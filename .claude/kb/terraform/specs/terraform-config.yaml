@@ -1,0 +1,162 @@
+schema_version: "1.0"
+domain: terraform
+file_type: configuration-spec
+last_validated: "2026-02-17"
+source: "HashiCorp Terraform Docs, Google Cloud Terraform Provider"
+
+# Terraform for GCP Configuration Specification
+# Defines required settings, file structure, and validation rules
+
+project_structure:
+  description: "Standard Terraform project layout for GCP"
+  root_files:
+    main_tf:
+      required: true
+      purpose: "Root module -- provider config, backend, module calls"
+      contains:
+        - terraform_block
+        - provider_block
+        - module_calls
+    variables_tf:
+      required: true
+      purpose: "Input variable declarations"
+    outputs_tf:
+      required: true
+      purpose: "Output value declarations"
+    terraform_tfvars:
+      required: false
+      purpose: "Default variable values (do not commit secrets)"
+    versions_tf:
+      required: false
+      purpose: "Alternative location for terraform and provider blocks"
+  directories:
+    modules:
+      required: true
+      purpose: "Reusable child modules"
+      structure:
+        - main.tf
+        - variables.tf
+        - outputs.tf
+    environments:
+      required: false
+      purpose: "Per-environment tfvars files"
+
+provider_config:
+  description: "GCP provider configuration requirements"
+  fields:
+    project:
+      type: string
+      required: true
+      source: "var.project_id"
+      validation:
+        - "Must be a valid GCP project ID"
+        - "Format: lowercase letters, digits, hyphens"
+    region:
+      type: string
+      required: true
+      default: "us-central1"
+      validation:
+        - "Must be a valid GCP region"
+    zone:
+      type: string
+      required: false
+      default: null
+      notes: "Only needed for zonal resources"
+    credentials:
+      type: string
+      required: false
+      default: "Application Default Credentials"
+      validation:
+        - "NEVER hardcode in configuration files"
+        - "Use ADC, environment variables, or impersonation"
+
+backend_config:
+  description: "GCS backend for remote state"
+  fields:
+    bucket:
+      type: string
+      required: true
+      validation:
+        - "Globally unique bucket name"
+        - "Convention: {project_id}-terraform-state"
+    prefix:
+      type: string
+      required: false
+      default: "terraform/state"
+      validation:
+        - "Use path hierarchy for multi-layer state"
+    encryption_key:
+      type: string
+      required: false
+      default: null
+      notes: "Customer-supplied encryption key (base64)"
+
+version_constraints:
+  terraform:
+    minimum: "1.5.0"
+    recommended: "~> 1.9"
+    notes: "1.5+ required for import blocks"
+  google_provider:
+    minimum: "5.0.0"
+    recommended: "~> 5.0"
+    notes: "Major version 5.x for latest GCP resources"
+  google_beta_provider:
+    minimum: "5.0.0"
+    recommended: "~> 5.0"
+    notes: "Match google provider version"
+
+naming_conventions:
+  resources:
+    format: "snake_case"
+    example: "google_storage_bucket.data_lake"
+  variables:
+    format: "snake_case"
+    example: "var.project_id"
+  modules:
+    format: "snake_case"
+    example: "module.invoice_api"
+  files:
+    format: "kebab-case or snake_case"
+    example: "main.tf, variables.tf"
+  gcp_resources:
+    format: "{project_id}-{environment}-{resource_name}"
+    example: "my-project-prod-data-lake"
+
+security_rules:
+  - rule: "Never commit .tfstate files"
+    enforcement: ".gitignore"
+  - rule: "Never hardcode credentials"
+    enforcement: "Use ADC or environment variables"
+  - rule: "Never commit terraform.tfvars with secrets"
+    enforcement: "Use Secret Manager or environment variables"
+  - rule: "Use uniform bucket level access"
+    enforcement: "uniform_bucket_level_access = true"
+  - rule: "Enable state bucket versioning"
+    enforcement: "versioning { enabled = true }"
+  - rule: "One service account per workload"
+    enforcement: "Least privilege principle"
+
+gitignore_entries:
+  - "*.tfstate"
+  - "*.tfstate.*"
+  - ".terraform/"
+  - ".terraform.lock.hcl"
+  - "*.tfvars"
+  - "!*.tfvars.example"
+  - "crash.log"
+
+gcp_services_required:
+  - service: "run.googleapis.com"
+    for: "Cloud Run"
+  - service: "pubsub.googleapis.com"
+    for: "Pub/Sub"
+  - service: "bigquery.googleapis.com"
+    for: "BigQuery"
+  - service: "storage.googleapis.com"
+    for: "Cloud Storage"
+  - service: "secretmanager.googleapis.com"
+    for: "Secret Manager"
+  - service: "iam.googleapis.com"
+    for: "IAM"
+  - service: "cloudresourcemanager.googleapis.com"
+    for: "Resource Manager"

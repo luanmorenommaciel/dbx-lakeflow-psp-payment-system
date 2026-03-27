@@ -1,0 +1,190 @@
+schema_version: "1.0"
+domain: pydantic
+file_type: extraction-schema
+last_validated: "2026-02-17"
+source: "patterns/extraction-schema.md"
+
+# Invoice Extraction Schema Specification
+# Machine-readable spec for LLM-based invoice data extraction
+
+description: >
+  Pydantic model specification for extracting structured invoice data
+  from unstructured documents via LLM. Used by ai-prompt-specialist-gcp
+  agent for document processing pipelines.
+
+model:
+  name: InvoiceExtraction
+  python_import: "from schemas.invoice import InvoiceExtraction"
+
+  fields:
+    invoice_number:
+      type: string
+      required: true
+      min_length: 1
+      strip_whitespace: true
+      description: "Unique invoice identifier (e.g., INV-2026-001)"
+      validation:
+        - "min_length=1"
+        - "strip_whitespace=True"
+      notes: "LLMs may prefix with 'Invoice #' -- use field_validator to strip"
+
+    vendor_name:
+      type: string
+      required: true
+      min_length: 1
+      description: "Name of the vendor or supplier"
+      validation:
+        - "min_length=1"
+
+    vendor_address:
+      type: nested_model
+      model: Address
+      required: false
+      default: null
+      description: "Vendor's postal address"
+
+    customer_name:
+      type: string
+      required: false
+      default: null
+      description: "Customer or buyer name"
+
+    issue_date:
+      type: date
+      required: true
+      format: "YYYY-MM-DD"
+      description: "Date the invoice was issued"
+      validation:
+        - "must be valid ISO date"
+      notes: "LLMs may return various formats; use field_validator mode=before to normalize"
+
+    due_date:
+      type: date
+      required: false
+      default: null
+      format: "YYYY-MM-DD"
+      description: "Payment due date"
+      validation:
+        - "must be >= issue_date if provided"
+
+    currency:
+      type: enum
+      required: false
+      default: "USD"
+      allowed_values: ["USD", "EUR", "GBP", "BRL"]
+      description: "ISO 4217 currency code"
+
+    line_items:
+      type: list
+      item_model: LineItem
+      required: true
+      min_length: 1
+      description: "List of invoice line items"
+
+    subtotal:
+      type: float
+      required: false
+      default: null
+      validation:
+        - "ge=0"
+        - "auto-computed from line_items if not provided"
+
+    tax_amount:
+      type: float
+      required: false
+      default: 0.0
+      validation:
+        - "ge=0"
+
+    total_amount:
+      type: float
+      required: true
+      validation:
+        - "ge=0"
+      description: "Total invoice amount including tax"
+
+    extraction_confidence:
+      type: float
+      required: false
+      default: 0.5
+      validation:
+        - "ge=0.0"
+        - "le=1.0"
+      description: "LLM self-reported extraction confidence"
+
+nested_models:
+  Address:
+    fields:
+      street:
+        type: string
+        required: false
+        default: null
+        description: "Street address line"
+      city:
+        type: string
+        required: false
+        default: null
+        description: "City name"
+      state:
+        type: string
+        required: false
+        default: null
+        description: "State or province"
+      postal_code:
+        type: string
+        required: false
+        default: null
+        description: "ZIP or postal code"
+      country:
+        type: string
+        required: false
+        default: "US"
+        description: "ISO 3166-1 alpha-2 country code"
+
+  LineItem:
+    fields:
+      description:
+        type: string
+        required: true
+        min_length: 1
+        description: "Item or service description"
+      quantity:
+        type: float
+        required: false
+        default: 1.0
+        validation:
+          - "ge=0"
+      unit_price:
+        type: float
+        required: true
+        validation:
+          - "ge=0"
+        description: "Price per unit"
+      total:
+        type: float
+        required: false
+        default: null
+        validation:
+          - "ge=0"
+          - "auto-computed as quantity * unit_price if null"
+
+model_validators:
+  - name: validate_totals
+    mode: "after"
+    logic: "If subtotal is None, compute from sum of line_item totals"
+  - name: validate_dates
+    mode: "after"
+    logic: "If due_date provided, assert due_date >= issue_date"
+
+usage:
+  prompt_generation: "Use InvoiceExtraction.model_json_schema() to generate format instructions"
+  validation: "Use InvoiceExtraction.model_validate_json(llm_response)"
+  retry_on_failure: "See patterns/error-handling.md for retry logic"
+
+related_files:
+  - path: "../patterns/extraction-schema.md"
+    purpose: "Python implementation with full code"
+  - path: "../patterns/llm-output-validation.md"
+    purpose: "Validation and parsing utilities"
+  - path: "../patterns/error-handling.md"
+    purpose: "Error handling and retry logic"

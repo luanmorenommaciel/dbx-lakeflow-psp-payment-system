@@ -1,56 +1,70 @@
 # Medallion Architecture Knowledge Base
 
+> **Purpose**: Bronze/Silver/Gold layered data architecture for lakehouses, data quality, schema evolution, incremental loading, AI-era extensions
 > **MCP Validated**: 2026-03-26
-
-## Overview
-
-Medallion Architecture is a data design pattern that organizes data in a lakehouse into three layers: Bronze (raw), Silver (refined), and Gold (business). This KB provides patterns and best practices for implementing Medallion on Databricks.
 
 ## Quick Navigation
 
-| Need | Go To |
-|------|-------|
-| Fast syntax lookup | [quick-reference.md](quick-reference.md) |
-| Layer responsibilities | [concepts/layer-responsibilities.md](concepts/layer-responsibilities.md) |
-| Grain selection | [concepts/grain-and-granularity.md](concepts/grain-and-granularity.md) |
-| SCD patterns | [concepts/scd-patterns.md](concepts/scd-patterns.md) |
-| Tables vs Views | [concepts/tables-vs-views.md](concepts/tables-vs-views.md) |
-| Bronze ingestion | [patterns/bronze-ingestion.md](patterns/bronze-ingestion.md) |
-| Silver transformation | [patterns/silver-transformation.md](patterns/silver-transformation.md) |
-| Gold aggregation | [patterns/gold-aggregation.md](patterns/gold-aggregation.md) |
+### Concepts (< 150 lines each)
 
-## Architecture Overview
+| File | Purpose |
+|------|---------|
+| [concepts/bronze-layer.md](concepts/bronze-layer.md) | Raw ingestion layer -- append-only, schema-on-read |
+| [concepts/silver-layer.md](concepts/silver-layer.md) | Cleansed/conformed layer -- deduplicated, typed, validated |
+| [concepts/gold-layer.md](concepts/gold-layer.md) | Business aggregation layer -- star schemas, KPIs, SCD |
+| [concepts/domain-modeling.md](concepts/domain-modeling.md) | Domain-driven design applied to data mesh and lakehouse |
 
-```
-┌─────────────────────────────────────────────────────────────────┐
-│                    MEDALLION ARCHITECTURE                        │
-├─────────────────────────────────────────────────────────────────┤
-│                                                                  │
-│   SOURCE           BRONZE          SILVER           GOLD        │
-│   ──────           ──────          ──────           ────        │
-│                                                                  │
-│   S3/ADLS    →    Raw Data    →   Cleansed    →   Aggregated   │
-│   Kafka           Append-only     Validated       Business      │
-│   APIs            Schema-on-read  Typed           KPIs          │
-│                                                                  │
-│   WHO QUERIES:    Engineers       Analysts        Dashboards    │
-│                   (debug)         (explore)       (report)      │
-│                                                                  │
-└─────────────────────────────────────────────────────────────────┘
-```
+### Patterns (< 200 lines each)
 
-## Layer Summary
+| File | Purpose |
+|------|---------|
+| [patterns/layer-transitions.md](patterns/layer-transitions.md) | Bronze to Silver to Gold transformation flow |
+| [patterns/data-quality-gates.md](patterns/data-quality-gates.md) | Quality checks and quarantine between layers |
+| [patterns/schema-evolution.md](patterns/schema-evolution.md) | Schema evolution strategy with Delta Lake |
+| [patterns/incremental-loading.md](patterns/incremental-loading.md) | Incremental/merge patterns with MERGE INTO |
 
-| Layer | Purpose | Data Quality | Consumers |
-|-------|---------|--------------|-----------|
-| **Bronze** | Raw ingestion, preserve source | Minimal (rescue bad data) | Data Engineers |
-| **Silver** | Cleanse, validate, conform | Expectations applied | Analysts, Data Scientists |
-| **Gold** | Aggregate, denormalize | Business rules enforced | Dashboards, Reports |
+### Specs (Machine-Readable)
 
-## Related Agents
+| File | Purpose |
+|------|---------|
+| [specs/medallion-config.yaml](specs/medallion-config.yaml) | Architecture configuration specification |
 
-| Agent | Responsibility |
-|-------|----------------|
-| `medallion-architect` | Strategy, layer design, best practices |
-| `lakeflow-pipeline-builder` | DLT implementation, code generation |
-| `lakeflow-expert` | Troubleshooting, optimization |
+---
+
+## Quick Reference
+
+- [quick-reference.md](quick-reference.md) - Fast lookup tables
+
+---
+
+## Key Concepts
+
+| Concept | Description |
+|---------|-------------|
+| **Bronze Layer** | Raw, append-only ingestion preserving source fidelity with metadata columns |
+| **Silver Layer** | Cleansed, deduplicated, conformed data with enforced schemas and SCD Type 1/2 |
+| **Gold Layer** | Business-level aggregates, star schemas, and pre-computed KPIs for consumption |
+| **Domain Modeling** | Organizing lakehouse tables by business domains rather than technical layers |
+| **Quality Gates** | Automated data quality checks that quarantine bad records between layers |
+| **AI Extensions** | Feature layer and vector layer extending medallion for ML/AI workloads (2025+) |
+| **Contracts as Code** | Medallion is a set of contracts, not just a pipeline — enforce at every boundary |
+
+---
+
+## Learning Path
+
+| Level | Files |
+|-------|-------|
+| **Beginner** | concepts/bronze-layer.md, concepts/silver-layer.md, concepts/gold-layer.md |
+| **Intermediate** | patterns/layer-transitions.md, patterns/data-quality-gates.md |
+| **Advanced** | patterns/schema-evolution.md, patterns/incremental-loading.md, concepts/domain-modeling.md |
+
+---
+
+## Agent Usage
+
+| Agent | Primary Files | Use Case |
+|-------|---------------|----------|
+| medallion-architect | All concepts + layer-transitions | Designing lakehouse layer architecture |
+| data-quality-engineer | data-quality-gates, silver-layer | Implementing quality checks and validation |
+| lakehouse-engineer | incremental-loading, schema-evolution | Building production ETL pipelines |

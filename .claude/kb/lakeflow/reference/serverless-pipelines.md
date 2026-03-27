@@ -1,10 +1,11 @@
 # Serverless Lakeflow Pipelines
 
 > Source: https://docs.databricks.com/aws/en/dlt/serverless-dlt
+> Status: GA, recommended default. TCO reduced by up to 70% (July 2025 optimizations).
 
 ## Overview
 
-**Serverless is the recommended compute option for Lakeflow Declarative Pipelines**, providing simplified infrastructure management with automatic scaling and optimization.
+**Serverless is the recommended compute option for Lakeflow Declarative Pipelines**, providing simplified infrastructure management with automatic scaling and optimization. As of July 2025, recent optimizations have cut TCO by up to 70%, making serverless the clear choice for most workloads.
 
 ## Key Benefits
 
@@ -384,10 +385,17 @@ Serverless:
 }
 ```
 
+## Databricks Runtime Versions (2026)
+
+| Channel | Runtime |
+|---------|---------|
+| CURRENT (default) | Databricks Runtime 16.4 |
+| PREVIEW | Databricks Runtime 17.3 |
+
 ## Recommendation
 
 **Databricks recommends developing new pipelines using serverless** for:
-- Reduced operational complexity
+- Reduced operational complexity (up to 70% TCO reduction)
 - Automatic optimization
 - Cost efficiency
 - Faster time to production

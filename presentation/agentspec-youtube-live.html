@@ -322,50 +322,121 @@
   </section>
 
   <!-- ================================================================ -->
-  <!-- SLIDE 4: AgentSpec × Spec-Driven Data Engineering               -->
-  <!-- Composition: Center orbit + flanking stats                      -->
+  <!-- SLIDE 4: Spec-Driven Development + Spec-Driven Data Engineering -->
+  <!-- Composition: Split — left SDD definition, right SDDE definition -->
+  <!-- ================================================================ -->
+  <section class="slide" style="background-image: radial-gradient(ellipse at 30% 50%, rgba(96,165,250,0.06) 0%, transparent 45%), radial-gradient(ellipse at 70% 50%, rgba(178,247,82,0.06) 0%, transparent 45%);">
+    <p class="slide__label reveal">The Methodology</p>
+    <h2 class="slide__heading reveal" style="font-size:clamp(28px,4.5vw,48px); margin-bottom:clamp(16px,3vh,28px);">From <span style="color:var(--blue);">SDD</span> to <span style="color:var(--accent);">Spec-Driven Data Engineering</span></h2>
+
+    <div class="split reveal" style="gap:clamp(20px,3vw,40px);">
+      <!-- LEFT: SDD -->
+      <div style="background:var(--surface); border:1.5px solid var(--blue); border-radius:14px; padding:clamp(20px,3vh,32px); position:relative; overflow:hidden;">
+        <div style="position:absolute; top:-20px; right:-10px; font-family:var(--font-display); font-size:120px; opacity:0.04; color:var(--blue); pointer-events:none;">1</div>
+        <div style="font-family:var(--font-mono); font-size:11px; color:var(--blue); letter-spacing:2px; text-transform:uppercase; margin-bottom:12px; font-weight:700;">Spec-Driven Development</div>
+        <p style="font-family:var(--font-editorial); font-size:clamp(16px,1.8vw,21px); color:var(--text); line-height:1.5; margin-bottom:16px;">A methodology where <strong style="color:var(--blue);">specifications are written before code</strong> &mdash; AI agents use structured specs as the single source of truth across the entire lifecycle.</p>
+        <div style="display:flex; flex-direction:column; gap:8px; margin-top:12px;">
+          <div style="display:flex; align-items:center; gap:10px;">
+            <span style="font-family:var(--font-mono); font-size:20px; color:var(--blue);">&#x2460;</span>
+            <span style="font-size:13px; color:var(--text-dim);">Spec defines <strong style="color:var(--text);">what</strong> to build</span>
+          </div>
+          <div style="display:flex; align-items:center; gap:10px;">
+            <span style="font-family:var(--font-mono); font-size:20px; color:var(--blue);">&#x2461;</span>
+            <span style="font-size:13px; color:var(--text-dim);">Agents execute the <strong style="color:var(--text);">how</strong></span>
+          </div>
+          <div style="display:flex; align-items:center; gap:10px;">
+            <span style="font-family:var(--font-mono); font-size:20px; color:var(--blue);">&#x2462;</span>
+            <span style="font-size:13px; color:var(--text-dim);">KB provides domain <strong style="color:var(--text);">knowledge</strong></span>
+          </div>
+          <div style="display:flex; align-items:center; gap:10px;">
+            <span style="font-family:var(--font-mono); font-size:20px; color:var(--blue);">&#x2463;</span>
+            <span style="font-size:13px; color:var(--text-dim);">Output is <strong style="color:var(--text);">deterministic &amp; auditable</strong></span>
+          </div>
+        </div>
+      </div>
+
+      <!-- RIGHT: SDDE -->
+      <div style="background:var(--surface); border:1.5px solid var(--accent); border-radius:14px; padding:clamp(20px,3vh,32px); position:relative; overflow:hidden;">
+        <div style="position:absolute; top:-20px; right:-10px; font-family:var(--font-display); font-size:120px; opacity:0.04; color:var(--accent); pointer-events:none;">2</div>
+        <div style="font-family:var(--font-mono); font-size:11px; color:var(--accent); letter-spacing:2px; text-transform:uppercase; margin-bottom:12px; font-weight:700;">Spec-Driven Data Engineering</div>
+        <p style="font-family:var(--font-editorial); font-size:clamp(16px,1.8vw,21px); color:var(--text); line-height:1.5; margin-bottom:16px;">SDD applied to the <strong style="color:var(--accent);">data engineering domain</strong> &mdash; agents understand source inventories, freshness SLAs, schema contracts, partition strategies, and quality gates.</p>
+        <div style="display:flex; flex-direction:column; gap:8px; margin-top:12px;">
+          <div style="display:flex; align-items:center; gap:10px;">
+            <span style="font-family:var(--font-mono); font-size:13px; color:var(--accent); background:var(--accent-dim); padding:3px 8px; border-radius:4px; font-weight:700;">/define</span>
+            <span style="font-size:13px; color:var(--text-dim);">Data contracts + schema SLAs</span>
+          </div>
+          <div style="display:flex; align-items:center; gap:10px;">
+            <span style="font-family:var(--font-mono); font-size:13px; color:var(--accent); background:var(--accent-dim); padding:3px 8px; border-radius:4px; font-weight:700;">/design</span>
+            <span style="font-size:13px; color:var(--text-dim);">Pipeline DAG + partitions</span>
+          </div>
+          <div style="display:flex; align-items:center; gap:10px;">
+            <span style="font-family:var(--font-mono); font-size:13px; color:var(--accent); background:var(--accent-dim); padding:3px 8px; border-radius:4px; font-weight:700;">/build</span>
+            <span style="font-size:13px; color:var(--text-dim);">dbt + Lakeflow + quality gates</span>
+          </div>
+          <div style="display:flex; align-items:center; gap:10px;">
+            <span style="font-family:var(--font-mono); font-size:13px; color:var(--accent); background:var(--accent-dim); padding:3px 8px; border-radius:4px; font-weight:700;">/ship</span>
+            <span style="font-size:13px; color:var(--text-dim);">Deploy + archive lessons</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="reveal" style="text-align:center; margin-top:clamp(16px,2.5vh,28px);">
+      <p class="slide__body" style="font-size:clamp(15px,1.6vw,20px); font-style:italic;">&ldquo;The new disruption for Data Engineers and AI Data Engineers.&rdquo;</p>
+    </div>
+  </section>
+
+  <!-- ================================================================ -->
+  <!-- SLIDE 5: AgentSpec Framework — Orbit Diagram                    -->
+  <!-- Composition: Center orbit + commands                            -->
   <!-- ================================================================ -->
   <section class="slide" style="background-image: radial-gradient(ellipse at 50% 50%, rgba(178,247,82,0.06) 0%, transparent 55%);">
     <p class="slide__label reveal">The Framework</p>
-    <h2 class="slide__heading reveal" style="font-size:clamp(28px,4.5vw,48px); margin-bottom:clamp(8px,1.5vh,16px); text-align:center;">AgentSpec</h2>
-    <p class="slide__subtitle reveal" style="text-align:center; margin-bottom:clamp(12px,2vh,20px);">Spec-Driven Data Engineering on Claude Code</p>
+    <h2 class="slide__heading reveal" style="font-size:clamp(28px,4.5vw,48px); margin-bottom:clamp(4px,1vh,10px); text-align:center;">AgentSpec</h2>
+    <p class="slide__subtitle reveal" style="text-align:center; margin-bottom:clamp(8px,1.5vh,14px);">Spec-Driven Data Engineering on Claude Code</p>
 
     <div class="reveal" style="position:relative;">
-      <div class="orbit-container">
-        <!-- Rings -->
-        <div class="orbit-ring" style="width:85%; height:85%; opacity:0.3;"></div>
-        <div class="orbit-ring" style="width:60%; height:60%; opacity:0.2;"></div>
+      <!-- SVG-based orbit for perfect alignment -->
+      <svg viewBox="0 0 600 400" xmlns="http://www.w3.org/2000/svg" style="width:100%; max-width:700px; margin:0 auto; display:block;">
+        <!-- Orbit rings -->
+        <ellipse cx="300" cy="200" rx="260" ry="170" fill="none" stroke="rgba(178,247,82,0.08)" stroke-width="1" stroke-dasharray="6,4"/>
+        <ellipse cx="300" cy="200" rx="180" ry="120" fill="none" stroke="rgba(178,247,82,0.05)" stroke-width="1" stroke-dasharray="4,6"/>
+
         <!-- Center -->
-        <div class="orbit-center">
-          <div class="orbit-center__logo">AS</div>
-          <div class="orbit-center__sub">v2.1.0</div>
-          <div style="margin-top:8px; display:flex; gap:8px; justify-content:center;">
-            <span style="font-family:var(--font-mono); font-size:22px; font-weight:800; color:var(--accent);">58</span>
-            <span style="font-family:var(--font-mono); font-size:10px; color:var(--text-dim); margin-top:8px;">agents</span>
-            <span style="font-family:var(--font-mono); font-size:22px; font-weight:800; color:var(--gold); margin-left:8px;">21</span>
-            <span style="font-family:var(--font-mono); font-size:10px; color:var(--text-dim); margin-top:8px;">cmds</span>
-          </div>
-        </div>
-        <!-- Orbit nodes (22 KB domains positioned in a circle) -->
-        <div class="orbit-node" style="top:3%; left:50%;">dbt</div>
-        <div class="orbit-node" style="top:8%; left:72%;">Spark</div>
-        <div class="orbit-node" style="top:20%; left:88%;">SQL</div>
-        <div class="orbit-node" style="top:38%; left:96%;">Airflow</div>
-        <div class="orbit-node" style="top:55%; left:94%;">Streaming</div>
-        <div class="orbit-node" style="top:72%; left:85%;">Lakehouse</div>
-        <div class="orbit-node" style="top:85%; left:70%;">Medallion</div>
-        <div class="orbit-node" style="top:92%; left:50%;">Lakeflow</div>
-        <div class="orbit-node" style="top:85%; left:30%;">Terraform</div>
-        <div class="orbit-node" style="top:72%; left:15%;">GCP</div>
-        <div class="orbit-node" style="top:55%; left:6%;">AWS</div>
-        <div class="orbit-node" style="top:38%; left:4%;">Fabric</div>
-        <div class="orbit-node" style="top:20%; left:12%;">GenAI</div>
-        <div class="orbit-node" style="top:8%; left:28%;">Pydantic</div>
-        <div class="orbit-node" style="top:0%; left:38%; color:var(--accent); border-color:var(--accent);">Python</div>
-        <div class="orbit-node" style="top:0%; left:62%; color:var(--gold); border-color:var(--gold);">Testing</div>
-        <div class="orbit-node" style="top:46%; left:1%;">Data Quality</div>
-        <div class="orbit-node" style="top:46%; left:99%;">Data Modeling</div>
-      </div>
+        <text x="300" y="185" font-family="'Instrument Serif', Georgia, serif" font-size="64" fill="url(#asGrad)" text-anchor="middle" dominant-baseline="central">AS</text>
+        <text x="300" y="220" font-family="'Fira Code', monospace" font-size="10" fill="#7da88f" text-anchor="middle" letter-spacing="2">V2.1.0</text>
+        <!-- Stats -->
+        <text x="265" y="248" font-family="'Fira Code', monospace" font-size="20" font-weight="800" fill="#b2f752" text-anchor="middle">58</text>
+        <text x="295" y="248" font-family="'Fira Code', monospace" font-size="9" fill="#7da88f" text-anchor="start" dominant-baseline="middle">agents</text>
+        <text x="335" y="248" font-family="'Fira Code', monospace" font-size="20" font-weight="800" fill="#fbbf24" text-anchor="middle">21</text>
+        <text x="358" y="248" font-family="'Fira Code', monospace" font-size="9" fill="#7da88f" text-anchor="start" dominant-baseline="middle">cmds</text>
+
+        <!-- 18 orbit nodes — computed at r=250/165 ellipse, evenly spaced 20° -->
+        <!-- angle 0° = top center, clockwise -->
+        <g font-family="'Fira Code', monospace" font-size="10">
+          <!-- 0° top -->    <rect x="270" y="18" width="60" height="22" rx="6" fill="#0d2818" stroke="rgba(178,247,82,0.2)"/><text x="300" y="33" fill="#7da88f" text-anchor="middle">dbt</text>
+          <!-- 20° -->       <rect x="368" y="28" width="60" height="22" rx="6" fill="#0d2818" stroke="rgba(178,247,82,0.2)"/><text x="398" y="43" fill="#7da88f" text-anchor="middle">Spark</text>
+          <!-- 40° -->       <rect x="445" y="68" width="50" height="22" rx="6" fill="#0d2818" stroke="rgba(178,247,82,0.2)"/><text x="470" y="83" fill="#7da88f" text-anchor="middle">SQL</text>
+          <!-- 60° -->       <rect x="490" y="125" width="65" height="22" rx="6" fill="#0d2818" stroke="rgba(178,247,82,0.2)"/><text x="522" y="140" fill="#b2f752" text-anchor="middle">Python</text>
+          <!-- 80° -->       <rect x="495" y="185" width="68" height="22" rx="6" fill="#0d2818" stroke="rgba(251,191,36,0.2)"/><text x="529" y="200" fill="#fbbf24" text-anchor="middle">Testing</text>
+          <!-- 100° -->      <rect x="480" y="248" width="68" height="22" rx="6" fill="#0d2818" stroke="rgba(178,247,82,0.2)"/><text x="514" y="263" fill="#7da88f" text-anchor="middle">Airflow</text>
+          <!-- 120° -->      <rect x="430" y="303" width="82" height="22" rx="6" fill="#0d2818" stroke="rgba(178,247,82,0.2)"/><text x="471" y="318" fill="#7da88f" text-anchor="middle">Streaming</text>
+          <!-- 140° -->      <rect x="355" y="340" width="85" height="22" rx="6" fill="#0d2818" stroke="rgba(178,247,82,0.2)"/><text x="398" y="355" fill="#7da88f" text-anchor="middle">Lakehouse</text>
+          <!-- 160° -->      <rect x="240" y="356" width="107" height="22" rx="6" fill="#0d2818" stroke="rgba(178,247,82,0.2)"/><text x="293" y="371" fill="#7da88f" text-anchor="middle">Data Modeling</text>
+          <!-- 180° bottom --><rect x="240" y="370" width="0" height="0"/><rect x="252" y="370" width="90" height="22" rx="6" fill="#0d2818" stroke="rgba(178,247,82,0.2)"/><text x="297" y="385" fill="#7da88f" text-anchor="middle">Medallion</text>
+          <!-- 200° -->      <rect x="148" y="340" width="85" height="22" rx="6" fill="#0d2818" stroke="rgba(178,247,82,0.2)"/><text x="191" y="355" fill="#7da88f" text-anchor="middle">Lakeflow</text>
+          <!-- 220° -->      <rect x="78" y="303" width="90" height="22" rx="6" fill="#0d2818" stroke="rgba(178,247,82,0.2)"/><text x="123" y="318" fill="#7da88f" text-anchor="middle">Terraform</text>
+          <!-- 240° -->      <rect x="38" y="248" width="50" height="22" rx="6" fill="#0d2818" stroke="rgba(178,247,82,0.2)"/><text x="63" y="263" fill="#7da88f" text-anchor="middle">GCP</text>
+          <!-- 260° -->      <rect x="28" y="185" width="55" height="22" rx="6" fill="#0d2818" stroke="rgba(178,247,82,0.2)"/><text x="55" y="200" fill="#7da88f" text-anchor="middle">AWS</text>
+          <!-- 280° -->      <rect x="32" y="125" width="65" height="22" rx="6" fill="#0d2818" stroke="rgba(178,247,82,0.2)"/><text x="64" y="140" fill="#7da88f" text-anchor="middle">Fabric</text>
+          <!-- 300° -->      <rect x="48" y="68" width="60" height="22" rx="6" fill="#0d2818" stroke="rgba(178,247,82,0.2)"/><text x="78" y="83" fill="#7da88f" text-anchor="middle">GenAI</text>
+          <!-- 320° -->      <rect x="108" y="28" width="78" height="22" rx="6" fill="#0d2818" stroke="rgba(178,247,82,0.2)"/><text x="147" y="43" fill="#7da88f" text-anchor="middle">Pydantic</text>
+          <!-- 340° -->      <rect x="165" y="10" width="102" height="22" rx="6" fill="#0d2818" stroke="rgba(178,247,82,0.2)"/><text x="216" y="25" fill="#7da88f" text-anchor="middle">Data Quality</text>
+        </g>
+        <defs>
+          <linearGradient id="asGrad" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#b2f752"/><stop offset="100%" stop-color="#4ade80"/></linearGradient>
+        </defs>
+      </svg>
     </div>
 
     <div class="cmd-row reveal">
@@ -381,78 +452,147 @@
       <span class="cmd-tag">/data-contract</span>
       <span class="cmd-tag">/migrate</span>
     </div>
-    <div class="reveal" style="text-align:center; margin-top:12px;">
-      <p class="slide__body" style="font-size:clamp(14px,1.6vw,20px); font-style:italic;">&ldquo;Every phase understands data engineering context.&rdquo;</p>
-    </div>
   </section>
 
   <!-- ================================================================ -->
-  <!-- SLIDE 5: Databricks + DABs + Lakeflow — Live Demo Result        -->
-  <!-- Composition: Full-width, dense but structured                   -->
+  <!-- SLIDE 5: Databricks + DABs + Lakeflow — Architecture Diagram    -->
+  <!-- Composition: 4-column architecture matching reference image     -->
   <!-- ================================================================ -->
-  <section class="slide" style="padding-top:clamp(20px,3vh,40px); padding-bottom:clamp(20px,3vh,40px); background-image: radial-gradient(ellipse at 50% 0%, rgba(251,191,36,0.08) 0%, transparent 50%), radial-gradient(ellipse at 20% 80%, rgba(178,247,82,0.05) 0%, transparent 40%);">
-    <p class="slide__label reveal">Live Demo Result</p>
-    <h2 class="slide__heading reveal" style="font-size:clamp(24px,3.8vw,42px); margin-bottom:clamp(12px,2vh,20px);">Databricks <span style="color:var(--gold);">DABs</span> + <span style="color:var(--accent);">Lakeflow</span></h2>
+  <section class="slide" style="padding:clamp(16px,3vh,32px) clamp(20px,4vw,60px); background: #080e14; background-image: radial-gradient(ellipse at 50% 0%, rgba(251,191,36,0.05) 0%, transparent 50%), radial-gradient(ellipse at 80% 80%, rgba(178,247,82,0.04) 0%, transparent 40%);">
 
-    <!-- Data flow -->
-    <div class="flow-row reveal" style="margin-bottom:clamp(12px,2vh,20px);">
-      <div class="flow-box"><div class="flow-box__title" style="color:var(--text-dim);">ShadowTraffic</div><div class="flow-box__sub">7 JSONL Generators</div></div>
-      <div class="flow-arrow">&rarr;</div>
-      <div class="flow-box flow-box--blue"><div class="flow-box__title" style="color:var(--blue);">Azure Blob</div><div class="flow-box__sub">owshqblobstg</div></div>
-      <div class="flow-arrow">&rarr;</div>
-      <div class="flow-box flow-box--purple"><div class="flow-box__title" style="color:var(--purple);">UC Volume</div><div class="flow-box__sub">External Mount</div></div>
-      <div class="flow-arrow">&rarr;</div>
-      <div class="flow-box flow-box--accent"><div class="flow-box__title" style="color:var(--accent);">Lakeflow DLT</div><div class="flow-box__sub">18 Notebooks</div></div>
-      <div class="flow-arrow">&rarr;</div>
-      <div class="flow-box flow-box--gold"><div class="flow-box__title" style="color:var(--gold);">Unity Catalog</div><div class="flow-box__sub">psp.*</div></div>
+    <!-- Column headers -->
+    <div class="reveal" style="display:grid; grid-template-columns: 1.2fr 1fr 1.8fr 1.4fr; gap:16px; margin-bottom:12px;">
+      <div style="font-family:var(--font-mono); font-size:10px; color:var(--text-dim); letter-spacing:2px; text-transform:uppercase; text-align:center;">ShadowTraffic</div>
+      <div style="font-family:var(--font-mono); font-size:10px; color:var(--text-dim); letter-spacing:2px; text-transform:uppercase; text-align:center;">Landing Zone</div>
+      <div style="font-family:var(--font-mono); font-size:10px; color:var(--text-dim); letter-spacing:2px; text-transform:uppercase; text-align:center;">PSP Entity Generators</div>
+      <div style="font-family:var(--font-mono); font-size:10px; color:var(--text-dim); letter-spacing:2px; text-transform:uppercase; text-align:center;">Databricks Lakeflow (DLT)</div>
     </div>
 
-    <!-- Medallion layers -->
-    <div class="medallion-grid reveal">
-      <div class="medallion-col" style="border-top:3px solid var(--orange);">
-        <div class="medallion-col__header" style="color:var(--orange);">Bronze &middot; 7 tables</div>
-        <div class="medallion-col__item">merchants</div>
-        <div class="medallion-col__item">customers</div>
-        <div class="medallion-col__item">payments</div>
-        <div class="medallion-col__item">orders</div>
-        <div class="medallion-col__item">transactions</div>
-        <div class="medallion-col__item">payouts</div>
-        <div class="medallion-col__item">disputes</div>
+    <!-- Main 4-column layout -->
+    <div class="reveal" style="display:grid; grid-template-columns: 1.2fr 1fr 1.8fr 1.4fr; gap:16px; align-items:center; flex:1;">
+
+      <!-- COL 1: ShadowTraffic box -->
+      <div style="border:1.5px solid var(--purple); border-radius:12px; padding:18px; text-align:center; background:rgba(167,139,250,0.04);">
+        <div style="font-family:var(--font-mono); font-size:14px; font-weight:700; color:var(--purple); letter-spacing:1px;">SHADOWTRAFFIC</div>
+        <div style="font-size:12px; color:var(--text-dim); margin-top:10px;">7 Entity Types</div>
+        <div style="font-size:11px; color:var(--text-dim); margin-top:4px;">State Machines + FK Integrity</div>
+        <div style="margin-top:12px; font-family:var(--font-mono); font-size:11px; color:var(--purple);">Docker / JSONL Output</div>
+        <div style="font-family:var(--font-mono); font-size:11px; color:var(--text-dim); margin-top:4px;">~120,000 Records</div>
       </div>
-      <div class="medallion-col" style="border-top:3px solid var(--accent);">
-        <div class="medallion-col__header" style="color:var(--accent);">Silver &middot; 7 SQL + 1 Python</div>
-        <div class="medallion-col__item">psp_merchants</div>
-        <div class="medallion-col__item">psp_customers</div>
-        <div class="medallion-col__item">psp_payment_instruments</div>
-        <div class="medallion-col__item">psp_orders</div>
-        <div class="medallion-col__item">psp_transactions</div>
-        <div class="medallion-col__item">psp_payouts</div>
-        <div class="medallion-col__item">psp_disputes</div>
-        <div class="medallion-col__item" style="color:var(--gold); font-weight:600;">unified_transactions</div>
+
+      <!-- COL 2: Landing Zone box + arrow -->
+      <div style="display:flex; align-items:center; gap:0;">
+        <div style="color:var(--text-dim); font-size:20px; margin-right:8px;">&rarr;</div>
+        <div style="border:1.5px solid var(--blue); border-radius:12px; padding:16px; text-align:center; background:rgba(96,165,250,0.04); flex:1;">
+          <div style="font-family:var(--font-mono); font-size:13px; font-weight:700; color:var(--blue);">LANDING ZONE</div>
+          <div style="font-family:var(--font-mono); font-size:10px; color:var(--text-dim); margin-top:8px;">/vol-landing-zone/{entity}/</div>
+          <div style="font-size:11px; color:var(--text-dim); margin-top:4px;">Azure Blob Storage</div>
+          <div style="margin-top:10px; font-family:var(--font-mono); font-size:10px; color:var(--blue);">Unity Catalog Volume</div>
+        </div>
       </div>
-      <div class="medallion-col" style="border-top:3px solid var(--gold);">
-        <div class="medallion-col__header" style="color:var(--gold);">Gold &middot; 3 materialized views</div>
-        <div class="medallion-col__item">merchant_performance</div>
-        <div class="medallion-col__item">customer_analytics</div>
-        <div class="medallion-col__item">risk_fraud_monitoring</div>
+
+      <!-- COL 3: Entity cards (7 entities) -->
+      <div style="display:flex; align-items:center; gap:0;">
+        <div style="color:var(--text-dim); font-size:20px; margin-right:8px;">&rarr;</div>
+        <div style="border:1.5px solid var(--gold); border-radius:12px; padding:12px; flex:1; background:rgba(251,191,36,0.03); display:flex; flex-direction:column; gap:5px;">
+          <div style="display:flex; align-items:center; gap:8px; background:rgba(248,113,113,0.08); border:1px solid rgba(248,113,113,0.3); border-radius:6px; padding:5px 10px;">
+            <span style="font-family:var(--font-mono); font-size:11px; font-weight:700; color:var(--red); min-width:90px;">merchants</span>
+            <span style="font-size:10px; color:var(--text-dim); flex:1;">MCC, KYB, risk levels</span>
+            <span style="font-family:var(--font-mono); font-size:9px; color:var(--gold);">19.7K</span>
+          </div>
+          <div style="display:flex; align-items:center; gap:8px; background:rgba(251,191,36,0.08); border:1px solid rgba(251,191,36,0.3); border-radius:6px; padding:5px 10px;">
+            <span style="font-family:var(--font-mono); font-size:11px; font-weight:700; color:var(--gold); min-width:90px;">customers</span>
+            <span style="font-size:10px; color:var(--text-dim); flex:1;">Hashed PII, segments</span>
+            <span style="font-family:var(--font-mono); font-size:9px; color:var(--gold);">24K</span>
+          </div>
+          <div style="display:flex; align-items:center; gap:8px; background:rgba(251,191,36,0.08); border:1px solid rgba(251,191,36,0.3); border-radius:6px; padding:5px 10px;">
+            <span style="font-family:var(--font-mono); font-size:11px; font-weight:700; color:var(--gold); min-width:90px;">payments</span>
+            <span style="font-size:10px; color:var(--text-dim); flex:1;">Cards, wallets, BINs</span>
+            <span style="font-family:var(--font-mono); font-size:9px; color:var(--gold);">17.4K</span>
+          </div>
+          <div style="display:flex; align-items:center; gap:8px; background:rgba(251,191,36,0.08); border:1px solid rgba(251,191,36,0.3); border-radius:6px; padding:5px 10px;">
+            <span style="font-family:var(--font-mono); font-size:11px; font-weight:700; color:var(--gold); min-width:90px;">orders</span>
+            <span style="font-size:10px; color:var(--text-dim); flex:1;">Amounts, channels</span>
+            <span style="font-family:var(--font-mono); font-size:9px; color:var(--gold);">16.1K</span>
+          </div>
+          <div style="display:flex; align-items:center; gap:8px; background:rgba(178,247,82,0.08); border:1px solid rgba(178,247,82,0.3); border-radius:6px; padding:5px 10px;">
+            <span style="font-family:var(--font-mono); font-size:11px; font-weight:700; color:var(--accent); min-width:90px;">transactions</span>
+            <span style="font-size:10px; color:var(--text-dim); flex:1;">State machine, 3DS</span>
+            <span style="font-family:var(--font-mono); font-size:9px; color:var(--gold);">11.2K</span>
+          </div>
+          <div style="display:flex; align-items:center; gap:8px; background:rgba(96,165,250,0.08); border:1px solid rgba(96,165,250,0.3); border-radius:6px; padding:5px 10px;">
+            <span style="font-family:var(--font-mono); font-size:11px; font-weight:700; color:var(--blue); min-width:90px;">payouts</span>
+            <span style="font-size:10px; color:var(--text-dim); flex:1;">Settlement, fees/net</span>
+            <span style="font-family:var(--font-mono); font-size:9px; color:var(--gold);">15.3K</span>
+          </div>
+          <div style="display:flex; align-items:center; gap:8px; background:rgba(167,139,250,0.08); border:1px solid rgba(167,139,250,0.3); border-radius:6px; padding:5px 10px;">
+            <span style="font-family:var(--font-mono); font-size:11px; font-weight:700; color:var(--purple); min-width:90px;">disputes</span>
+            <span style="font-size:10px; color:var(--text-dim); flex:1;">Chargebacks, SLA</span>
+            <span style="font-family:var(--font-mono); font-size:9px; color:var(--gold);">17.2K</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- COL 4: Lakeflow Medallion (vertical B → S → G) -->
+      <div style="display:flex; align-items:center; gap:0;">
+        <div style="color:var(--text-dim); font-size:20px; margin-right:8px;">&rarr;</div>
+        <div style="display:flex; flex-direction:column; align-items:center; gap:0; flex:1;">
+          <!-- Bronze -->
+          <div style="border:1.5px solid var(--orange); border-radius:12px; padding:14px 18px; width:100%; background:rgba(239,144,0,0.04); display:flex; align-items:center; gap:12px;">
+            <div style="width:32px; height:32px; border-radius:50%; border:2px solid var(--orange); display:flex; align-items:center; justify-content:center; font-family:var(--font-mono); font-size:14px; font-weight:800; color:var(--orange); flex-shrink:0;">B</div>
+            <div style="flex:1;">
+              <div style="font-family:var(--font-display); font-size:clamp(18px,2.5vw,26px); color:var(--text);">Bronze</div>
+              <div style="font-size:10px; color:var(--text-dim);">7 streaming tables</div>
+            </div>
+            <div style="text-align:right;">
+              <div style="font-family:var(--font-mono); font-size:10px; color:var(--orange);">Auto Loader</div>
+              <div style="font-family:var(--font-mono); font-size:9px; color:var(--text-dim);">read_files()</div>
+            </div>
+          </div>
+          <!-- Arrow down -->
+          <div style="font-size:18px; color:var(--accent); line-height:1; padding:4px 0;">&darr;</div>
+          <!-- Silver -->
+          <div style="border:1.5px solid var(--accent); border-radius:12px; padding:14px 18px; width:100%; background:rgba(178,247,82,0.04); display:flex; align-items:center; gap:12px;">
+            <div style="width:32px; height:32px; border-radius:50%; border:2px solid var(--accent); display:flex; align-items:center; justify-content:center; font-family:var(--font-mono); font-size:14px; font-weight:800; color:var(--accent); flex-shrink:0;">S</div>
+            <div style="flex:1;">
+              <div style="font-family:var(--font-display); font-size:clamp(18px,2.5vw,26px); color:var(--text);">Silver</div>
+              <div style="font-size:10px; color:var(--text-dim);">8 quality tables + DECIMAL</div>
+            </div>
+            <div style="text-align:right;">
+              <div style="font-family:var(--font-mono); font-size:10px; color:var(--accent);">53 rules</div>
+              <div style="font-family:var(--font-mono); font-size:9px; color:var(--text-dim);">DROP ROW</div>
+            </div>
+          </div>
+          <!-- Arrow down -->
+          <div style="font-size:18px; color:var(--gold); line-height:1; padding:4px 0;">&darr;</div>
+          <!-- Gold -->
+          <div style="border:1.5px solid var(--gold); border-radius:12px; padding:14px 18px; width:100%; background:rgba(251,191,36,0.04); display:flex; align-items:center; gap:12px;">
+            <div style="width:32px; height:32px; border-radius:50%; border:2px solid var(--gold); display:flex; align-items:center; justify-content:center; font-family:var(--font-mono); font-size:14px; font-weight:800; color:var(--gold); flex-shrink:0;">G</div>
+            <div style="flex:1;">
+              <div style="font-family:var(--font-display); font-size:clamp(18px,2.5vw,26px); color:var(--text);">Gold</div>
+              <div style="font-size:10px; color:var(--text-dim);">3 materialized views</div>
+            </div>
+            <div style="text-align:right;">
+              <div style="font-family:var(--font-mono); font-size:10px; color:var(--gold);">Scoring</div>
+              <div style="font-family:var(--font-mono); font-size:9px; color:var(--text-dim);">Analytics</div>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
 
-    <!-- Deploy badge -->
-    <div class="reveal" style="text-align:center; margin-top:clamp(12px,2vh,20px);">
+    <!-- Deploy badge + stats -->
+    <div class="reveal" style="display:flex; align-items:center; justify-content:center; gap:clamp(16px,3vw,32px); margin-top:clamp(10px,2vh,18px); flex-wrap:wrap;">
       <div class="deploy-badge">
         <code>databricks bundle deploy --target dev</code>
         <span class="deploy-badge__arrow">&rarr;</span>
         <span class="deploy-badge__result">18 tables &middot; 7 minutes</span>
       </div>
-    </div>
-
-    <!-- Stats row -->
-    <div class="stat-pills reveal" style="margin-top:clamp(8px,1.5vh,16px);">
-      <div class="stat-pill"><span class="stat-pill__val">1000+</span><span class="stat-pill__label">JSONL files</span></div>
-      <div class="stat-pill"><span class="stat-pill__val">53</span><span class="stat-pill__label">Quality Constraints</span></div>
-      <div class="stat-pill"><span class="stat-pill__val">6-way</span><span class="stat-pill__label">Streaming Join</span></div>
-      <div class="stat-pill"><span class="stat-pill__val">Zero-copy</span><span class="stat-pill__label">External Volume</span></div>
+      <div style="display:flex; gap:10px;">
+        <div class="stat-pill"><span class="stat-pill__val">53</span><span class="stat-pill__label">Constraints</span></div>
+        <div class="stat-pill"><span class="stat-pill__val">6-way</span><span class="stat-pill__label">Join</span></div>
+        <div class="stat-pill"><span class="stat-pill__val">Zero-copy</span><span class="stat-pill__label">Volume</span></div>
+      </div>
     </div>
   </section>
 

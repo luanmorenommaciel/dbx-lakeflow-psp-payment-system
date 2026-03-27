@@ -1,106 +1,93 @@
 # Medallion Architecture Quick Reference
 
-> **MCP Validated**: 2026-03-26 | **Max Lines**: 100
+> Fast lookup tables. For code examples, see linked files.
+> **MCP Validated**: 2026-03-26
 
-## Layer Cheat Sheet
+## Layer Comparison
 
-| Layer | Input | Output | Quality | Update Mode |
-|-------|-------|--------|---------|-------------|
-| Bronze | Raw files | Delta tables | `@dlt.expect` (warn) | Append-only |
-| Silver | Bronze tables | Delta tables | `@dlt.expect_or_drop` | Append/Merge |
-| Gold | Silver tables | Delta tables | `@dlt.expect_or_fail` | Refresh/Merge |
+| Property | Bronze | Silver | Gold | Feature (AI ext.) | Vector (AI ext.) |
+|----------|--------|--------|------|-------------------|------------------|
+| **Data Quality** | Raw, as-is | Cleansed, validated | Business-ready | ML-ready, point-in-time | Embedding-ready |
+| **Schema** | Schema-on-read | Schema-on-write | Star/snowflake | Feature schemas | Vector + metadata |
+| **Duplicates** | Allowed | Deduplicated | Aggregated | Versioned features | Deduplicated embeddings |
+| **Format** | Delta/Iceberg (append) | Delta/Iceberg (merge) | Delta/Iceberg (overwrite/merge) | Feature store | Vector DB (Qdrant, Pinecone) |
+| **Consumers** | Data engineers | Analysts, ML engineers | Business users, dashboards | ML models, inference | RAG, semantic search |
+| **Retention** | Long (years) | Medium (months) | Short-medium (refreshed) | Versioned (time-travel) | Refreshed with source |
 
-## DLT Syntax Quick Reference
+## Naming Convention
 
-```python
-# Bronze - Raw ingestion
-@dlt.table(name="bronze_xxx")
-@dlt.expect("rescued_null", "_rescued_data IS NULL")
-def bronze_xxx():
-    return spark.readStream.format("cloudFiles").load(path)
-
-# Silver - Cleansed
-@dlt.table(name="silver_xxx")
-@dlt.expect_or_drop("valid_id", "id IS NOT NULL")
-def silver_xxx():
-    return dlt.read_stream("bronze_xxx").select(...)
-
-# Silver View - Business logic
-@dlt.view(name="view_xxx")
-def view_xxx():
-    return spark.sql("SELECT ... FROM LIVE.silver_xxx JOIN ...")
-
-# Gold - Aggregated
-@dlt.table(name="gold_xxx")
-def gold_xxx():
-    return dlt.read("silver_xxx").groupBy(...).agg(...)
-```
+| Layer | Database Pattern | Table Pattern |
+|-------|-----------------|---------------|
+| Bronze | `bronze_{domain}` | `raw_{source}_{entity}` |
+| Silver | `silver_{domain}` | `cleansed_{entity}` |
+| Gold | `gold_{domain}` | `dim_{entity}`, `fact_{entity}`, `agg_{metric}` |
 
 ## Decision Matrix
 
-| Question | Bronze | Silver | Gold |
-|----------|--------|--------|------|
-| Business logic? | NO | Minimal | YES |
-| Aggregation? | NO | NO | YES |
-| Data quality? | Warn | Drop | Fail |
-| Schema? | Inferred/Loose | Enforced | Enforced |
-| Queryable by analysts? | NO | YES | YES |
+| Use Case | Choose |
+|----------|--------|
+| Raw event ingestion | Bronze append-only with metadata |
+| Deduplication + cleansing | Silver MERGE with dedup window |
+| Business KPIs / dashboards | Gold pre-aggregated tables |
+| ML feature engineering | Feature layer (or Silver with point-in-time joins) |
+| RAG / semantic search | Vector layer sourced from Gold |
+| Data quality enforcement | Quality gates between Bronze-Silver (shift-left) |
+| Schema changes from source | Schema evolution at Bronze, migrate Silver |
+| Historical tracking (SCD2) | Silver layer with valid_from/valid_to |
+| Real-time + batch combined | Bronze streaming, Silver/Gold batch |
+| AI model training data | Gold certified datasets with data contracts |
+| Cross-domain analytics | Gold layer with domain-separated namespaces |
 
-## Metadata Columns
+## Common Pitfalls
 
-| Column | Layer | Purpose |
-|--------|-------|---------|
-| `_ingested_at` | Bronze | When data landed |
-| `_source_file` | Bronze | Source file path |
-| `_processed_at` | Silver | When cleansed |
-| `_is_current` | Silver (SCD2) | Current record flag |
-| `_valid_from` | Silver (SCD2) | Effective start |
-| `_valid_to` | Silver (SCD2) | Effective end |
+| Don't | Do |
+|-------|-----|
+| Transform in Bronze | Keep Bronze raw, add only metadata columns |
+| Skip deduplication in Silver | Always deduplicate using business keys |
+| Build Gold directly from Bronze | Always go Bronze -> Silver -> Gold |
+| One monolithic Gold table | Create purpose-specific Gold aggregates |
+| Ignore schema evolution | Use Delta Lake/Iceberg schema evolution features |
+| Hard-delete in Bronze | Soft-delete or retain all raw records |
+| Store secrets in table properties | Use secret scopes or environment variables |
+| Treat medallion as "set and forget" | Medallion is a set of contracts -- enforce and monitor |
+| Skip quality in Bronze ("it's raw") | Shift-left: validate basic structure at ingestion |
+| Silver = Bronze with nicer column names | Silver must cleanse, deduplicate, type-cast, and validate |
+| Gold without `_computed_at` metadata | Always track when aggregations were last refreshed |
+| No data contracts between layers | Define schemas, SLAs, and ownership at each boundary |
+| Ignore AI/ML data needs | Add Feature/Vector layers for ML workloads |
 
-## Common Expectations
+## Essential Commands (Delta Lake / Iceberg)
 
-```python
-# Null checks
-"id IS NOT NULL"
-"amount IS NOT NULL"
+| Operation | Delta Lake SQL | Iceberg SQL |
+|-----------|---------------|-------------|
+| Create Bronze table | `CREATE TABLE bronze.raw USING DELTA` | `CREATE TABLE bronze.raw USING ICEBERG` |
+| Merge into Silver | `MERGE INTO silver.t USING src ON key ...` | `MERGE INTO silver.t USING src ON key ...` |
+| Schema evolution | `ALTER TABLE t SET TBLPROPERTIES ('delta.columnMapping.mode' = 'name')` | `ALTER TABLE t ADD COLUMN col TYPE` |
+| Optimize | `OPTIMIZE silver.t` (liquid clustering) | `CALL system.rewrite_data_files(...)` |
+| Vacuum / Expire | `VACUUM bronze.t RETAIN 168 HOURS` | `CALL system.expire_snapshots(...)` |
+| Time travel | `SELECT * FROM silver.t VERSION AS OF 5` | `SELECT * FROM silver.t TIMESTAMP AS OF '...'` |
+| Type widening (4.0+) | `ALTER TABLE t ALTER COLUMN col TYPE BIGINT` | `ALTER TABLE t ALTER COLUMN col TYPE BIGINT` |
+| Variant data (4.0+/v3) | `SELECT col:path::STRING FROM t` | Variant type support (v3) |
 
-# Range checks
-"amount >= 0"
-"date >= '2020-01-01'"
+## AI-Era Extensions (2025+)
 
-# Domain checks
-"status IN ('ACTIVE', 'INACTIVE', 'PENDING')"
-"card_type IN ('V', 'M', 'D', 'A')"
+| Extension Layer | Source | Purpose | Storage |
+|----------------|--------|---------|---------|
+| **Feature Layer** | Silver/Gold | Versioned, point-in-time correct ML features | Feature store (Feast, Tecton, Databricks) |
+| **Vector Layer** | Gold | Embeddings for RAG and semantic search | Vector DB (Qdrant, Pinecone, Weaviate) |
+| **Semantic Layer** | Gold | Business metrics as code, reusable definitions | dbt Semantic Layer, Cube, AtScale |
 
-# Format checks
-"LENGTH(id) <= 50"
-"email RLIKE '^[^@]+@[^@]+$'"
-```
+Key principles for AI-era medallion:
+- Certified Gold datasets serve as the trusted source for AI/ML training data
+- Feature layer enforces point-in-time correctness (no data leakage)
+- Vector layer is refreshed when underlying Gold data changes
+- Data contracts are mandatory when AI models consume the data
+- Quality must shift left: validate structure at Bronze, not just Silver
 
-## Anti-Patterns
+## Related Documentation
 
-| Don't | Do Instead |
-|-------|------------|
-| Business logic in Bronze | Move to Silver/Gold |
-| `SELECT *` | Explicit column list |
-| Hardcode paths | Use `spark.conf.get()` |
-| Skip expectations | Always add quality checks |
-| Too many layers | Max: Bronze -> Silver -> Gold |
-
-## File Naming Convention
-
-```
-{layer}_{source}_{entity}
-bronze_payments_transactions
-silver_payments_transactions
-gold_transaction_summary
-```
-
-## Unity Catalog Structure
-
-```
-catalog_name (Catalog)
-├── bronze (Schema) - Raw tables
-├── silver (Schema) - Cleansed tables + views
-└── gold (Schema)   - Aggregated tables
-```
+| Topic | Path |
+|-------|------|
+| Layer Transitions | `patterns/layer-transitions.md` |
+| Quality Gates | `patterns/data-quality-gates.md` |
+| Full Index | `index.md` |

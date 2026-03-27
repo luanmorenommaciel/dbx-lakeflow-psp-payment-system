@@ -1,0 +1,193 @@
+schema_version: "1.0"
+domain: aws-lambda
+file_type: sam-template
+last_validated: "2026-02-17"
+source: "AWS SAM Documentation + AWS Lambda Best Practices"
+
+# Complete SAM Template Spec for S3-Triggered Lambda Pipeline
+# This is a machine-readable reference, not a deployable template.
+
+template_structure:
+  header:
+    AWSTemplateFormatVersion:
+      value: "2010-09-09"
+      required: true
+      notes: "Always this value"
+    Transform:
+      value: "AWS::Serverless-2016-10-31"
+      required: true
+      notes: "Declares SAM template"
+    Description:
+      type: string
+      required: false
+      notes: "Human-readable stack description"
+
+  globals:
+    description: "Shared configuration inherited by all functions"
+    fields:
+      Function.Runtime:
+        type: string
+        required: true
+        values: ["python3.12", "python3.11", "python3.13"]
+        default: "python3.12"
+        notes: "Python runtime version"
+      Function.Timeout:
+        type: integer
+        required: true
+        default: 300
+        range: "1-900"
+        notes: "Seconds before function times out"
+      Function.MemorySize:
+        type: integer
+        required: true
+        default: 512
+        range: "128-10240"
+        notes: "MB of memory; 512 minimum for pandas/pyarrow"
+      Function.Architectures:
+        type: list
+        values: ["x86_64", "arm64"]
+        default: ["x86_64"]
+        notes: "arm64 cheaper but check layer compatibility"
+      Function.Environment.Variables:
+        type: map
+        required: false
+        common_keys:
+          LOG_LEVEL: "INFO"
+          POWERTOOLS_SERVICE_NAME: "(required for Powertools)"
+          POWERTOOLS_LOG_LEVEL: "INFO"
+
+  resources:
+    lambda_function:
+      type: "AWS::Serverless::Function"
+      properties:
+        CodeUri:
+          type: string
+          required: true
+          example: "src/"
+          notes: "Directory containing handler code"
+        Handler:
+          type: string
+          required: true
+          pattern: "{module}.{function}"
+          example: "app.lambda_handler"
+        Layers:
+          type: list
+          required: false
+          max_items: 5
+          common_layers:
+            aws_sdk_pandas:
+              arn_pattern: "arn:aws:lambda:{region}:336392948345:layer:AWSSDKPandas-Python312:{version}"
+              includes: ["pandas", "pyarrow", "numpy", "boto3"]
+              min_memory: 512
+            powertools:
+              arn_pattern: "arn:aws:lambda:{region}:017000801446:layer:AWSLambdaPowertoolsPythonV3-python312-x86_64:{version}"
+              includes: ["aws_lambda_powertools"]
+              min_memory: 128
+        Policies:
+          type: list
+          required: true
+          notes: "Use SAM policy templates for least privilege"
+          common_templates:
+            - name: S3ReadPolicy
+              params: [BucketName]
+              grants: ["s3:GetObject", "s3:ListBucket"]
+            - name: S3CrudPolicy
+              params: [BucketName]
+              grants: ["s3:GetObject", "s3:PutObject", "s3:DeleteObject", "s3:ListBucket"]
+            - name: S3WritePolicy
+              params: [BucketName]
+              grants: ["s3:PutObject"]
+            - name: SQSSendMessagePolicy
+              params: [QueueName]
+              grants: ["sqs:SendMessage"]
+        Events:
+          type: map
+          s3_trigger:
+            type: S3
+            properties:
+              Bucket:
+                type: ref
+                required: true
+                notes: "Must reference S3 bucket in same template"
+              Events:
+                type: string
+                required: true
+                values:
+                  - "s3:ObjectCreated:*"
+                  - "s3:ObjectCreated:Put"
+                  - "s3:ObjectRemoved:*"
+              Filter:
+                type: object
+                required: false
+                fields:
+                  S3Key.Rules:
+                    type: list
+                    items:
+                      - Name: "prefix"
+                        Value: "raw/"
+                      - Name: "suffix"
+                        Value: ".csv"
+        DeadLetterQueue:
+          type: object
+          required: false
+          fields:
+            Type:
+              values: ["SQS", "SNS"]
+            TargetArn:
+              type: ref
+              notes: "ARN of SQS queue or SNS topic"
+        EventInvokeConfig:
+          type: object
+          required: false
+          fields:
+            MaximumRetryAttempts:
+              type: integer
+              range: "0-2"
+              default: 2
+            MaximumEventAgeInSeconds:
+              type: integer
+              range: "60-21600"
+              default: 21600
+              notes: "6 hours max"
+
+    s3_bucket:
+      type: "AWS::S3::Bucket"
+      properties:
+        BucketName:
+          type: string
+          required: false
+          notes: "Auto-generated if omitted (recommended)"
+          pattern: "!Sub '${AWS::StackName}-{purpose}'"
+
+    sqs_queue:
+      type: "AWS::SQS::Queue"
+      properties:
+        QueueName:
+          type: string
+          required: false
+        MessageRetentionPeriod:
+          type: integer
+          default: 1209600
+          notes: "14 days in seconds"
+        VisibilityTimeout:
+          type: integer
+          default: 30
+          notes: "Should be >= Lambda timeout"
+
+  outputs:
+    description: "Exported values for cross-stack references"
+    common_outputs:
+      FunctionArn:
+        value: "!GetAtt ProcessorFunction.Arn"
+      InputBucketName:
+        value: "!Ref InputBucket"
+      OutputBucketName:
+        value: "!Ref OutputBucket"
+
+# Deployment commands
+deployment:
+  first_deploy: "sam build && sam deploy --guided"
+  subsequent: "sam build && sam deploy"
+  local_test: "sam local invoke ProcessorFunction -e events/s3-put.json"
+  tail_logs: "sam logs -n ProcessorFunction --tail"
+  delete: "sam delete"

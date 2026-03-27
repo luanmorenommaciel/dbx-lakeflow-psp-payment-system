@@ -1,23 +1,23 @@
 -- Databricks notebook source
 -- Entity: Customer Analytics
 -- Layer: Gold - Business Aggregations
--- Upstream: silver_unified_transactions (via pipeline-internal reference)
+-- Upstream: silver.silver_l2_customer_service
 
 -- =============================================================================
 -- GOLD: Customer Lifetime Value and Behavioral Analytics
 -- =============================================================================
--- Aggregates from the unified transaction table to produce per-customer
+-- Aggregates from the Silver L2 customer service view to produce per-customer
 -- lifetime metrics including value segmentation, lifecycle stage, frequency
 -- analysis, risk profiling, and a composite health score.
 --
--- Uses LIVE.silver_unified_transactions since this table is created by the
--- Python notebook within the same pipeline (pipeline-internal reference).
+-- Reads from silver_l2_customer_service which pre-joins transactions, orders,
+-- customers, payments, merchants, and disputes at transaction grain.
 --
 -- Grain: customer_id
 -- =============================================================================
 
 CREATE OR REFRESH MATERIALIZED VIEW `${catalog}`.gold.psp_customer_analytics
-COMMENT "Customer lifetime value and behavioral analytics - aggregated from unified transactions"
+COMMENT "Customer lifetime value and behavioral analytics - aggregated from Silver L2 customer service view"
 TBLPROPERTIES (
     "quality" = "gold",
     "domain" = "customers",
@@ -105,7 +105,7 @@ WITH customer_transactions AS (
         SUM(CASE WHEN DATEDIFF(CURRENT_DATE(), transaction_date) <= 90 THEN 1 ELSE 0 END) AS transactions_last_90d,
         SUM(CASE WHEN DATEDIFF(CURRENT_DATE(), transaction_date) <= 90 THEN transaction_amount ELSE 0 END) AS spend_last_90d
 
-    FROM `${catalog}`.silver.silver_unified_transactions
+    FROM `${catalog}`.silver.silver_l2_customer_service
     GROUP BY
         customer_id,
         customer_type,

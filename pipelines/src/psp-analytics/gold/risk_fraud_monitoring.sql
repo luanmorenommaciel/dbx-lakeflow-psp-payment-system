@@ -1,7 +1,7 @@
 -- Databricks notebook source
 -- Entity: Risk & Fraud Monitoring
 -- Layer: Gold - Business Aggregations
--- Upstream: silver_unified_transactions (via pipeline-internal reference)
+-- Upstream: silver.silver_l2_risk_operations
 
 -- =============================================================================
 -- GOLD: Transaction-Level Risk Scoring and Fraud Detection
@@ -10,14 +10,14 @@
 -- transaction pattern analysis. Produces fraud indicators, composite risk
 -- scores, and recommended actions for the operations team.
 --
--- Uses the unified transaction table for the complete context needed for
--- risk assessment across all dimensions.
+-- Reads from silver_l2_risk_operations which pre-joins transactions, orders,
+-- customers, payments, merchants, and disputes with pre-computed risk scores.
 --
 -- Grain: txn_id
 -- =============================================================================
 
 CREATE OR REFRESH MATERIALIZED VIEW `${catalog}`.gold.psp_risk_fraud_monitoring
-COMMENT "Transaction-level risk scoring and fraud detection indicators"
+COMMENT "Transaction-level risk scoring and fraud detection indicators - from Silver L2 risk operations view"
 TBLPROPERTIES (
     "quality" = "gold",
     "domain" = "risk",
@@ -94,8 +94,8 @@ WITH risk_calculations AS (
         days_since_merchant_created,
         days_since_payment_first_seen,
 
-        psp_revenue AS transaction_fees,
-        merchant_net_revenue,
+        fees_total_amount AS transaction_fees,
+        net_amount AS merchant_net_revenue,
 
         -- Merchant risk score component
         (
@@ -141,7 +141,7 @@ WITH risk_calculations AS (
         CASE WHEN days_since_customer_created < 1 AND transaction_amount > 200 THEN TRUE ELSE FALSE END AS new_customer_high_value,
         CASE WHEN (order_hour < 2 OR order_hour > 23) AND transaction_amount > 300 THEN TRUE ELSE FALSE END AS late_night_high_value
 
-    FROM `${catalog}`.silver.silver_unified_transactions
+    FROM `${catalog}`.silver.silver_l2_risk_operations
 )
 
 SELECT

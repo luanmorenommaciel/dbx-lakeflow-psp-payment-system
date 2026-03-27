@@ -2,10 +2,10 @@
 # PSP Analytics Pipeline - Unified Medallion Pipeline
 # =============================================================================
 #
-# Single unified pipeline covering all 7 entities across 3 layers.
+# Single unified pipeline covering all 7 entities across Bronze, Silver L1, Silver L2, and Gold layers.
 # DLT resolves execution order from the dependency graph automatically.
 #
-# Libraries: 7 bronze + 7 silver SQL + 1 silver Python + 3 gold = 18 notebooks
+# Libraries: 7 bronze + 7 silver L1 SQL + 1 silver L1 Python + 4 silver L2 SQL + 3 gold = 22 notebooks
 #
 # =============================================================================
 
@@ -42,7 +42,7 @@ resources:
         - notebook:
             path: ../src/psp-analytics/bronze/disputes.sql
 
-        # -- Silver: Cleaned, conformed, domain-aligned (8 tables) --
+        # -- Silver L1: Cleaned, conformed, domain-aligned (7 entity tables) --
         - notebook:
             path: ../src/psp-analytics/silver/merchants.sql
         - notebook:
@@ -59,6 +59,16 @@ resources:
             path: ../src/psp-analytics/silver/disputes.sql
         - notebook:
             path: ../src/psp-analytics/silver/unified_transactions.py
+
+        # -- Silver L2: Domain-scoped operational views (4 materialized views) --
+        - notebook:
+            path: ../src/psp-analytics/silver/l2_settlement_ops.sql
+        - notebook:
+            path: ../src/psp-analytics/silver/l2_customer_service.sql
+        - notebook:
+            path: ../src/psp-analytics/silver/l2_risk_operations.sql
+        - notebook:
+            path: ../src/psp-analytics/silver/l2_merchant_operations.sql
 
         # -- Gold: Business analytics (3 tables) --
         - notebook:

@@ -5,47 +5,72 @@ description: Save valuable insights from the current session to storage
 
 # Memory Command
 
-Save session insights to `.claude/storage/` with **daily accumulation** - multiple sessions append to the same daily file.
+Save session insights to `.claude/storage/` for future reference (directory is auto-created on first use).
 
 ## Usage
 
 ```bash
 /memory                           # Save current session insights
 /memory "specific note to save"   # Save with specific context
-/memory --summary                 # View today's accumulated memories
 ```
 
 ---
 
-## Daily Accumulation Logic
+## What It Does
 
-```text
-┌─────────────────────────────────────────────────────────────────┐
-│  memory-2026-02-02.md                                           │
-├─────────────────────────────────────────────────────────────────┤
-│  # Daily Memory: 2026-02-02                                     │
-│  > 3 sessions captured                                          │
-│                                                                 │
-│  ## Daily Summary                                               │
-│  - [09:15] Parser validation setup                              │
-│  - [14:30] Field position fixes                                 │
-│  - [16:45] Claude Code 100% configuration                       │
-│                                                                 │
-│  ---                                                            │
-│                                                                 │
-│  ## Session 1 - 09:15                                           │
-│  > {session content}                                            │
-│                                                                 │
-│  ---                                                            │
-│                                                                 │
-│  ## Session 2 - 14:30                                           │
-│  > {session content}                                            │
-│                                                                 │
-│  ---                                                            │
-│                                                                 │
-│  ## Session 3 - 16:45                                           │
-│  > {session content}                                            │
-└─────────────────────────────────────────────────────────────────┘
+1. **Analyzes** current conversation for valuable insights
+2. **Compresses** to high-signal format (decisions, patterns, gotchas)
+3. **Saves** to `.claude/storage/memory-{YYYY-MM-DD}.md`
+
+---
+
+## When to Use
+
+Use `/memory` when you've discovered something worth remembering:
+
+- ✅ Non-obvious decisions with rationale
+- ✅ Patterns that worked well
+- ✅ Gotchas discovered
+- ✅ Architecture decisions
+- ✅ Terminology clarifications
+
+**Don't save:**
+
+- ❌ Step-by-step implementation details (obvious from code)
+- ❌ Temporary debugging info
+- ❌ Every session (only valuable ones)
+
+---
+
+## Output Format
+
+Creates: `.claude/storage/memory-{YYYY-MM-DD}.md`
+
+```markdown
+# Memory: {date}
+
+> {One-line summary of session}
+
+## Decisions Made
+
+| Decision | Rationale | Impact |
+| -------- | --------- | ------ |
+| {what} | {why} | {files affected} |
+
+## Patterns Discovered
+
+- {pattern}: {where applied}
+
+## Gotchas
+
+- {gotcha}: {how to avoid}
+
+## Open Items
+
+- [ ] {item for next session}
+
+---
+*Saved: {timestamp}*
 ```
 
 ---
@@ -55,202 +80,56 @@ Save session insights to `.claude/storage/` with **daily accumulation** - multip
 When invoked:
 
 ```text
-1. Check if .claude/storage/memory-{YYYY-MM-DD}.md exists:
-
-   IF EXISTS:
-     - Read existing file
-     - Count existing sessions (## Session N pattern)
-     - Increment session counter
-     - Append new session section
-     - Update Daily Summary with new entry
-
-   IF NOT EXISTS:
-     - Create new file with header
-     - Start with Session 1
-
-2. Scan current conversation for:
+1. Scan conversation for:
    - Decisions (look for "decided", "chose", "will use")
    - Patterns (look for reusable solutions)
    - Gotchas (look for "gotcha", "watch out", "careful")
    - Open items (look for "TODO", "later", "next time")
-   - Files modified (extract from tool calls)
 
-3. Compress to session block:
-   - Max 5 decisions per session
-   - Max 3 patterns per session
-   - Max 3 gotchas per session
-   - Include file list if significant changes
+2. Compress ruthlessly:
+   - Max 5 decisions
+   - Max 3 patterns
+   - Max 3 gotchas
+   - Max 3 open items
 
-4. Write/Append to storage file
+3. Write to storage:
+   - Create .claude/storage/ if not exists
+   - Append to existing file if same date
+   - Use consistent format
 ```
 
 ---
 
-## Output Format
-
-**New File (First Session of Day):**
-
-```markdown
-# Daily Memory: {YYYY-MM-DD}
-
-> 1 session captured
-
-## Daily Summary
-
-| Time | Focus | Key Outcome |
-|------|-------|-------------|
-| {HH:MM} | {brief description} | {main result} |
-
----
-
-## Session 1 - {HH:MM}
-
-> {One-line summary}
-
-### Decisions
-| Decision | Rationale |
-|----------|-----------|
-| {what} | {why} |
-
-### Patterns
-- {pattern}: {application}
-
-### Gotchas
-- {gotcha}: {avoidance}
-
-### Files Changed
-- `{path}` - {what changed}
-
----
-*Session saved: {timestamp}*
-```
-
-**Append (Subsequent Sessions):**
-
-```markdown
----
-
-## Session {N} - {HH:MM}
-
-> {One-line summary}
-
-### Decisions
-| Decision | Rationale |
-|----------|-----------|
-| {what} | {why} |
-
-### Patterns
-- {pattern}: {application}
-
-### Gotchas
-- {gotcha}: {avoidance}
-
-### Files Changed
-- `{path}` - {what changed}
-
----
-*Session saved: {timestamp}*
-```
-
-Also update the **Daily Summary** table at the top with the new session entry.
-
----
-
-## Implementation Steps
-
-```python
-# Pseudocode for memory accumulation
-
-def save_memory(context: str = None):
-    today = datetime.now().strftime("%Y-%m-%d")
-    time_now = datetime.now().strftime("%H:%M")
-    storage_path = f".claude/storage/memory-{today}.md"
-
-    # Scan conversation for insights
-    insights = extract_insights(conversation)
-
-    if file_exists(storage_path):
-        # APPEND mode
-        content = read_file(storage_path)
-        session_num = count_sessions(content) + 1
-
-        # Update daily summary
-        content = update_daily_summary(content, time_now, context)
-
-        # Append new session
-        content += format_session(session_num, time_now, insights)
-
-        # Update session count in header
-        content = update_session_count(content, session_num)
-    else:
-        # CREATE mode
-        content = create_daily_header(today)
-        content += format_daily_summary(time_now, context)
-        content += format_session(1, time_now, insights)
-
-    write_file(storage_path, content)
-    return f"Saved to {storage_path} (Session {session_num})"
-```
-
----
-
-## When to Use
-
-**Good times to invoke /memory:**
-
-- ✅ After completing a significant task
-- ✅ When you've discovered something non-obvious
-- ✅ Before ending a work session
-- ✅ After fixing a tricky bug
-- ✅ When making architecture decisions
-
-**The command handles accumulation** - you don't need to worry about overwriting. Each invocation adds a new session block.
-
----
-
-## Example: Multi-Session Day
+## Example
 
 ```text
-User: /memory "Completed data validation"
+User: /memory "Completed authentication refactoring"
 
-→ Checking .claude/storage/memory-2026-02-02.md...
-→ Found 2 existing sessions
 → Scanning conversation...
-→ Found: 3 decisions, 2 patterns, 1 gotcha
+→ Found: 2 decisions, 1 pattern, 1 gotcha
 
-✅ Appended Session 3 to memory-2026-02-02.md
+Saved to: .claude/storage/memory-2026-01-23.md
 
-## Daily Summary (Updated)
-| Time | Focus | Key Outcome |
-|------|-------|-------------|
-| 09:15 | Parser setup | Initial structure |
-| 14:30 | Field fixes | Positions corrected |
-| 16:45 | Data validation | All parsers verified |  ← NEW
+## Preview:
+> Completed authentication refactoring with JWT + refresh tokens
 
-## Session 3 - 16:45
-> Completed data validation - all file types verified
-
-### Decisions
 | Decision | Rationale |
-|----------|-----------|
-| Field [567:579] for cash_back | Verified against source spec |
-| Entity needs 6 prefixes | Added mapping to PREFIX_MAP |
+| -------- | --------- |
+| Use JWT + refresh | Stateless, scales better |
+| 15min access token | Balance security/UX |
 
-### Patterns
-- UUID-based context tracking for parsing
-- Generator parsing for memory efficiency
+Pattern: Token rotation on refresh
 
-### Gotchas
-- Some formats have DUAL sign handling - don't assume single method
+Gotcha: Must invalidate refresh tokens on password change
 ```
 
 ---
 
-## Tips
+## Best Practices
 
 | Do | Don't |
 | -- | ----- |
-| Run at natural breakpoints | Run after every message |
-| Include context parameter | Leave summaries vague |
-| Let it accumulate all day | Create multiple daily files |
-| Review daily summary for gaps | Duplicate obvious info |
+| Save only valuable insights | Save every session |
+| Compress ruthlessly | Write long summaries |
+| Reference file paths | Duplicate code comments |
+| Store decisions + rationale | Store implementation details |

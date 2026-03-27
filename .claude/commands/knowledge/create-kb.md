@@ -1,3 +1,8 @@
+---
+name: create-kb
+description: Create a complete KB domain from scratch with MCP validation
+---
+
 # Create Knowledge Base Command
 
 > Create a complete KB section from scratch with MCP validation.
@@ -25,7 +30,7 @@
 
 ## See Also
 
-- **Agent**: `.claude/agents/exploration/kb-architect.md`
-- **Example**: `.claude/kb/llmops/`
+- **Agent**: `.claude/agents/architect/kb-architect.md`
+- **Example**: `.claude/kb/{domain}/`
 - **Templates**: `.claude/kb/_templates/`
 - **Registry**: `.claude/kb/_index.yaml`

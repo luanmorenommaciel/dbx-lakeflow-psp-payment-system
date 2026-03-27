@@ -1,7 +1,9 @@
 # Databricks Lakeflow Knowledge Base
 
-> **Purpose**: Authoritative reference for Lakeflow Declarative Pipelines development.
-> **MCP Validated**: 2025-01-19
+> **Purpose**: Authoritative reference for Lakeflow Declarative Pipelines (formerly DLT) development.
+> **Version Coverage**: Lakeflow Declarative Pipelines GA (July 2025), releases through Feb 2026 (DBR 16.4/17.3)
+> **Key Update**: Contributed to Apache Spark as "Spark Declarative Pipelines" (DAIS 2025)
+> **MCP Validated**: 2026-03-26
 
 ## Quick Navigation
 
@@ -56,8 +58,12 @@
 | **Streaming Table** | Incrementally processes new data |
 | **Materialized View** | Batch-refreshed aggregate table |
 | **Expectation** | Data quality constraint |
-| **AUTO CDC** | Automatic change data capture |
+| **AUTO CDC** | Automatic change data capture (SCD Type 1 now supported) |
 | **SCD Type 1/2** | Slowly Changing Dimension patterns |
+| **Move Tables** | Move MVs/STs between pipelines (GA, 2025.29) |
+| **Type Widening** | Safe column type broadening without pipeline reset (Feb 2026) |
+| **Multi-Catalog** | Publish to multiple catalogs/schemas from single pipeline |
+| **Spark Declarative Pipelines** | Open-source contribution to Apache Spark (DAIS 2025) |
 
 ## Common Patterns
 
@@ -72,6 +78,15 @@ Bronze: WARN  -> Track issues
 Silver: DROP  -> Remove bad data
 Gold:   FAIL  -> Strict validation
 ```
+
+### Recent Release Highlights
+
+| Release | Key Feature |
+|---------|-------------|
+| 2025.04 (Jan 2025) | Multi-catalog/schema support, LIVE schema no longer required |
+| 2025.29 (Jul 2025) | Move Tables between pipelines (GA), ALTER commands on MVs/STs |
+| 2025.30 (Jul 2025) | AUTO CDC: multiple flows per target, one-time backfills, SQL support |
+| Feb 2026 | Type widening for Delta tables, SCD Type 1 with AUTO CDC |
 
 ---
 

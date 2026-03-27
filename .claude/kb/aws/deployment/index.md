@@ -1,44 +1,63 @@
-# AWS Deployment KB
+# AWS Deployment Knowledge Base
 
-> **MCP Validated**: 2026-03-26
-
-SAM CLI and AWS CLI commands for Lambda deployment and testing.
+> **Purpose**: AWS serverless deployment operations using SAM CLI, AWS CLI, S3, and Lambda
+> **MCP Validated**: 2026-02-17
 
 ## Quick Navigation
 
-| Need | Go To |
-|------|-------|
-| SAM lifecycle | `concepts/sam-lifecycle.md` |
-| Deploy commands | `patterns/sam-deploy-commands.md` |
-| Testing | `patterns/lambda-testing.md` |
-| S3 operations | `patterns/s3-test-workflow.md` |
+### Concepts (< 150 lines each)
 
-## Deployment Workflow
+| File | Purpose |
+|------|---------|
+| [concepts/sam-cli.md](concepts/sam-cli.md) | SAM CLI commands: init, build, deploy, sync, validate |
+| [concepts/aws-cli.md](concepts/aws-cli.md) | AWS CLI essentials: configure, profiles, output formats |
+| [concepts/environments.md](concepts/environments.md) | Multi-environment deployment with samconfig.toml |
 
-```text
-sam validate -> sam build -> sam deploy -> verify -> test
-```
+### Patterns (< 200 lines each)
 
-## Confidence Thresholds
+| File | Purpose |
+|------|---------|
+| [patterns/sam-deploy.md](patterns/sam-deploy.md) | SAM build, package, deploy workflow end-to-end |
+| [patterns/local-testing.md](patterns/local-testing.md) | sam local invoke, start-api, generate-event |
+| [patterns/s3-operations.md](patterns/s3-operations.md) | S3 sync, cp, ls, presign patterns |
 
-| Command Type | Threshold |
-|--------------|-----------|
-| `sam deploy` to prd | 0.98 |
-| `aws lambda update-function-code` | 0.95 |
-| `sam build`, `sam validate` | 0.90 |
-| `sam local invoke`, `aws s3 ls` | 0.80 |
+### Specs (Machine-Readable)
 
-## Stack Naming Convention
+| File | Purpose |
+|------|---------|
+| [specs/deployment-config.yaml](specs/deployment-config.yaml) | Deployment configuration spec for samconfig.toml |
 
-```
-{project}-{function}-{environment}
+---
 
-Examples:
-- psp-processor-dev
-- psp-processor-prd
-```
+## Quick Reference
 
-## Related
+- [quick-reference.md](quick-reference.md) - Fast lookup tables
 
-- Agent: `.claude/agents/aws/aws-deployer.md`
-- Lambda: `.claude/kb/aws/lambda/`
+---
+
+## Key Concepts
+
+| Concept | Description |
+|---------|-------------|
+| **SAM CLI** | Serverless Application Model CLI for building, testing, and deploying Lambda apps |
+| **AWS CLI** | Unified command-line tool for managing AWS services and resources |
+| **Environments** | Multi-environment strategy using samconfig.toml config-env sections |
+| **S3 Operations** | Object storage commands for artifact management and static hosting |
+
+---
+
+## Learning Path
+
+| Level | Files |
+|-------|-------|
+| **Beginner** | concepts/sam-cli.md, concepts/aws-cli.md |
+| **Intermediate** | patterns/sam-deploy.md, patterns/local-testing.md |
+| **Advanced** | concepts/environments.md, patterns/s3-operations.md |
+
+---
+
+## Agent Usage
+
+| Agent | Primary Files | Use Case |
+|-------|---------------|----------|
+| aws-deployer | patterns/sam-deploy.md, concepts/environments.md | Build, test, and deploy Lambda functions to AWS |

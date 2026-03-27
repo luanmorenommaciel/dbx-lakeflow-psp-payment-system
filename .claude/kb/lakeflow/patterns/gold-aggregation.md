@@ -1,6 +1,6 @@
 # Gold Aggregation Patterns
 
-> **MCP Validated**: 2026-03-26
+> **MCP Validated**: 2025-01-19
 > **Source**: https://docs.databricks.com/aws/en/dlt/materialized-views
 
 ## Gold Layer Purpose
@@ -30,10 +30,10 @@ from pyspark.sql import functions as F
 )
 def daily_transaction_summary():
     return (
-        spark.read.table("transactions_silver")
+        spark.read.table("tddf_transactions_silver")
         .groupBy(
             F.col("transaction_date"),
-            F.col("merchant_id"),
+            F.col("merchant_number"),
             F.col("card_type")
         )
         .agg(
@@ -52,9 +52,9 @@ def daily_transaction_summary():
 @dlt.table(name="monthly_merchant_performance")
 def monthly_merchant_performance():
     return (
-        spark.read.table("transactions_silver")
+        spark.read.table("tddf_transactions_silver")
         .withColumn("month", F.date_trunc("month", F.col("transaction_date")))
-        .groupBy("month", "merchant_id")
+        .groupBy("month", "merchant_number")
         .agg(
             F.count("*").alias("total_transactions"),
             F.sum("signed_amount").alias("total_volume"),
@@ -71,24 +71,24 @@ def monthly_merchant_performance():
 ```python
 @dlt.table(name="merchant_360")
 def merchant_360():
-    merchants = spark.read.table("merchants_silver")
+    merchants = spark.read.table("mdi_silver")
     transactions = spark.read.table("daily_transaction_summary")
 
     return (
         merchants
         .join(
-            transactions.groupBy("merchant_id").agg(
+            transactions.groupBy("merchant_number").agg(
                 F.sum("transaction_count").alias("lifetime_transactions"),
                 F.sum("total_amount").alias("lifetime_volume"),
                 F.max("transaction_date").alias("last_transaction_date")
             ),
-            on="merchant_id",
+            on="merchant_number",
             how="left"
         )
         .select(
-            "merchant_id",
+            "merchant_number",
             "merchant_name",
-            "category",
+            "dba_name",
             "status",
             "effective_date",
             "lifetime_transactions",
@@ -104,13 +104,13 @@ def merchant_360():
 @dlt.table(name="fee_analysis")
 def fee_analysis():
     return (
-        spark.read.table("transactions_silver")
-        .groupBy("merchant_id", "card_type")
+        spark.read.table("tddf_transactions_silver")
+        .groupBy("merchant_number", "card_type")
         .agg(
-            F.sum("network_fee").alias("total_network_fees"),
+            F.sum("mc_visa_amex_fee").alias("total_network_fees"),
             F.sum("interchange_fee").alias("total_interchange"),
-            F.sum("amount").alias("total_volume"),
-            (F.sum("network_fee") / F.sum("amount") * 100)
+            F.sum("transaction_amount").alias("total_volume"),
+            (F.sum("mc_visa_amex_fee") / F.sum("transaction_amount") * 100)
                 .alias("effective_rate_pct")
         )
     )
@@ -125,7 +125,7 @@ from pyspark.sql.window import Window
 
 @dlt.table(name="rolling_metrics")
 def rolling_metrics():
-    window_7d = Window.partitionBy("merchant_id") \
+    window_7d = Window.partitionBy("merchant_number") \
         .orderBy("transaction_date") \
         .rowsBetween(-6, 0)
 
@@ -146,7 +146,7 @@ def mom_comparison():
         .withColumn(
             "prev_month_volume",
             F.lag("total_volume").over(
-                Window.partitionBy("merchant_id").orderBy("month")
+                Window.partitionBy("merchant_number").orderBy("month")
             )
         )
         .withColumn(
@@ -166,7 +166,7 @@ Gold layer uses FAIL for strict validation:
 @dlt.expect_all_or_fail({
     "valid_volume": "total_volume >= 0",
     "valid_count": "transaction_count >= 0",
-    "valid_merchant": "merchant_id IS NOT NULL"
+    "valid_merchant": "merchant_number IS NOT NULL"
 })
 def merchant_kpis():
     ...
@@ -183,12 +183,12 @@ def merchant_kpis():
 ### Materialized View Example
 
 ```python
-@dlt.view(name="active_merchants")
-def active_merchants():
+@dlt.view(name="current_merchant_status")
+def current_merchant_status():
     return (
-        spark.read.table("merchants_silver")
-        .filter(F.col("status") == "ACTIVE")
-        .select("merchant_id", "merchant_name", "effective_date")
+        spark.read.table("mdi_silver")
+        .filter(F.col("status") == "A")
+        .select("merchant_number", "merchant_name", "effective_date")
     )
 ```
 

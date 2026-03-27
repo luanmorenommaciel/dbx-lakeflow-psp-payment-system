@@ -14,11 +14,14 @@ catalog = spark.conf.get("catalog")
 
 @dlt.table(
     name=f"{catalog}.silver.silver_unified_transactions",
-    comment="Unified transaction domain table at transaction grain - combines all PSP entities",
+    comment="[DEPRECATED] Monolithic unified transaction table - use domain-specific L2 views instead: silver_l2_settlement_ops, silver_l2_customer_service, silver_l2_risk_operations, silver_l2_merchant_operations",
     table_properties={
         "quality": "silver",
         "layer": "silver_l2",
         "grain": "transaction",
+        "deprecated": "true",
+        "deprecated_date": "2026-03-26",
+        "deprecated_migration": "See silver_l2_* tables for domain-scoped replacements",
         "pipelines.autoOptimize.zOrderCols": "txn_id,transaction_date,merchant_id,customer_id",
     },
 )

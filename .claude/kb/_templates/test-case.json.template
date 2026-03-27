@@ -4,20 +4,21 @@
   "domain": "{{DOMAIN_NAME}}",
   "confidence_required": 0.98,
   "last_validated": "{{VALIDATION_DATE}}",
+  "_type_values": "string | integer | decimal | date | boolean",
   "cases": [
     {
       "id": "TC001",
       "description": "{{TEST_CASE_1_DESCRIPTION}}",
       "input": "{{TEST_CASE_1_INPUT}}",
       "expected": "{{TEST_CASE_1_EXPECTED}}",
-      "expected_type": "{{TYPE}}"
+      "expected_type": "{{TYPE: string | integer | decimal | date | boolean}}"
     },
     {
       "id": "TC002",
       "description": "{{TEST_CASE_2_DESCRIPTION}}",
       "input": "{{TEST_CASE_2_INPUT}}",
       "expected": "{{TEST_CASE_2_EXPECTED}}",
-      "expected_type": "{{TYPE}}"
+      "expected_type": "{{TYPE: string | integer | decimal | date | boolean}}"
     }
   ]
 }

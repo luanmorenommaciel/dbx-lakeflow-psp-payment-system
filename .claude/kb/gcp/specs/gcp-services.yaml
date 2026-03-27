@@ -1,0 +1,173 @@
+schema_version: "1.0"
+domain: gcp
+file_type: service-catalog
+last_validated: "2026-02-17"
+source: "Google Cloud documentation, MCP validation"
+
+services:
+  cloud_run:
+    name: Cloud Run
+    category: compute
+    description: "Fully managed serverless container platform"
+    python_package: "google-cloud-run"
+    pricing_model: "per-request (CPU + memory + request count)"
+    key_limits:
+      max_request_timeout: "3600s"
+      max_memory: "32Gi"
+      max_cpu: 8
+      max_instances: 100
+      max_concurrency: 1000
+      container_image_size: "32GB"
+    common_roles:
+      - "roles/run.invoker"
+      - "roles/run.admin"
+      - "roles/run.developer"
+    env_vars:
+      - name: PORT
+        auto_injected: true
+        default: "8080"
+      - name: K_SERVICE
+        auto_injected: true
+      - name: K_REVISION
+        auto_injected: true
+      - name: K_CONFIGURATION
+        auto_injected: true
+    docs_url: "https://cloud.google.com/run/docs"
+
+  pubsub:
+    name: Pub/Sub
+    category: messaging
+    description: "Global asynchronous messaging service"
+    python_package: "google-cloud-pubsub"
+    pricing_model: "per-message (data volume)"
+    key_limits:
+      max_message_size: "10MB"
+      max_attributes_per_message: 100
+      max_attribute_key_size: "256B"
+      max_attribute_value_size: "1024B"
+      max_subscriptions_per_topic: 10000
+      message_retention: "31 days"
+      ack_deadline_max: "600s"
+    delivery_guarantee: "at-least-once"
+    delivery_modes:
+      - push
+      - pull
+      - streaming_pull
+    common_roles:
+      - "roles/pubsub.publisher"
+      - "roles/pubsub.subscriber"
+      - "roles/pubsub.viewer"
+    docs_url: "https://cloud.google.com/pubsub/docs"
+
+  cloud_storage:
+    name: Cloud Storage (GCS)
+    category: storage
+    description: "Durable object storage with event notifications"
+    python_package: "google-cloud-storage"
+    pricing_model: "per-GB stored + per-operation"
+    storage_classes:
+      - name: STANDARD
+        min_duration: null
+        use_case: "Frequently accessed data"
+      - name: NEARLINE
+        min_duration: "30 days"
+        use_case: "Accessed less than once a month"
+      - name: COLDLINE
+        min_duration: "90 days"
+        use_case: "Accessed less than once a quarter"
+      - name: ARCHIVE
+        min_duration: "365 days"
+        use_case: "Long-term archival"
+    notification_events:
+      - OBJECT_FINALIZE
+      - OBJECT_DELETE
+      - OBJECT_ARCHIVE
+      - OBJECT_METADATA_UPDATE
+    key_limits:
+      max_object_size: "5TB"
+      max_notifications_per_bucket: 100
+      max_notifications_per_event: 10
+      max_bucket_name_length: 63
+    common_roles:
+      - "roles/storage.objectViewer"
+      - "roles/storage.objectCreator"
+      - "roles/storage.objectAdmin"
+      - "roles/storage.admin"
+    docs_url: "https://cloud.google.com/storage/docs"
+
+  bigquery:
+    name: BigQuery
+    category: analytics
+    description: "Serverless data warehouse for SQL analytics"
+    python_package: "google-cloud-bigquery"
+    pricing_model: "per-query (bytes scanned) + storage"
+    supported_formats:
+      - NEWLINE_DELIMITED_JSON
+      - CSV
+      - PARQUET
+      - AVRO
+      - ORC
+    key_limits:
+      max_row_size: "100MB"
+      max_columns: 10000
+      max_query_size: "12MB"
+      max_results_size: "128MB (compressed)"
+      streaming_insert_max_rows: 50000
+      streaming_insert_max_size: "10MB"
+      load_jobs_per_table_per_day: 1500
+    partitioning_types:
+      - time_unit: "DAY, HOUR, MONTH, YEAR"
+      - integer_range: "custom ranges"
+      - ingestion_time: "auto by load time"
+    common_roles:
+      - "roles/bigquery.dataViewer"
+      - "roles/bigquery.dataEditor"
+      - "roles/bigquery.jobUser"
+      - "roles/bigquery.admin"
+    docs_url: "https://cloud.google.com/bigquery/docs"
+
+  iam:
+    name: Identity and Access Management
+    category: security
+    description: "Access control for GCP resources"
+    python_package: "google-cloud-iam"
+    key_concepts:
+      principal: "Who (user, service account, group)"
+      role: "What permissions (predefined or custom)"
+      resource: "Which GCP resource"
+      policy: "Binding of principals to roles on a resource"
+    service_account_format: "{name}@{project}.iam.gserviceaccount.com"
+    best_practices:
+      - "Use least-privilege predefined roles"
+      - "One service account per Cloud Run service"
+      - "Never use roles/editor or roles/owner for service accounts"
+      - "Use Workload Identity for GKE workloads"
+      - "Audit with IAM Recommender"
+    docs_url: "https://cloud.google.com/iam/docs"
+
+  secret_manager:
+    name: Secret Manager
+    category: security
+    description: "Versioned secret storage with IAM access control"
+    python_package: "google-cloud-secret-manager"
+    pricing_model: "per-secret-version + per-access-operation"
+    key_limits:
+      max_secret_size: "64KiB"
+      max_versions_per_secret: "unlimited"
+      max_secrets_per_project: 40000
+    replication_modes:
+      - automatic
+      - user_managed
+    cloud_run_integration:
+      env_var: "--set-secrets=ENV_VAR=secret-name:version"
+      volume: "--set-secrets=/path/file=secret-name:version"
+    best_practices:
+      - "Pin to specific version numbers in production"
+      - "Use automatic replication for most cases"
+      - "Never log secret values"
+      - "Rotate secrets using versioning for zero downtime"
+    common_roles:
+      - "roles/secretmanager.secretAccessor"
+      - "roles/secretmanager.admin"
+      - "roles/secretmanager.viewer"
+    docs_url: "https://cloud.google.com/secret-manager/docs"

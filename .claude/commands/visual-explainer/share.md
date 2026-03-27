@@ -32,7 +32,7 @@ No Vercel account, Cloudflare account, or API keys needed. The deployment is "cl
 ## Script Location
 
 ```bash
-bash {{skill_dir}}/scripts/share.sh <file>
+bash /Users/luanmorenomaciel/GitHub/agentspec/.claude/skills/visual-explainer/scripts/share.sh <file>
 ```
 
 ## Output

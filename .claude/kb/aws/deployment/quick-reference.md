@@ -1,95 +1,91 @@
 # AWS Deployment Quick Reference
 
-> **MCP Validated**: 2026-03-26
+> Fast lookup tables. For code examples, see linked files.
+> **MCP Validated:** 2026-02-17
+> **Last Updated:** 2026-03-26
 
-## SAM Commands
+## SAM CLI Commands
 
-```bash
-# Validate template
-sam validate --lint
+| Command | Purpose | Key Flags |
+|---------|---------|-----------|
+| `sam init` | Scaffold new project | `--runtime python3.14 --app-template` |
+| `sam build` | Build artifacts | `--use-container --parallel` |
+| `sam deploy` | Deploy to AWS | `--guided --config-env dev` |
+| `sam sync` | Hot-sync changes (Accelerate) | `--watch --stack-name` |
+| `sam validate` | Validate template | `--lint` |
+| `sam local invoke` | Run function locally | `-e event.json --env-vars` |
+| `sam local start-api` | Local API Gateway | `--port 3000 --warm-containers` |
+| `sam delete` | Tear down stack | `--stack-name --no-prompts` |
+| `sam logs` | Tail CloudWatch logs | `--tail --stack-name` |
 
-# Build Lambda package
-sam build
+## SAM Accelerate (sam sync)
 
-# Deploy (interactive first time)
-sam deploy --guided
+| What Changed | Deployment Path | Speed |
+|-------------|----------------|-------|
+| Lambda code only | Direct update (skip CloudFormation) | Seconds |
+| Lambda layer code | Direct layer publish | Seconds |
+| Infrastructure (new resources) | CloudFormation nested stacks | Minutes |
+| Template config changes | CloudFormation update | Minutes |
 
-# Deploy to specific environment
-sam deploy --config-env dev
-sam deploy --config-env prd
+## AWS CLI S3 Commands
 
-# Tail logs
-sam logs --name FunctionName --stack-name StackName --tail
-```
+| Command | Purpose | Key Flags |
+|---------|---------|-----------|
+| `aws s3 ls` | List buckets/objects | `--recursive --human-readable` |
+| `aws s3 cp` | Copy files | `--recursive --exclude --include` |
+| `aws s3 sync` | Sync directories | `--delete --exclude` |
+| `aws s3 rm` | Delete objects | `--recursive` |
+| `aws s3 mb` | Create bucket | `--region us-east-1` |
+| `aws s3 presign` | Generate temp URL | `--expires-in 3600` |
 
-## AWS Lambda Commands
+## AWS CLI Essentials
 
-```bash
-# List functions
-aws lambda list-functions --query 'Functions[?starts_with(FunctionName, `psp-`)]'
+| Command | Purpose |
+|---------|---------|
+| `aws configure` | Set credentials interactively |
+| `aws configure list` | Show current config |
+| `aws sts get-caller-identity` | Verify active identity |
+| `aws lambda list-functions` | List deployed Lambdas |
+| `aws cloudformation describe-stacks` | Check stack status |
 
-# Get function config
-aws lambda get-function --function-name psp-processor-dev
+## Decision Matrix
 
-# Invoke function
-aws lambda invoke \
-  --function-name psp-processor-dev \
-  --cli-binary-format raw-in-base64-out \
-  --payload file://events/s3-event.json \
-  response.json
+| Use Case | Choose |
+|----------|--------|
+| First-time deploy | `sam deploy --guided` |
+| Repeat deploy (CI/CD) | `sam deploy --config-env prod` |
+| Rapid iteration | `sam sync --watch` |
+| Test single function | `sam local invoke FunctionName` |
+| Test API endpoints | `sam local start-api` |
+| Upload artifacts to S3 | `aws s3 sync ./dist s3://bucket/` |
+| One-off file transfer | `aws s3 cp file.zip s3://bucket/` |
 
-# Update code
-aws lambda update-function-code \
-  --function-name psp-processor-dev \
-  --zip-file fileb://function.zip
-```
+## Common Pitfalls
 
-## S3 Commands
+| Don't | Do |
+|-------|-----|
+| Deploy without building first | `sam build && sam deploy` |
+| Hardcode credentials in templates | Use `AWS_PROFILE` or IAM roles |
+| Skip `--guided` on first deploy | `sam deploy --guided` to generate samconfig.toml |
+| Use `s3 cp` for large directory sync | Use `s3 sync` with `--delete` flag |
+| Test in prod without local testing | `sam local invoke` before deploying |
+| Forget `--use-container` for native deps | `sam build --use-container` for compiled packages |
 
-```bash
-# Upload test file
-aws s3 cp input/test-data.csv s3://psp-use1-dev-source/data/
+## AWS Data Services Quick Reference
 
-# List bucket
-aws s3 ls s3://psp-use1-dev-stage/output/
+| Service | CLI Command | Purpose |
+|---------|------------|---------|
+| Glue | `aws glue start-job-run --job-name NAME` | Run Glue 5.0 ETL job |
+| Glue | `aws glue get-job-runs --job-name NAME` | Check job run status |
+| Redshift | `aws redshift-serverless get-workgroup --workgroup-name NAME` | Check Serverless workgroup |
+| MWAA | `aws mwaa create-environment --name NAME` | Create Airflow 3.0 environment |
+| MWAA | `aws mwaa create-cli-token --name NAME` | Get CLI token for Airflow API |
 
-# Download output
-aws s3 cp s3://psp-use1-dev-stage/output/result.parquet ./output/
-```
+## Related Documentation
 
-## CloudFormation Commands
-
-```bash
-# List stacks
-aws cloudformation list-stacks --stack-status-filter CREATE_COMPLETE UPDATE_COMPLETE
-
-# Describe stack
-aws cloudformation describe-stacks --stack-name psp-processor-dev
-
-# Get outputs
-aws cloudformation describe-stacks \
-  --stack-name psp-processor-dev \
-  --query 'Stacks[0].Outputs'
-```
-
-## samconfig.toml Template
-
-```toml
-version = 0.1
-
-[default.deploy.parameters]
-stack_name = "psp-processor-dev"
-resolve_s3 = true
-region = "us-east-1"
-confirm_changeset = true
-capabilities = "CAPABILITY_IAM"
-parameter_overrides = "Environment=dev SourceBucket=psp-use1-dev-source OutputBucket=psp-use1-dev-stage"
-
-[prd.deploy.parameters]
-stack_name = "psp-processor-prd"
-resolve_s3 = true
-region = "us-east-1"
-confirm_changeset = true
-capabilities = "CAPABILITY_IAM"
-parameter_overrides = "Environment=prd SourceBucket=psp-use1-prd-source OutputBucket=psp-use1-prd-stage"
-```
+| Topic | Path |
+|-------|------|
+| SAM CLI commands | `concepts/sam-cli.md` |
+| AWS CLI basics | `concepts/aws-cli.md` |
+| Environment config | `concepts/environments.md` |
+| Full Index | `index.md` |

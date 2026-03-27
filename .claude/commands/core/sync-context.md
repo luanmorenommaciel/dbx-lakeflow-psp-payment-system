@@ -1,251 +1,307 @@
 ---
 name: sync-context
-description: Sync project context to CLAUDE.md + .claude/rules/ using the WHAT-WHY-HOW progressive disclosure pattern
+description: Sync project context to CLAUDE.md by analyzing codebase patterns and conventions
 ---
 
 # Sync Context Command
 
-Analyzes the codebase and updates `CLAUDE.md` (root) + `.claude/rules/*.md` (scoped rules) following the progressive disclosure pattern.
+Analyzes codebase and intelligently updates `CLAUDE.md` with current project context.
 
 ## Usage
 
 ```bash
 /sync-context                    # Full analysis and update
-/sync-context --section rules    # Update only rules files
-/sync-context --section root     # Update only root CLAUDE.md
+/sync-context --section agents   # Update specific section
 /sync-context --dry-run          # Preview changes without saving
-/sync-context --audit            # Check health: line count, rule coverage, stale content
 ```
 
 ---
 
-## Architecture: Progressive Disclosure Pattern
+## What It Does
 
-The pattern splits project context across two tiers:
-
-### Tier 1: Root CLAUDE.md (loaded EVERY session)
-
-**Target: < 150 lines.** Only content that applies to ALL tasks.
-
-Uses the WHAT-WHY-HOW framework:
-
-| Section | Purpose | Update Mode |
-|---------|---------|-------------|
-| WHAT — Project Context | One-liner orientation + core mission | Preserve |
-| WHAT — Stack | Technology table (language, frameworks, infra) | Replace |
-| WHAT — Project Map | Directory tree with purpose annotations | Replace |
-| WHY — Key Decisions | Architecture choices Claude would get wrong without | Preserve |
-| HOW — Commands | Build, test, lint, deploy commands | Replace |
-| HOW — Verification | Always-run verification command after changes | Preserve |
-| HOW — Configuration | Pointer to configs/ with @imports | Replace |
-| Scoped Rules Table | Index of .claude/rules/ with scope + content summary | Replace |
-| Active Work | Current features in progress | Preserve |
-
-### Tier 2: .claude/rules/*.md (loaded ONLY when working in matching paths)
-
-Each rule file has YAML frontmatter with `paths:` globs. Claude loads them on-demand.
+1. **Analyzes** current codebase structure
+2. **Extracts** patterns, conventions, and architecture
+3. **Merges** with existing CLAUDE.md content
+4. **Preserves** manual customizations
+5. **Updates** sections that need refresh
 
 ---
 
 ## Analysis Process
 
-### Step 1: Audit Current State
+### Step 1: Scan Codebase Structure
 
 ```text
-Read("CLAUDE.md")                           # Count lines, check structure
-Glob(".claude/rules/*.md")                  # List existing rules
+# Discover project structure
+Glob("**/*.py")              # Python files
+Glob("**/*.ts")              # TypeScript files
+Glob("**/package.json")      # Node projects
+Glob("**/pyproject.toml")    # Python projects
+Glob("**/Dockerfile")        # Container configs
+Glob("**/*.tf")              # Terraform
 ```
 
-Flag issues:
-- Root CLAUDE.md > 150 lines -> WARN: "too long, move content to rules"
-- Root CLAUDE.md > 300 lines -> ERROR: "Claude will ignore instructions"
-- Rules without paths: frontmatter -> WARN: "loads unconditionally"
-- Content in root that only applies to specific paths -> WARN: "move to rules"
-
-### Step 2: Scan for WHAT (Stack + Structure)
+### Step 2: Extract Patterns
 
 ```text
-Read("pyproject.toml")                      # Python version, dependencies
-Glob("src/**/__init__.py")                  # Package structure
-Glob("functions/*/template.yaml")           # Lambda functions
-Glob("pipelines/**/*.yml")                  # Pipeline definitions
-Glob("configs/*")                           # Config files
-ls scripts/                                 # Available scripts
+# Code patterns
+Grep("@dataclass")           # Dataclass usage
+Grep("class.*Parser")        # Parser patterns
+Grep("def test_")            # Test patterns
+Grep("async def")            # Async patterns
+
+# Architecture patterns
+Grep("from src")             # Import structure
+Grep("@router")              # API patterns
+Grep("@lambda_handler")      # Lambda patterns
 ```
 
-Generate: Stack table, Project Map tree
-
-### Step 3: Scan for HOW (Commands)
+### Step 3: Analyze Agents
 
 ```text
-Read("pyproject.toml")                      # scripts section
-Read("Makefile") if exists                  # make targets
-Grep("^pytest", "pyproject.toml")           # test config
-Glob("scripts/*.sh")                        # Shell scripts
-Read("scripts/preflight-validate.sh")       # Pre-flight gates
+# List available agents
+Glob(".claude/agents/**/*.md")
+
+# Categorize by folder
+- workflow/       → SDD pipeline agents (brainstorm, define, design, build, ship, iterate)
+- architect/      → System design (schema, pipeline, lakehouse, genai, planner)
+- cloud/          → AWS, GCP, CI/CD, deployment agents
+- platform/       → Microsoft Fabric specialists
+- python/         → Code review, clean, document, prompt engineering
+- test/           → Testing, data quality, data contracts
+- data-engineering/ → Spark, dbt, Airflow, Lakeflow, streaming, SQL
+- dev/            → Codebase explorer, meeting analyst, prompt crafter
 ```
 
-Generate: Commands section, Verification section
-
-### Step 4: Scan for Rules Content
+### Step 4: Merge Updates
 
 ```text
-# Code patterns (-> code-quality.md)
-Grep("@dataclass", "src/**/*.py")
-Grep("mask_pii", "src/**/*.py")
-Grep("Decimal", "src/**/*.py")
+# Sections to update
+- Project Structure (from scan)
+- Coding Standards (from patterns)
+- Agent Usage (from agent analysis)
+- Commands (from commands/)
+- Environment (from config files)
 
-# Architecture (-> architecture.md)
-Grep("from src", "src/**/*.py")             # Import structure
-Read("scripts/build-copy-src.sh")           # Build pipeline
-
-# Domain (-> domain.md, lakeflow.md)
-Glob("reference/specs/*")                   # Domain specs
-Glob("pipelines/src/**/*.sql")              # DLT notebooks
-
-# Testing (-> testing.md)
-Grep("def test_", "tests/**/*.py", count)   # Test count
-Read("pyproject.toml")                      # Coverage config
-
-# Config (-> configs.md)
-Read("configs/aws-env.sh.example")          # AWS variables
-Read("configs/databricks-env.sh.example")   # Databricks variables
+# Sections to preserve
+- Project Context (manual)
+- Core Mission (manual)
+- Important Dates (manual)
+- Getting Help (manual)
 ```
-
-### Step 5: Scan for Scoped Rules Index
-
-```text
-Glob(".claude/rules/*.md")                  # All rule files
-# For each: extract name, paths, and description from YAML frontmatter
-```
-
-Generate: Scoped Rules Table in root CLAUDE.md
-
-### Step 6: Apply Updates
-
-For root CLAUDE.md:
-- **Replace** sections: Stack, Project Map, Commands, Configuration, Scoped Rules Table
-- **Preserve** sections: Project Context, Key Decisions, Verification, Active Work
-- **Delete** sections that belong in rules (env var tables, agent tables, etc.)
-
-For .claude/rules/*.md:
-- **Update** content from scans
-- **Preserve** YAML frontmatter paths (unless structure changed)
-- **Create** new rule files if new domains detected
 
 ---
 
-## The Include/Exclude Principle
+## CLAUDE.md Template
 
-For EVERY line in CLAUDE.md, ask: "Would removing this cause Claude to make mistakes?"
-
-| Include in Root | Exclude from Root (move to rules or delete) |
-|----------------|----------------------------------------------|
-| Commands Claude can't guess | Anything Claude discovers by reading code |
-| Architecture decisions that differ from defaults | Standard language conventions |
-| Verification steps | Detailed API docs (link instead) |
-| Common gotchas | File-by-file codebase descriptions |
-| Config pointers (@imports) | Full env var tables |
-| Active work context | Agent/command catalogs (auto-discovered) |
-
-## Token Budget Check
-
-After generating, verify:
-- Root CLAUDE.md: count lines. MUST be < 150, WARN if > 100
-- Each rule file: count lines. WARN if > 50 per file
-- Total instruction count (root + average rules loaded): MUST be < 150
-
----
-
-## YAML Frontmatter Template for Rules
-
-```yaml
----
-description: One-line description of what this rule covers
-paths:
-  - "src/core/parsers/**"
-  - "tests/integration/**"
----
-```
-
-Rules WITHOUT `paths:` load unconditionally (same as putting content in root CLAUDE.md).
-
----
-
-## Reusable Template (for new projects)
-
-When running on a project WITHOUT an existing CLAUDE.md, generate this skeleton:
+Generated CLAUDE.md follows this structure:
 
 ```markdown
 # {Project Name}
 
-## WHAT — Project Context
-{One paragraph: what it does and why it exists}
+## Project Context
 
-## WHAT — Stack
-| Layer | Technology |
-|-------|-----------|
-| Language | {detected} |
-| Framework | {detected} |
-| Testing | {detected} |
-| Deployment | {detected} |
+{Manual: What this project does and why}
 
-## WHAT — Project Map
-{Auto-generated directory tree with annotations}
+---
 
-## WHY — Key Decisions
-- {Non-obvious architectural choice #1}
-- {Non-obvious architectural choice #2}
+## Architecture Overview
 
-## HOW — Commands
-{Build, test, lint, deploy commands}
+{Auto-generated from codebase scan}
 
-## HOW — Verification
-IMPORTANT: Always run after changes:
-{single verification command}
+```text
+{Data flow diagram}
+```
 
-## HOW — Configuration
-{Pointer to config files with @imports}
+| Stage | Technology | Purpose |
+| ----- | ---------- | ------- |
+| {stage} | {tech} | {purpose} |
 
-## Scoped Rules
-| Rule File | Scope | Content |
-|-----------|-------|---------|
-| {auto-generated from .claude/rules/} |
+---
 
-## Active Work
-| Feature | Phase | Artifacts |
-|---------|-------|-----------|
+## Project Structure
+
+{Auto-generated from Glob scans}
+
+```text
+{project}/
+├── src/
+│   ├── {folders discovered}
+├── tests/
+├── .claude/
+│   ├── agents/
+│   ├── commands/
+│   ├── sdd/
+│   ├── kb/
+│   └── storage/
 ```
 
 ---
 
-## Output
+## Agent Usage Guidelines
+
+{Auto-generated from agents/ folder}
+
+### Available Agents by Category
+
+| Category | Agents | Use When |
+| -------- | ------ | -------- |
+| Workflow | brainstorm-agent, define-agent, ... | Building features with SDD |
+| Code Quality | code-reviewer, test-generator, ... | Improving code |
+| {category} | {agents} | {trigger} |
+
+---
+
+## Coding Standards
+
+{Auto-generated from detected patterns}
+
+### Language: {Python/TypeScript/etc}
+
+- **Version:** {detected from config}
+- **Style:** {detected patterns}
+- **Testing:** {detected framework}
+
+### Detected Patterns
+
+| Pattern | Usage | Example File |
+| ------- | ----- | ------------ |
+| {pattern} | {where used} | {file path} |
+
+---
+
+## Commands
+
+{Auto-generated from commands/ folder}
+
+| Command | Purpose |
+| ------- | ------- |
+| /build-feature | Full SDD pipeline |
+| /memory | Save session insights |
+| {command} | {purpose} |
+
+---
+
+## Environment Variables
+
+{Auto-generated from .env.example, config files}
+
+| Variable | Purpose |
+| -------- | ------- |
+| {var} | {purpose} |
+
+---
+
+## MCP Tools Available
+
+{Auto-generated from settings}
+
+| MCP Server | Purpose |
+| ---------- | ------- |
+| context7-mcp | Library documentation |
+| exa | Code context search |
+| {mcp} | {purpose} |
+
+---
+
+## Important Dates
+
+{Manual: Project-specific dates}
+
+---
+
+## Getting Help
+
+{Auto-generated from structure}
+
+- **Documentation**: Start with relevant docs
+- **Agents**: Review .claude/agents/
+- **Commands**: Use /help for available commands
+```
+
+---
+
+## Section Update Rules
+
+| Section | Source | Update Mode |
+| ------- | ------ | ----------- |
+| Project Context | Manual | Preserve |
+| Architecture | Codebase scan | Replace |
+| Project Structure | Glob patterns | Replace |
+| Agent Usage | agents/ folder | Replace |
+| Coding Standards | Pattern detection | Merge |
+| Commands | commands/ folder | Replace |
+| Environment | Config files | Merge |
+| MCP Tools | settings.json | Replace |
+| Important Dates | Manual | Preserve |
+| Getting Help | Structure | Replace |
+
+**Replace**: Fully regenerate from source
+**Merge**: Add new, preserve custom
+**Preserve**: Never auto-modify
+
+---
+
+## Execution Flow
 
 ```text
-SYNC CONTEXT
-━━━━━━━━━━━━
+1. Read existing CLAUDE.md
+   │
+   ▼
+2. Parse into sections
+   │
+   ▼
+3. Analyze codebase (parallel)
+   ├── Glob for structure
+   ├── Grep for patterns
+   ├── Read config files
+   └── List agents/commands
+   │
+   ▼
+4. Generate new sections
+   │
+   ▼
+5. Apply update rules
+   ├── Replace auto sections
+   ├── Merge semi-auto sections
+   └── Preserve manual sections
+   │
+   ▼
+6. Validate (dry-run or save)
+   │
+   ▼
+7. Write updated CLAUDE.md
+```
+
+---
+
+## Example Output
+
+```text
+UPDATE CLAUDE.MD
+━━━━━━━━━━━━━━━━
 
 Analyzing codebase...
-✓ Scanned project structure
-✓ Detected stack: Python 3.12, pytest, SAM, Databricks
-✓ Found 6 rule files in .claude/rules/
+✓ Found 47 Python files
+✓ Found 12 test files
+✓ Found 28 agents
+✓ Found 8 commands
 
-Health check:
-✓ CLAUDE.md: 105 lines (target: < 150) ✅
-✓ Rules: 6 files, avg 35 lines each ✅
-✓ Token budget: ~95 instructions (limit: 150) ✅
-⚠ No verification section found → ADDED
+Detected patterns:
+✓ Dataclass pattern (15 usages)
+✓ Parser pattern (4 files)
+✓ Generator pattern (8 usages)
 
 Section updates:
-• WHAT — Stack: REPLACED (dependency changes detected)
-• WHAT — Project Map: REPLACED (new directories found)
-• HOW — Commands: REPLACED (new scripts found)
-• Scoped Rules Table: REPLACED (1 new rule file)
-• WHY — Key Decisions: PRESERVED
-• Active Work: PRESERVED
+• Architecture: UPDATED (new components detected)
+• Project Structure: UPDATED (3 new folders)
+• Agent Usage: UPDATED (2 new agents)
+• Coding Standards: MERGED (1 new pattern)
+• Commands: UPDATED (1 new command)
+• Project Context: PRESERVED (manual content)
 
-━━━━━━━━━━━━
-CLAUDE.md + .claude/rules/ updated successfully
+━━━━━━━━━━━━━━━━
+CLAUDE.md updated successfully
 ```
 
 ---
@@ -253,10 +309,39 @@ CLAUDE.md + .claude/rules/ updated successfully
 ## Flags
 
 | Flag | Description |
-|------|-------------|
+| ---- | ----------- |
 | `--dry-run` | Preview changes without saving |
-| `--section root` | Update only root CLAUDE.md |
-| `--section rules` | Update only .claude/rules/ files |
-| `--audit` | Health check: line counts, coverage, staleness |
+| `--section {name}` | Update only specific section |
 | `--force` | Replace all sections (ignores preserve rules) |
-| `--template` | Generate fresh skeleton for new project |
+| `--verbose` | Show detailed analysis |
+
+---
+
+## Best Practices
+
+### When to Run
+
+- After adding new agents or commands
+- After significant architecture changes
+- After adding new file types
+- When onboarding new team members
+
+### What to Customize
+
+After running, manually update:
+
+1. **Project Context** - Add business context
+2. **Important Dates** - Add milestone dates
+3. **Architecture** - Add business-specific details
+4. **Coding Standards** - Add team conventions
+
+### Version Control
+
+```bash
+# Review changes before committing
+git diff CLAUDE.md
+
+# Commit with context
+git add CLAUDE.md
+git commit -m "chore: update CLAUDE.md with latest project structure"
+```

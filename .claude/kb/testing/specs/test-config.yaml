@@ -1,0 +1,149 @@
+schema_version: "1.0"
+domain: testing
+file_type: pytest-configuration
+last_validated: "2026-02-17"
+source: "pytest official documentation + community best practices"
+
+# ============================================================
+# pyproject.toml [tool.pytest.ini_options] configuration spec
+# ============================================================
+
+pytest_config:
+  description: "Standard pytest configuration for Python projects"
+
+  # --- Core Settings ---
+  testpaths:
+    type: list
+    default: ["tests"]
+    description: "Directories to search for tests"
+    example: ["tests", "src/tests"]
+
+  python_files:
+    type: list
+    default: ["test_*.py", "*_test.py"]
+    description: "File patterns for test discovery"
+
+  python_classes:
+    type: list
+    default: ["Test*"]
+    description: "Class name patterns for test discovery"
+
+  python_functions:
+    type: list
+    default: ["test_*"]
+    description: "Function name patterns for test discovery"
+
+  # --- Output Settings ---
+  addopts:
+    type: string
+    default: "-v --tb=short --strict-markers"
+    description: "Default CLI options appended to every pytest invocation"
+    recommended: "-v --tb=short --strict-markers -x"
+
+  console_output_style:
+    type: string
+    default: "progress"
+    options: ["progress", "classic", "count"]
+    description: "Output style for test progress"
+
+  # --- Marker Registry ---
+  markers:
+    type: list
+    description: "Custom markers (register to avoid warnings)"
+    values:
+      - name: "unit"
+        description: "Unit tests (fast, isolated)"
+      - name: "integration"
+        description: "Integration tests (may need external services)"
+      - name: "slow"
+        description: "Slow tests (> 5 seconds)"
+      - name: "spark"
+        description: "Tests requiring SparkSession"
+      - name: "e2e"
+        description: "End-to-end tests"
+
+  # --- Filtering ---
+  filterwarnings:
+    type: list
+    default:
+      - "error"
+      - "ignore::DeprecationWarning"
+      - "ignore::PendingDeprecationWarning"
+    description: "Warning filters applied during test runs"
+
+  # --- Minimum Version ---
+  minversion:
+    type: string
+    default: "7.0"
+    description: "Minimum required pytest version"
+
+# ============================================================
+# pyproject.toml example
+# ============================================================
+#
+# [tool.pytest.ini_options]
+# testpaths = ["tests"]
+# addopts = "-v --tb=short --strict-markers"
+# markers = [
+#     "unit: Unit tests (fast, isolated)",
+#     "integration: Integration tests (external services)",
+#     "slow: Slow tests (> 5 seconds)",
+#     "spark: Tests requiring SparkSession",
+# ]
+# filterwarnings = [
+#     "error",
+#     "ignore::DeprecationWarning",
+# ]
+
+# ============================================================
+# conftest.py hierarchy
+# ============================================================
+
+conftest_hierarchy:
+  description: "Recommended conftest.py placement"
+  structure:
+    root: "tests/conftest.py -- shared fixtures, markers, hooks"
+    unit: "tests/unit/conftest.py -- unit-specific fixtures"
+    integration: "tests/integration/conftest.py -- DB, API fixtures"
+    spark: "tests/spark/conftest.py -- SparkSession fixture"
+
+# ============================================================
+# Coverage configuration
+# ============================================================
+
+coverage_config:
+  description: "pytest-cov settings in pyproject.toml"
+  section: "[tool.coverage.run]"
+  settings:
+    source: ["src"]
+    omit: ["tests/*", "**/__init__.py"]
+    branch: true
+  report:
+    section: "[tool.coverage.report]"
+    show_missing: true
+    fail_under: 80
+    exclude_lines:
+      - "pragma: no cover"
+      - "if __name__ == .__main__."
+      - "if TYPE_CHECKING:"
+
+# ============================================================
+# Plugin recommendations
+# ============================================================
+
+recommended_plugins:
+  - name: "pytest-cov"
+    purpose: "Coverage reporting"
+    install: "pip install pytest-cov"
+  - name: "pytest-xdist"
+    purpose: "Parallel test execution"
+    install: "pip install pytest-xdist"
+  - name: "pytest-mock"
+    purpose: "Simplified mocking"
+    install: "pip install pytest-mock"
+  - name: "pytest-timeout"
+    purpose: "Test timeouts"
+    install: "pip install pytest-timeout"
+  - name: "pytest-randomly"
+    purpose: "Randomize test order"
+    install: "pip install pytest-randomly"

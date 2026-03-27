@@ -270,10 +270,10 @@ Exploring codebase...
 ✓ Detected: Python project (pyproject.toml)
 ✓ Found: 17 source files, 4 test files
 ✓ Framework: Click CLI, Pydantic
-✓ Entry point: src/invoice_gen/cli.py
+✓ Entry point: src/task_runner/cli.py
 
 Extracting metadata...
-✓ Name: invoice-gen
+✓ Name: task-runner
 ✓ Version: 0.1.0
 ✓ License: MIT
 ✓ Dependencies: click, pydantic, faker
@@ -293,14 +293,14 @@ Validating...
 Saved: README.md (comprehensive style)
 
 Preview:
-# invoice-gen
+# task-runner
 
-> Generate synthetic invoices for testing ML extraction pipelines
+> Flexible task execution framework with plugin support
 
 ## Quick Start
 
 pip install -e .
-invoice-gen generate --count 10 --output invoices/
+task-runner run --workers 4 --output results/
 ```
 
 ---

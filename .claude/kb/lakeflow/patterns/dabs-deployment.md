@@ -1,6 +1,6 @@
 # DABs Deployment Patterns
 
-> **MCP Validated**: 2026-03-26
+> **MCP Validated**: 2025-01-19
 > **Source**: https://docs.databricks.com/aws/en/dev-tools/bundles
 
 ## Databricks Asset Bundles (DABs)
@@ -10,18 +10,19 @@ DABs provide declarative deployment of Databricks resources including Lakeflow p
 ## Project Structure
 
 ```text
-project-lakeflow/
+kurv-edp-lakeflow/
 ├── databricks.yml           # Main bundle config
 ├── resources/
-│   ├── transactions_pipeline.yml
-│   ├── merchants_pipeline.yml
-│   └── settlements_pipeline.yml
+│   ├── mdi_pipeline.yml     # MDI Lakeflow pipeline
+│   ├── tddf_pipeline.yml    # TDDF Lakeflow pipeline
+│   ├── adf_pipeline.yml     # ADF Lakeflow pipeline
+│   └── d256_pipeline.yml    # D256 Lakeflow pipeline
 ├── src/
-│   ├── transactions/
+│   ├── mdi/
 │   │   ├── bronze.py
 │   │   ├── silver.py
 │   │   └── gold.py
-│   ├── merchants/
+│   ├── tddf/
 │   │   ├── bronze.py
 │   │   ├── silver.py
 │   │   └── gold.py
@@ -35,17 +36,17 @@ project-lakeflow/
 
 ```yaml
 bundle:
-  name: psp-lakeflow
+  name: kurv-edp-lakeflow
 
 variables:
   catalog:
-    default: psp_catalog
+    default: kurv_edp
   schema:
     default: lakeflow
-  source_bucket:
-    default: psp-data-source
+  landing_bucket:
+    default: kurv-edp-landing
   stage_bucket:
-    default: psp-data-stage
+    default: kurv-edp-stage
 
 include:
   - resources/*.yml
@@ -55,63 +56,63 @@ targets:
     mode: development
     default: true
     variables:
-      catalog: psp_catalog_dev
+      catalog: kurv_edp_dev
       schema: lakeflow_dev
-      source_bucket: psp-use1-dev-source
-      stage_bucket: psp-use1-dev-stage
+      landing_bucket: kurv-edp-landing-dev
+      stage_bucket: kurv-edp-stage-dev
     workspace:
       host: https://dbc-xxxxx.cloud.databricks.com
 
   prd:
     mode: production
     variables:
-      catalog: psp_catalog
+      catalog: kurv_edp
       schema: lakeflow
-      source_bucket: psp-use1-prd-source
-      stage_bucket: psp-use1-prd-stage
+      landing_bucket: kurv-edp-landing-prd
+      stage_bucket: kurv-edp-stage-prd
     workspace:
       host: https://dbc-xxxxx.cloud.databricks.com
     run_as:
-      service_principal_name: psp-service-principal
+      service_principal_name: kurv-edp-service-principal
 ```
 
 ## Pipeline Resource Configuration
 
-### Transactions Pipeline (`resources/transactions_pipeline.yml`)
+### MDI Pipeline (`resources/mdi_pipeline.yml`)
 
 ```yaml
 resources:
   pipelines:
-    transactions_pipeline:
-      name: "psp-transactions-${bundle.target}"
+    mdi_pipeline:
+      name: "kurv-edp-mdi-${bundle.target}"
       catalog: "${var.catalog}"
-      target: "bronze"
-      serverless: true
+      target: "bronze"                # Default schema; fully qualified names override
+      serverless: true                # Serverless and clusters: are mutually exclusive
       channel: "CURRENT"
-      edition: "ADVANCED"
+      edition: "ADVANCED"             # Required for EXPECT/DROP/FAIL expectations
       photon: true
       continuous: false
 
       libraries:
         - notebook:
-            path: ../src/transactions/bronze.py
+            path: ../src/mdi/bronze_mdi.sql
         - notebook:
-            path: ../src/transactions/silver.py
+            path: ../src/mdi/silver_mdi.sql
         - notebook:
-            path: ../src/transactions/gold.py
+            path: ../src/mdi/gold_mdi.sql
 
       configuration:
         stage_bucket: "${var.stage_bucket}"
         catalog: "${var.catalog}"
 ```
 
-### Merchants Pipeline (with Notifications)
+### TDDF Pipeline (Multiple Tables)
 
 ```yaml
 resources:
   pipelines:
-    merchants_pipeline:
-      name: "psp-merchants-${bundle.target}"
+    tddf_pipeline:
+      name: "kurv-edp-tddf-${bundle.target}"
       catalog: "${var.catalog}"
       target: "bronze"
       serverless: true
@@ -122,11 +123,11 @@ resources:
 
       libraries:
         - notebook:
-            path: ../src/merchants/bronze.py
+            path: ../src/tddf/bronze_tddf.sql
         - notebook:
-            path: ../src/merchants/silver.py
+            path: ../src/tddf/silver_tddf.sql
         - notebook:
-            path: ../src/merchants/gold.py
+            path: ../src/tddf/gold_tddf.sql
 
       configuration:
         stage_bucket: "${var.stage_bucket}"
@@ -134,7 +135,7 @@ resources:
 
       notifications:
         - email_recipients:
-            - data-team@company.com
+            - data-team@kurvpay.com
           alerts:
             - on_failure
             - on_flow_failure
@@ -158,8 +159,8 @@ databricks bundle deploy --target prd
 ### Run Pipeline
 
 ```bash
-databricks bundle run transactions_pipeline --target dev
-databricks bundle run transactions_pipeline --target dev --refresh-all
+databricks bundle run mdi_pipeline --target dev
+databricks bundle run mdi_pipeline --target dev --refresh-all
 ```
 
 ### Destroy Resources
@@ -176,14 +177,15 @@ databricks bundle destroy --target dev
 import dlt
 
 stage_bucket = spark.conf.get("stage_bucket")
+landing_bucket = spark.conf.get("landing_bucket")
 
-@dlt.table(name="transactions_bronze")
-def transactions_bronze():
+@dlt.table(name="mdi_bronze")
+def mdi_bronze():
     return (
         spark.readStream
         .format("cloudFiles")
         .option("cloudFiles.format", "parquet")
-        .load(f"s3://{stage_bucket}/transactions/")
+        .load(f"s3://{stage_bucket}/mdi/")
     )
 ```
 
@@ -194,10 +196,10 @@ import dlt
 
 is_dev = spark.conf.get("pipelines.development", "false") == "true"
 
-@dlt.table(name="transactions_silver")
-@dlt.expect_or_drop("valid_id", "transaction_id IS NOT NULL")
-def transactions_silver():
-    df = dlt.read_stream("transactions_bronze")
+@dlt.table(name="mdi_silver")
+@dlt.expect_or_drop("valid_merchant", "merchant_number IS NOT NULL")
+def mdi_silver():
+    df = dlt.read_stream("mdi_bronze")
 
     if is_dev:
         df = df.limit(10000)
@@ -210,7 +212,7 @@ def transactions_silver():
 ```yaml
 resources:
   pipelines:
-    transactions_pipeline:
+    mdi_pipeline:
       catalog: "${var.catalog}"
       target: "${var.schema}"
 
@@ -220,7 +222,7 @@ resources:
         - level: CAN_RUN
           group_name: data-engineers
         - level: CAN_MANAGE
-          service_principal_name: psp-admin
+          service_principal_name: kurv-edp-admin
 ```
 
 ## Validation Checklist

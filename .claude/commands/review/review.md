@@ -1,3 +1,8 @@
+---
+name: review
+description: Dual AI code review with CodeRabbit + Claude Code for maximum coverage
+---
+
 # Review Command
 
 > Dual AI code review with CodeRabbit + Claude Code for maximum coverage
@@ -22,7 +27,7 @@ This command orchestrates a **dual AI review** combining:
 | Reviewer | Strengths |
 |----------|-----------|
 | **CodeRabbit** | Static analysis, security scanning (Gitleaks, Semgrep), linting (Ruff, Pylint), pattern detection |
-| **Claude** | Architectural review, business logic, GenAI patterns, contextual understanding |
+| **Claude** | Architectural review, business logic, design patterns, contextual understanding |
 
 ```text
 ┌─────────────────────────────────────────────────────────────────┐
@@ -37,7 +42,7 @@ This command orchestrates a **dual AI review** combining:
 │   ┌───────▼───────┐          ┌───────▼───────┐                  │
 │   │ • Security    │          │ • Architecture│                  │
 │   │ • Linting     │          │ • Logic       │                  │
-│   │ • Patterns    │          │ • GenAI       │                  │
+│   │ • Patterns    │          │ • Design      │                  │
 │   │ • Style       │          │ • Intent      │                  │
 │   └───────┬───────┘          └───────┬───────┘                  │
 │           │                          │                           │
@@ -117,7 +122,7 @@ Use the code-reviewer agent capabilities:
 |----------|-----------|
 | **Architecture** | Project pattern alignment, separation of concerns |
 | **Business Logic** | Correct implementation, edge cases, error handling |
-| **GenAI Patterns** | LangFuse hooks, structured outputs, prompt engineering |
+| **Design Patterns** | Project conventions, established patterns, consistency |
 | **Maintainability** | Self-documenting code, type hints, DRY principle |
 
 ### Step 4: Synthesize Findings
@@ -321,7 +326,7 @@ git add .
 
 ## Configuration
 
-Respects `.coderabbit.yaml` settings:
+Optionally respects `.coderabbit.yaml` settings (create this file if needed):
 
 | Setting | Effect |
 |---------|--------|
@@ -385,6 +390,6 @@ Comparing: HEAD vs develop
 
 ## Related
 
-- Agent: `.claude/agents/code-quality/dual-reviewer.md`
-- Config: `.coderabbit.yaml`
+- Agent: `.claude/agents/python/code-reviewer.md`
+- Config: `.coderabbit.yaml` (optional, create if needed)
 - Create PR: `.claude/commands/workflow/create-pr.md`

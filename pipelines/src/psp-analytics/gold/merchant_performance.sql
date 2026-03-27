@@ -1,112 +1,32 @@
 -- Databricks notebook source
 -- Entity: Merchant Performance
 -- Layer: Gold - Business Aggregations
--- Upstream: silver.psp_transactions, silver.psp_orders, silver.psp_merchants, silver.psp_payouts
+-- Upstream: silver.silver_l2_merchant_operations, silver.psp_payouts
 
 -- =============================================================================
 -- GOLD: Daily Merchant Performance
 -- =============================================================================
--- Aggregated daily merchant metrics combining transaction performance with
--- payout settlement data. Provides volume, revenue, fees, approval rates,
--- channel distribution, and payout reconciliation for merchant dashboards.
+-- Aggregated daily merchant metrics combining pre-computed L2 merchant
+-- operations data with payout settlement aggregation. Provides volume,
+-- revenue, fees, approval rates, channel distribution, and payout
+-- reconciliation for merchant dashboards.
+--
+-- Reads from silver_l2_merchant_operations for transaction-side metrics
+-- (pre-aggregated at merchant_id + transaction_date grain), and aggregates
+-- payouts separately since multiple payouts can exist per merchant per day.
 --
 -- Grain: merchant_id + transaction_date
 -- =============================================================================
 
 CREATE OR REFRESH MATERIALIZED VIEW `${catalog}`.gold.psp_merchant_performance
-COMMENT "Daily merchant performance analytics - transaction volume, revenue, fees, payouts"
+COMMENT "Daily merchant performance analytics - from Silver L2 merchant operations + payout aggregation"
 TBLPROPERTIES (
     "quality" = "gold",
     "domain" = "merchants",
     "grain" = "merchant_id, transaction_date"
 )
 AS
-WITH daily_transactions AS (
-    SELECT
-        m.merchant_id,
-        m.legal_name AS merchant_legal_name,
-        m.merchant_category_code,
-        m.country_code AS merchant_country,
-        m.kyb_status AS merchant_kyb_status,
-        m.pricing_tier AS merchant_pricing_tier,
-        m.risk_level AS merchant_risk_level,
-        m.is_kyb_approved,
-        m.is_high_risk,
-        m.is_enterprise,
-        t.transaction_date,
-
-        COUNT(DISTINCT t.txn_id) AS daily_transaction_count,
-        COUNT(DISTINCT o.order_id) AS daily_order_count,
-        COUNT(DISTINCT o.customer_id) AS daily_unique_customers,
-
-        SUM(CASE WHEN t.is_successful THEN 1 ELSE 0 END) AS successful_transactions,
-        SUM(CASE WHEN t.is_failed THEN 1 ELSE 0 END) AS failed_transactions,
-        SUM(CASE WHEN t.is_declined THEN 1 ELSE 0 END) AS declined_transactions,
-
-        ROUND(
-            SUM(CASE WHEN t.is_successful THEN 1 ELSE 0 END) * 100.0 / COUNT(*),
-            2
-        ) AS success_rate_pct,
-        ROUND(
-            SUM(CASE WHEN t.is_declined THEN 1 ELSE 0 END) * 100.0 / COUNT(*),
-            2
-        ) AS decline_rate_pct,
-
-        SUM(o.total_amount) AS daily_gross_revenue,
-        AVG(o.total_amount) AS avg_order_value,
-        MIN(o.total_amount) AS min_order_value,
-        MAX(o.total_amount) AS max_order_value,
-
-        SUM(o.subtotal_amount) AS daily_subtotal,
-        SUM(o.tax_amount) AS daily_tax,
-        SUM(o.tip_amount) AS daily_tips,
-
-        SUM(t.fees_total_amount) AS daily_total_fees,
-        SUM(t.network_fee_amount) AS daily_network_fees,
-        AVG(t.effective_fee_rate_pct) AS avg_fee_rate_pct,
-
-        SUM(t.net_amount) AS daily_net_revenue,
-        ROUND(
-            SUM(t.net_amount) * 100.0 / NULLIF(SUM(o.total_amount), 0),
-            2
-        ) AS net_margin_pct,
-
-        SUM(CASE WHEN o.is_ecommerce_order THEN 1 ELSE 0 END) AS ecommerce_transactions,
-        SUM(CASE WHEN o.order_channel = 'pos' THEN 1 ELSE 0 END) AS pos_transactions,
-        SUM(CASE WHEN o.order_channel = 'mobile' THEN 1 ELSE 0 END) AS mobile_transactions,
-
-        SUM(CASE WHEN o.has_tip THEN 1 ELSE 0 END) AS orders_with_tips,
-        SUM(CASE WHEN o.is_high_value_order THEN 1 ELSE 0 END) AS high_value_orders,
-        AVG(o.tip_rate) AS avg_tip_rate,
-        AVG(o.tax_rate) AS avg_tax_rate,
-
-        COUNT(DISTINCT t.payment_id) AS unique_payment_instruments,
-
-        SUM(CASE WHEN t.is_3ds_authenticated THEN 1 ELSE 0 END) AS authenticated_3ds_count,
-        ROUND(
-            SUM(CASE WHEN t.is_3ds_authenticated THEN 1 ELSE 0 END) * 100.0 / COUNT(*),
-            2
-        ) AS authentication_rate_pct
-
-    FROM `${catalog}`.silver.psp_transactions t
-    INNER JOIN `${catalog}`.silver.psp_orders o ON t.order_id = o.order_id
-    INNER JOIN `${catalog}`.silver.psp_merchants m ON o.merchant_id = m.merchant_id
-
-    GROUP BY
-        m.merchant_id,
-        m.legal_name,
-        m.merchant_category_code,
-        m.country_code,
-        m.kyb_status,
-        m.pricing_tier,
-        m.risk_level,
-        m.is_kyb_approved,
-        m.is_high_risk,
-        m.is_enterprise,
-        t.transaction_date
-),
-
-daily_payouts AS (
+WITH daily_payouts AS (
     SELECT
         merchant_id,
         payout_batch_date,
@@ -126,61 +46,59 @@ daily_payouts AS (
 )
 
 SELECT
-    dt.merchant_id,
-    dt.merchant_legal_name,
-    dt.merchant_category_code,
-    dt.merchant_country,
-    dt.merchant_kyb_status,
-    dt.merchant_pricing_tier,
-    dt.merchant_risk_level,
-    dt.is_kyb_approved,
-    dt.is_high_risk,
-    dt.is_enterprise,
+    l2.merchant_id,
+    l2.merchant_legal_name,
+    l2.merchant_category_code,
+    l2.merchant_country,
+    l2.merchant_kyb_status,
+    l2.merchant_pricing_tier,
+    l2.merchant_risk_level,
+    l2.is_kyb_approved,
+    l2.is_high_risk,
+    l2.is_enterprise,
 
-    dt.transaction_date,
-    DAYOFWEEK(dt.transaction_date) AS day_of_week,
-    WEEKOFYEAR(dt.transaction_date) AS week_of_year,
-    MONTH(dt.transaction_date) AS month,
-    QUARTER(dt.transaction_date) AS quarter,
-    YEAR(dt.transaction_date) AS year,
+    l2.transaction_date,
+    DAYOFWEEK(l2.transaction_date) AS day_of_week,
+    WEEKOFYEAR(l2.transaction_date) AS week_of_year,
+    MONTH(l2.transaction_date) AS month,
+    QUARTER(l2.transaction_date) AS quarter,
+    YEAR(l2.transaction_date) AS year,
 
-    dt.daily_transaction_count,
-    dt.daily_order_count,
-    dt.daily_unique_customers,
+    l2.daily_transaction_count,
+    l2.daily_order_count,
+    l2.daily_unique_customers,
 
-    dt.successful_transactions,
-    dt.failed_transactions,
-    dt.declined_transactions,
-    dt.success_rate_pct,
-    dt.decline_rate_pct,
+    l2.successful_transactions,
+    l2.failed_transactions,
+    l2.declined_transactions,
+    l2.success_rate_pct,
+    l2.decline_rate_pct,
 
-    dt.daily_gross_revenue,
-    dt.avg_order_value,
-    dt.min_order_value,
-    dt.max_order_value,
-    dt.daily_subtotal,
-    dt.daily_tax,
-    dt.daily_tips,
+    l2.daily_gross_revenue,
+    l2.avg_order_value,
+    l2.min_order_value,
+    l2.max_order_value,
 
-    dt.daily_total_fees,
-    dt.daily_network_fees,
-    dt.avg_fee_rate_pct,
-    dt.daily_net_revenue,
-    dt.net_margin_pct,
+    l2.daily_total_fees,
+    l2.daily_network_fees,
+    l2.avg_fee_rate_pct,
+    l2.daily_net_revenue,
+    ROUND(
+        l2.daily_net_revenue * 100.0 / NULLIF(l2.daily_gross_revenue, 0),
+        2
+    ) AS net_margin_pct,
 
-    dt.ecommerce_transactions,
-    dt.pos_transactions,
-    dt.mobile_transactions,
-    ROUND(dt.ecommerce_transactions * 100.0 / dt.daily_transaction_count, 2) AS ecommerce_pct,
+    l2.ecommerce_transactions,
+    l2.pos_transactions,
+    l2.mobile_transactions,
+    ROUND(l2.ecommerce_transactions * 100.0 / l2.daily_transaction_count, 2) AS ecommerce_pct,
 
-    dt.orders_with_tips,
-    dt.high_value_orders,
-    dt.avg_tip_rate,
-    dt.avg_tax_rate,
-
-    dt.unique_payment_instruments,
-    dt.authenticated_3ds_count,
-    dt.authentication_rate_pct,
+    l2.authenticated_3ds_count,
+    l2.unique_payment_instruments,
+    ROUND(
+        l2.authenticated_3ds_count * 100.0 / l2.daily_transaction_count,
+        2
+    ) AS authentication_rate_pct,
 
     dp.daily_payout_count,
     dp.daily_payout_gross,
@@ -195,23 +113,23 @@ SELECT
 
     -- Performance rating
     CASE
-        WHEN dt.success_rate_pct >= 95 THEN 'excellent'
-        WHEN dt.success_rate_pct >= 90 THEN 'good'
-        WHEN dt.success_rate_pct >= 85 THEN 'fair'
+        WHEN l2.success_rate_pct >= 95 THEN 'excellent'
+        WHEN l2.success_rate_pct >= 90 THEN 'good'
+        WHEN l2.success_rate_pct >= 85 THEN 'fair'
         ELSE 'poor'
     END AS performance_rating,
 
     -- Revenue tier
     CASE
-        WHEN dt.daily_gross_revenue >= 10000 THEN 'high'
-        WHEN dt.daily_gross_revenue >= 5000 THEN 'medium'
-        WHEN dt.daily_gross_revenue >= 1000 THEN 'low'
+        WHEN l2.daily_gross_revenue >= 10000 THEN 'high'
+        WHEN l2.daily_gross_revenue >= 5000 THEN 'medium'
+        WHEN l2.daily_gross_revenue >= 1000 THEN 'low'
         ELSE 'minimal'
     END AS revenue_tier,
 
     current_timestamp() AS gold_created_at
 
-FROM daily_transactions dt
+FROM `${catalog}`.silver.silver_l2_merchant_operations l2
 LEFT JOIN daily_payouts dp
-    ON dt.merchant_id = dp.merchant_id
-    AND dt.transaction_date = dp.payout_batch_date;
+    ON l2.merchant_id = dp.merchant_id
+    AND l2.transaction_date = dp.payout_batch_date;
