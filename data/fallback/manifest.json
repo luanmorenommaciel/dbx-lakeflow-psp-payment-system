@@ -1,0 +1,36 @@
+{
+  "batches": {
+    "batch-001": 98791,
+    "batch-002-incident": 1209
+  },
+  "contract": "PSPSyntheticManifest/v1",
+  "entities": {
+    "disputes": 102,
+    "merchants": 12,
+    "orders": 100000,
+    "transactions": 100000
+  },
+  "entity_digests": {
+    "disputes": "sha256:a6d857c400e146df87e7d8ad3bf48d544cb395322ba6511e269b267f5beceac7",
+    "merchants": "sha256:2e53e4d5c0b996c703d93fa121c1687a8cd39a00b3314af43c3bee2f4e2e1534",
+    "orders": "sha256:e8c7b7dab65c11affe2b8dba1db33fef53d3722dd6e13e4b8e933505671fff28",
+    "transactions": "sha256:ca3f30ce9f717fbe1dc21554df646b77c38f170ae8d3c17ecf2570208e73b4e1"
+  },
+  "expected_risk": {
+    "after_replay": 45,
+    "before_replay": 25
+  },
+  "focus_merchant": "m-007",
+  "incidents": {
+    "amount-non-positive": 1,
+    "currency-brl-unauthorized": 1204,
+    "dispute-closes-before-open": 1,
+    "late-valid-chargeback": 1,
+    "order-orphan": 1,
+    "processor-unknown": 1,
+    "txn-id-duplicate": 1,
+    "txn-id-null": 1
+  },
+  "logical_digest": "sha256:7f34ce150ac7fe391694efe6ace20a378e042c47ce9c66b8067509e837936d6d",
+  "seed": 22082026
+}

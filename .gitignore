@@ -12,6 +12,13 @@ __pycache__/
 *.pyc
 *.egg-info/
 .venv/
+.pytest_cache/
+.ruff_cache/
+.spark-pipelines/
+.workshop-evidence/
+.taskspec/
+pipelines/.spark-pipelines/
+spark-warehouse/
 
 # IDE
 .idea/
@@ -21,3 +28,15 @@ __pycache__/
 # OS
 .DS_Store
 Thumbs.db
+
+# Project-scoped official Databricks Agent Skills are installed on demand.
+.codex/skills/databricks-*
+.claude/skills/databricks-*
+.agents/skills/databricks-*
+.databricks/aitools/
+
+# Spark writer metadata is reproducible and not part of the fallback payload.
+data/fallback/generated/**/_SUCCESS
+data/fallback/generated/**/._SUCCESS.crc
+data/fallback/generated/**/*.crc
+data/fallback/generated/_manifest/

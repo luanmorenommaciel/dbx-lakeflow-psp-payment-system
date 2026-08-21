@@ -1,0 +1,67 @@
+{
+  "contract": "AuthoringEvidence/v1",
+  "provider": "exa",
+  "request_id": "exa-20260821-four-workstreams",
+  "query": "Free Edition, Agent Skills, Spark SDP and DABs, DQX and dbldatagen compatibility for a four-hour Databricks workshop",
+  "observed_at": "2026-08-21T15:30:35Z",
+  "state": "ok",
+  "sources": [
+    {
+      "url": "https://docs.databricks.com/aws/en/getting-started/free-edition-limitations",
+      "title": "Databricks Free Edition limitations",
+      "retrieved_at": "2026-08-21T15:18:00Z",
+      "content_digest": "3233fea750c2644cd1a6778ad5e9d13b7311e7b954f73f7cd7fd36fb3fddb445"
+    },
+    {
+      "url": "https://spark.apache.org/docs/latest/declarative-pipelines-programming-guide.html",
+      "title": "Spark Declarative Pipelines Programming Guide",
+      "retrieved_at": "2026-08-21T15:18:00Z",
+      "content_digest": "769891c52b1869331491d28b1c3a7cb86eb74d90c65cac50d6fb5539d2a3d1fa"
+    },
+    {
+      "url": "https://docs.databricks.com/aws/en/ldp/developer/environment-versions",
+      "title": "Configure environment versions for pipelines",
+      "retrieved_at": "2026-08-21T15:18:00Z",
+      "content_digest": "cfa56ec044de108ca45f0b4b27478028fdfcb02f83b4ece89ca6456ee27e8c1a"
+    },
+    {
+      "url": "https://databrickslabs.github.io/dqx/docs/motivation/",
+      "title": "DQX motivation",
+      "retrieved_at": "2026-08-21T15:18:00Z",
+      "content_digest": "645ec8d3612508c2d9120dbb2e05799571bb9b623f6a0ac7d83d0f3ef129145a"
+    },
+    {
+      "url": "https://github.com/databrickslabs/dbldatagen",
+      "title": "Databricks Labs Data Generator",
+      "retrieved_at": "2026-08-21T15:18:00Z",
+      "content_digest": "cb47c9ba89cfe513b54d92c38f2705f211ec43befafc1007de7d1360f5bc9e9a"
+    }
+  ],
+  "claims": [
+    {
+      "text": "Free Edition has one workspace and metastore per account and one active Lakeflow pipeline per pipeline type.",
+      "excerpt": "One workspace and one metastore per account. Lakeflow pipelines: One active pipeline per pipeline type.",
+      "source_refs": [0]
+    },
+    {
+      "text": "The current Apache Spark local SDP path uses the pipelines extra and pyspark.pipelines.",
+      "excerpt": "pip install pyspark[pipelines]. Apache Spark includes declarative pipelines beginning in Spark 4.1.",
+      "source_refs": [1]
+    },
+    {
+      "text": "Lakeflow pipeline environment versions 3 and 4 are supported and must be treated as version-sensitive.",
+      "excerpt": "Lakeflow pipelines support environment versions 3 and 4 on both serverless and classic compute.",
+      "source_refs": [2]
+    },
+    {
+      "text": "DQX supports Lakeflow pipelines and dbldatagen has a serverless-oriented release, but the exact Spark 4.2 tuple still requires a smoke test.",
+      "source_refs": [3, 4]
+    }
+  ],
+  "usage": {
+    "search_workstreams": 4,
+    "search_results": 44,
+    "fetched_primary_pages": 9,
+    "mode": "live_mcp"
+  }
+}

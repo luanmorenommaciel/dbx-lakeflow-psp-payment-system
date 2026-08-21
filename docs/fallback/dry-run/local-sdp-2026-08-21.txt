@@ -1,0 +1,14 @@
+contract=DBXWorkshopLocalSDPFallback/v1
+evidence_label=local_graph_only
+source_revision=bec30126d99bedae18ddd97af8a1e79a402a8d30-plus-workshop-changes
+command=./scripts/sdp.sh dry-run --spec pipelines/spark-pipeline.yaml
+spark=4.2.0
+java=21.0.12
+result=COMPLETED
+definitions=bronze.py,silver.py,outputs.py,gold.py
+bronze=bronze_merchants,bronze_orders,bronze_transactions,bronze_disputes
+silver=silver_merchants,silver_orders,silver_transactions,silver_disputes
+quarantine=quarantine_transactions,quarantine_disputes
+metrics=dq_transaction_metrics,dq_dispute_metrics
+gold=gold_merchant_risk
+boundary=This proves local Spark Declarative Pipelines graph construction only; it does not prove Databricks deployment, hosted DQX execution, or processed workspace rows.

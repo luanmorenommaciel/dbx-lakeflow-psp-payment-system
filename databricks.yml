@@ -1,0 +1,31 @@
+bundle:
+  name: dbx-agentic-psp-workshop
+  databricks_cli_version: ">=1.13.0"
+
+experimental:
+  skip_name_prefix_for_schema: true
+
+include:
+  - pipelines/resources/agentic/*.yml
+
+sync:
+  include:
+    - configs/**
+    - gen/synthetic/**
+    - pipelines/src/psp-agentic/**
+
+variables:
+  catalog:
+    description: Writable Unity Catalog catalog in the learner Free Edition workspace
+    default: workspace
+  schema:
+    description: Isolated schema used by the dev workshop
+    default: dbx_agentic_dev
+  landing_volume:
+    description: Managed Volume name for generated JSON batches
+    default: landing
+
+targets:
+  dev:
+    default: true
+    mode: development

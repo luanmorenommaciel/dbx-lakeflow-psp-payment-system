@@ -1,0 +1,38 @@
+contract: DBXAgentContract/v1
+authority:
+  mode: plan_before_edit
+  deploy_requires_human_approval: true
+  allowed_target: dev
+scope:
+  writable:
+    - AGENTS.md
+    - CLAUDE.md
+    - databricks.yml
+    - pyproject.toml
+    - uv.lock
+    - toolchain.lock.yaml
+    - configs/**
+    - gen/synthetic/**
+    - pipelines/resources/agentic/**
+    - pipelines/src/psp-agentic/**
+    - pipelines/spark-pipeline.yaml
+    - scripts/**
+    - tests/**
+    - docs/**
+    - data/fallback/**
+  protected:
+    - pipelines/databricks.yml
+    - pipelines/resources/psp_analytics_pipeline.yml
+    - pipelines/resources/psp_orchestration_job.yml
+    - pipelines/src/psp-analytics/**
+    - gen/psp.json
+controls:
+  - Never read, print, or commit credentials.
+  - Preserve invalid rows with DQX errors and warnings.
+  - Never use ON VIOLATION DROP ROW in the agentic pipeline.
+  - Report local, remote dry-run, deployment, and runtime evidence separately.
+  - Stop at checkpoint boundaries before remote mutation.
+  - Reset only the exact dev bundle resources and configured schema.
+evidence:
+  directory: .workshop-evidence
+  required_fields: [command, timestamp, state, output_digest]

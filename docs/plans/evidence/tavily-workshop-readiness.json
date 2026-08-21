@@ -1,0 +1,63 @@
+{
+  "contract": "AuthoringEvidence/v1",
+  "provider": "tavily",
+  "request_id": "tavily-20260821-targeted-advanced",
+  "query": "Primary-source verification of Free Edition, Lakeflow SDP, DABs, Agent Skills, DQX, and dbldatagen",
+  "observed_at": "2026-08-21T15:30:35Z",
+  "state": "ok",
+  "sources": [
+    {
+      "url": "https://docs.databricks.com/aws/en/getting-started/free-edition-limitations",
+      "title": "Databricks Free Edition limitations",
+      "retrieved_at": "2026-08-21T15:24:00Z",
+      "content_digest": "3233fea750c2644cd1a6778ad5e9d13b7311e7b954f73f7cd7fd36fb3fddb445"
+    },
+    {
+      "url": "https://docs.databricks.com/aws/en/dev-tools/cli/reference/aitools-commands",
+      "title": "aitools command group",
+      "retrieved_at": "2026-08-21T15:24:00Z",
+      "content_digest": "b9c13233729feef9ee2b55794985331cd6a8566f16a23fae307536b0728baad1"
+    },
+    {
+      "url": "https://github.com/databricks/cli/releases/tag/v1.13.0",
+      "title": "Databricks CLI v1.13.0",
+      "retrieved_at": "2026-08-21T15:24:00Z",
+      "content_digest": "8dfdb333b45f2e464d5ec67936ba4034a2e7d891d041c7a7b8e3c1837c87a133"
+    },
+    {
+      "url": "https://github.com/databrickslabs/dqx/releases/tag/v0.16.0",
+      "title": "DQX v0.16.0",
+      "retrieved_at": "2026-08-21T15:24:00Z",
+      "content_digest": "645ec8d3612508c2d9120dbb2e05799571bb9b623f6a0ac7d83d0f3ef129145a"
+    },
+    {
+      "url": "https://github.com/databrickslabs/dbldatagen/releases/tag/v0.4.0-Hotfix1-WheelBuild",
+      "title": "dbldatagen serverless hotfix wheel",
+      "retrieved_at": "2026-08-21T15:24:00Z",
+      "content_digest": "cb47c9ba89cfe513b54d92c38f2705f211ec43befafc1007de7d1360f5bc9e9a"
+    }
+  ],
+  "claims": [
+    {
+      "text": "The project-scoped AI tools installer supports Claude Code and Codex CLI.",
+      "excerpt": "databricks aitools install --scope project. Supported agents include Claude Code and Codex CLI.",
+      "source_refs": [1]
+    },
+    {
+      "text": "Databricks CLI v1.13.0 was the current release at observation time.",
+      "excerpt": "Databricks CLI v1.13.0 was published on 2026-08-20.",
+      "source_refs": [2]
+    },
+    {
+      "text": "DQX 0.16.0 and dbldatagen 0.4.0.post1 are exact candidate pins, not open-ended latest ranges.",
+      "source_refs": [3, 4]
+    }
+  ],
+  "usage": {
+    "advanced_searches": 3,
+    "search_results": 30,
+    "extracted_pages": 6,
+    "pro_research_state": "timeout_after_300_seconds",
+    "mode": "live_mcp"
+  }
+}

@@ -1,3 +1,23 @@
+# DBX Agentic Development workshop
+
+This repository now contains a focused four-hour, build-along path for Databricks Free Edition. Learners generate a deterministic four-entity payment story, build a Bronze/Silver/Gold Lakeflow Spark Declarative Pipeline, preserve bad records with DQX quarantine, deploy through Databricks Asset Bundles, and finish by investigating a late chargeback with Genie Code.
+
+Start here:
+
+1. Follow [the learner setup](docs/learner/setup.md).
+2. Use [the four-hour guide](docs/learner/workshop-guide.md) during the workshop.
+3. Keep [the CLI cheat sheet](docs/learner/cheat-sheet.md) open.
+4. Instructors should use [the runbook](docs/instructor/instructor-runbook.md) and [evidence checklist](docs/instructor/expected-evidence.md).
+
+Automated rehearsals: `./scripts/e2e_local.sh` proves the clean-room local story; after explicitly selecting the
+correct OAuth profile, `./scripts/e2e_remote.sh --confirm-remote --reset-and-restore` validates, deploys, runs,
+creates/tests Genie, proves the hosted incident delta, tests guarded reset, and leaves the workspace restored to
+the healthy baseline. Generated evidence stays under ignored `.workshop-evidence/`.
+
+The workshop implementation lives at the repository root (`gen/`, `pipelines/`, `configs/`, `scripts/`, and `tests/`); teaching material is under `docs/`. The larger PSP reference implementation remains below as optional post-workshop exploration.
+
+---
+
 <div align="center">
 
 # PSP Payment System — Lakeflow Declarative Pipelines

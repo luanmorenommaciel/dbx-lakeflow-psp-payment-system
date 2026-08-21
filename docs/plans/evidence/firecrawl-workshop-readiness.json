@@ -1,0 +1,69 @@
+{
+  "contract": "AuthoringEvidence/v1",
+  "provider": "firecrawl",
+  "request_id": "firecrawl-20260821-workshop-readiness",
+  "query": "Live landing-page contract and current developer documentation for the Databricks workshop",
+  "observed_at": "2026-08-21T15:30:35Z",
+  "state": "ok",
+  "sources": [
+    {
+      "url": "https://www.engenhariadadosacademy.ai/workshop/dbx-agentic-development-v1",
+      "title": "DBX Agentic Development",
+      "retrieved_at": "2026-08-21T15:25:00Z",
+      "content_digest": "bbdf2b7733f06db0245d9eec8b2ca060c62f7a7688d3797dfb894696ecf4600e"
+    },
+    {
+      "url": "https://docs.databricks.com/aws/en/getting-started/free-edition",
+      "title": "Sign up for Databricks Free Edition",
+      "retrieved_at": "2026-08-21T15:29:00Z",
+      "content_digest": "4bd1f3f354c3a82985d4325567a0d2d8af7735063fe95130e5e2a2e8e2e634ad"
+    },
+    {
+      "url": "https://docs.databricks.com/aws/en/dev-tools/cli/reference/aitools-commands",
+      "title": "aitools command group",
+      "retrieved_at": "2026-08-21T15:20:00Z",
+      "content_digest": "b9c13233729feef9ee2b55794985331cd6a8566f16a23fae307536b0728baad1"
+    },
+    {
+      "url": "https://spark.apache.org/docs/latest/declarative-pipelines-programming-guide.html",
+      "title": "Spark Declarative Pipelines Programming Guide",
+      "retrieved_at": "2026-08-21T15:20:00Z",
+      "content_digest": "769891c52b1869331491d28b1c3a7cb86eb74d90c65cac50d6fb5539d2a3d1fa"
+    },
+    {
+      "url": "https://github.com/databrickslabs/dqx/releases/tag/v0.16.0",
+      "title": "DQX v0.16.0",
+      "retrieved_at": "2026-08-21T15:20:00Z",
+      "content_digest": "645ec8d3612508c2d9120dbb2e05799571bb9b623f6a0ac7d83d0f3ef129145a"
+    }
+  ],
+  "claims": [
+    {
+      "text": "The live page promises six modules, 100k transactions, eight named incidents, four fallbacks, and six final outcomes.",
+      "excerpt": "Six modules, 100k transactions, eight incidents, four fallbacks, and six final outcomes.",
+      "source_refs": [0]
+    },
+    {
+      "text": "Free Edition explicitly advertises Genie Code and serverless/default storage for learning and pipeline development.",
+      "excerpt": "Free Edition supports serverless compute, Lakeflow pipelines, Unity Catalog, and Genie.",
+      "source_refs": [1]
+    },
+    {
+      "text": "Current official developer surfaces support project Agent Skills and local Spark SDP dry-run/run workflows.",
+      "source_refs": [2, 3]
+    },
+    {
+      "text": "DQX v0.16.0 adds Lakeflow pipeline summary metrics and must be pinned because its release includes breaking changes.",
+      "excerpt": "DQX v0.16.0 added support for summary metrics in Lakeflow Declarative Pipelines.",
+      "source_refs": [4]
+    }
+  ],
+  "usage": {
+    "developer_searches": 3,
+    "developer_results": 30,
+    "forced_live_scrapes": 4,
+    "landing_scrape_id": "01a024f0-99a5-71b9-a9c3-a6bafd08d81f",
+    "free_edition_scrape_id": "01a024f2-5f36-71d9-9f12-7fbc1e28dbcc",
+    "mode": "live_mcp"
+  }
+}

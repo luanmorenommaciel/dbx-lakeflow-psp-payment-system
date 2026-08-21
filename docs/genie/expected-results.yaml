@@ -1,0 +1,10 @@
+contract: PSPGenieExpectedResults/v1
+expected:
+  highest-risk-merchant:
+    shape: m-007 is highest, with 1209 quarantined transactions and risk_score 25 before replay
+  rejected-brl:
+    shape: total brl_rejected_count equals 1204 before grouping by merchant
+  quarantine-reasons:
+    shape: seven incident categories across transactions and disputes
+  late-chargeback-delta:
+    shape: m-007 chargeback_count increases from 0 to 1 and risk_score increases from 25 to 45

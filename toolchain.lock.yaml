@@ -1,0 +1,32 @@
+contract: DBXWorkshopToolchain/v1
+observed_at: 2026-08-21T19:56:52Z
+python: ">=3.11,<3.14"
+java:
+  required: "17 or 21"
+  local_selected_observed: "21.0.12"
+databricks_cli:
+  required: "1.13.0"
+  local_observed: "1.13.0"
+spark:
+  pyspark: "4.2.0"
+  local_cli: spark-pipelines
+lakeflow:
+  pipeline_environment_version: "4"
+dependencies:
+  dbldatagen: "0.4.0.post1"
+  databricks_labs_dqx: "0.16.0"
+  jmespath: ">=0.10.0,<1.1.0"
+  pyparsing: ">=3.0.0,<3.3.0"
+agent_skills:
+  catalog_observed: "0.2.10"
+  selected:
+    - databricks-core
+    - databricks-dabs
+    - databricks-pipelines
+    - databricks-synthetic-data-gen
+    - databricks-unity-catalog
+    - databricks-spark-structured-streaming
+    - databricks-genie
+known_gates:
+  - Use Java 17 or 21 for local Spark; Java 11 is unsupported for Spark 4.2.
+  - Rehearse dbldatagen and DQX on Free Edition environment version 4.

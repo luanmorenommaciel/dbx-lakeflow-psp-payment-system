@@ -1,8 +1,12 @@
+[build-system]
+requires = ["setuptools>=77"]
+build-backend = "setuptools.build_meta"
+
 [project]
 name = "psp-flowcheck"
 version = "0.1.0"
 description = "FlowCheck — End-to-End Pipeline Debugger for PSP Payment System"
-requires-python = ">=3.11"
+requires-python = ">=3.11,<3.14"
 dependencies = [
     "typer>=0.9.0",
     "rich>=13.0.0",
@@ -10,10 +14,35 @@ dependencies = [
     "azure-identity>=1.15.0",
     "databricks-sdk>=0.20.0",
     "pyarrow>=14.0.0",
+    "pyspark[pipelines]==4.2.0",
+    "dbldatagen==0.4.0.post1",
+    "jmespath>=0.10.0,<1.1.0",
+    "pyparsing>=3.0.0,<3.3.0",
+    "numpy>=1.26,<2.4",
+    "pandas>=2.0,<3.0",
+    "databricks-labs-dqx==0.16.0",
+    "pyyaml>=6.0,<7.0",
 ]
 
 [tool.setuptools.packages.find]
-include = ["cli*"]
+include = ["cli*", "gen*"]
 
 [project.scripts]
 flowcheck = "cli.app:app"
+
+[dependency-groups]
+dev = [
+    "pytest>=8.3,<9",
+    "ruff>=0.13,<1",
+]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-ra"
+
+[tool.ruff]
+target-version = "py311"
+line-length = 110
+
+[tool.ruff.lint.per-file-ignores]
+"pipelines/src/psp-agentic/*.py" = ["F821"]
