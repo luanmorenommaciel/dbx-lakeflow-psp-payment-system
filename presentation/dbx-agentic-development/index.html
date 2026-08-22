@@ -2505,23 +2505,22 @@ body.anim-ready .slide--silent .reveal.in > *, body.anim-ready .slide--title .re
            style="justify-content:center;align-items:flex-start;text-align:left;">
     <div class="aurora aurora--cyan" aria-hidden="true"><b></b></div>
     <div class="reveal" style="position:relative;z-index:2;width:100%;max-width:1780px;margin:0 auto;">
-      <span class="tag" style="--tag-c:var(--cyan);">Move 2 of 4 · Build · one serverless pipeline</span>
+      <span class="tag" style="--tag-c:var(--cyan);">Move 2 of 4 · Build · six modules, six checkpoints</span>
       <div class="act-num" style="--an-c:var(--cyan);margin-top:clamp(6px,1.2vh,14px);">02</div>
       <h2 class="h2" style="margin-top:clamp(4px,0.8vh,10px);max-width:30ch;">
-        From a contract to a <span style="color:var(--cyan);">risk score</span>, in seven stages.
+        Six modules, six checkpoints &mdash; <span style="color:var(--cyan);">contract to risk score.</span>
       </h2>
-      <div class="rpipe" style="margin-top:clamp(24px,3.8vh,42px);">
-        <div class="rst" style="--r-c:var(--accent);"><div class="rst-n">1 · contract</div><div class="rst-t">Payment contract</div><div class="rst-s">four entities, seed, batches</div></div>
-        <div class="rst" style="--r-c:var(--gold);"><div class="rst-n">2 · generate</div><div class="rst-t">dbldatagen</div><div class="rst-s">100k deterministic rows</div></div>
-        <div class="rst" style="--r-c:var(--silver);"><div class="rst-n">3 · volume</div><div class="rst-t">UC managed Volume</div><div class="rst-s">batch-001 + incident</div></div>
-        <div class="rst" style="--r-c:var(--cyan);"><div class="rst-n">4 · bronze</div><div class="rst-t">4 streaming tables</div><div class="rst-s">raw + lineage metadata</div></div>
-        <div class="rst" style="--r-c:var(--purple);"><div class="rst-n">5 · dqx</div><div class="rst-t">Quality checks</div><div class="rst-s">single source of quality</div></div>
-        <div class="rst" style="--r-c:var(--green);"><div class="rst-n">6 · silver</div><div class="rst-t">valid + quarantine</div><div class="rst-s">_errors / _warnings</div></div>
-        <div class="rst" style="--r-c:var(--gold);"><div class="rst-n">7 · gold</div><div class="rst-t">merchant risk</div><div class="rst-s">gold_merchant_risk</div></div>
+      <div class="rpipe" style="margin-top:clamp(24px,3.8vh,42px);grid-template-columns:repeat(6,minmax(0,1fr));">
+        <div class="rst" style="--r-c:var(--accent);"><div class="rst-n">M01</div><div class="rst-t">Contract + plan</div><div class="rst-s">contracts · ledger</div></div>
+        <div class="rst" style="--r-c:var(--gold);"><div class="rst-n">M02</div><div class="rst-t">Synthetic data</div><div class="rst-s">dbldatagen · 100k</div></div>
+        <div class="rst" style="--r-c:var(--cyan);"><div class="rst-n">M03</div><div class="rst-t">Bronze</div><div class="rst-s">4 streaming tables</div></div>
+        <div class="rst" style="--r-c:var(--purple);"><div class="rst-n">M04</div><div class="rst-t">DQX + Silver</div><div class="rst-s">quality + quarantine</div></div>
+        <div class="rst" style="--r-c:var(--green);"><div class="rst-n">M05</div><div class="rst-t">Gold + DABs</div><div class="rst-s">risk + dev deploy</div></div>
+        <div class="rst" style="--r-c:var(--gold);"><div class="rst-n">M06</div><div class="rst-t">Genie + replay</div><div class="rst-s">investigate · 25 → 45</div></div>
       </div>
       <div class="callout cyan" style="margin-top:clamp(24px,3.6vh,40px);">
-        <div class="co-kicker">Then · the delivery layer</div>
-        <div class="co-body"><b>DABs</b> deploy the pipeline to dev &rarr; <b>Unity Catalog</b> records lineage &rarr; <b>Genie</b> answers the four contract questions.</div>
+        <div class="co-kicker">Each module · the same loop</div>
+        <div class="co-body">own &rarr; plan &rarr; execute &rarr; verify &rarr; review &rarr; lesson &mdash; then <b>checkpoint.sh NN</b> proves the slice.</div>
       </div>
     </div>
   </section>
@@ -2531,7 +2530,7 @@ body.anim-ready .slide--silent .reveal.in > *, body.anim-ready .slide--title .re
            style="justify-content:center;align-items:flex-start;text-align:left;">
     <div class="aurora aurora--cyan" aria-hidden="true"><b></b></div>
     <div class="reveal" style="position:relative;z-index:2;width:100%;max-width:1720px;margin:0 auto;">
-      <span class="tag kick-tag" style="--tag-c:var(--cyan);">The domain model · only the fields the story needs</span>
+      <span class="tag kick-tag" style="--tag-c:var(--cyan);">The domain model · NovaPay (m-007) under review · 12 merchants · 100k orders · 100k transactions · 102 disputes</span>
       <div class="four-col">
         <div class="req cyan">
           <div class="req-inner">
@@ -2588,7 +2587,7 @@ body.anim-ready .slide--silent .reveal.in > *, body.anim-ready .slide--title .re
 <span class="k">seed</span>:               <span class="n">22082026</span>
 <span class="k">transaction_count</span>:  <span class="n">100000</span>
 <span class="k">focus_merchant</span>:     m-007
-<span class="k">allowed_currencies</span>: [USD, EUR]
+<span class="k">allowed_currencies</span>: [USD, GBP, CAD, AUD]
 <span class="k">allowed_processors</span>: [stripe, adyen]
 <span class="k">entities</span>: [merchants, orders, transactions, disputes]
             </div>
@@ -2628,7 +2627,7 @@ body.anim-ready .slide--silent .reveal.in > *, body.anim-ready .slide--title .re
           <div class="wh-row"><span class="wh-num">1</span><div><div class="wh-rule">Begin in <b>plan</b> mode &mdash; propose, don't deploy</div><div class="wh-why">approve the plan before any edit or remote mutation</div></div></div>
           <div class="wh-row"><span class="wh-num">2</span><div><div class="wh-rule">Target <b>dev</b> only &mdash; no prd, no schedules, no service principals</div><div class="wh-why">the reset may touch only the exact workshop bundle and schema</div></div></div>
           <div class="wh-row"><span class="wh-num">3</span><div><div class="wh-rule">Never <b>ON VIOLATION DROP ROW</b> &mdash; preserve every invalid row</div><div class="wh-why">quarantine carries _errors and _warnings; nothing is deleted</div></div></div>
-          <div class="wh-row"><span class="wh-num">4</span><div><div class="wh-rule">Keep <b>pipelines/src/psp-analytics/**</b> read-only</div><div class="wh-why">the advanced reference is context, not the build target</div></div></div>
+          <div class="wh-row"><span class="wh-num">4</span><div><div class="wh-rule">Implement only the <b>module's paths</b> &mdash; one slice at a time</div><div class="wh-why">own &rarr; plan &rarr; execute &rarr; verify &rarr; review &rarr; lesson</div></div></div>
         </div>
         <div class="cmac">
           <div class="cmac-bar"><div class="cmac-dots"><i style="background:#ff5f56;"></i><i style="background:#ffbd2e;"></i><i style="background:#27c93f;"></i></div><span style="font-family:var(--font-mono);font-size:11px;color:var(--text-dim);">agent-contract.yaml · writable scope</span></div>
@@ -2637,13 +2636,12 @@ body.anim-ready .slide--silent .reveal.in > *, body.anim-ready .slide--title .re
 <span class="et-hi">writable:</span>
   configs/**
   gen/synthetic/**
-  pipelines/src/<span class="et-hi">psp-agentic</span>/**
-  pipelines/resources/agentic/**
-  docs/** · tests/** · data/fallback/**
+  pipelines/src/**
+  pipelines/resources/**
+  pipelines/spark-pipeline.yaml
+  scripts/** · tests/** · docs/** · data/fallback/**
 <span class="et-dim"># ── protected ──────────────────────</span>
-  pipelines/src/<span class="et-dim">psp-analytics</span>/**   <span class="et-dim">· keep unchanged</span>
-  pipelines/resources/psp_*.yml
-  gen/psp.json
+  <span class="et-dim">none &mdash; main holds the instructor solution</span>
             </div>
           </div>
         </div>
@@ -2651,12 +2649,12 @@ body.anim-ready .slide--silent .reveal.in > *, body.anim-ready .slide--title .re
     </div>
   </section>
 
-  <!-- S13 · STEP 1 — GENERATE -->
-  <section class="slide" data-act="BUILD" data-act-name="Step 1 · Generate" data-accent="gold">
+  <!-- S13 · MODULE 02 — GENERATE -->
+  <section class="slide" data-act="BUILD" data-act-name="Module 02 · Generate" data-accent="gold">
     <span class="demo-live">Demo · Live</span>
     <div class="aurora aurora--gold" aria-hidden="true"><b></b></div>
     <div class="reveal" style="position:relative;z-index:2;width:100%;max-width:1680px;margin:0 auto;">
-      <span class="tag kick-tag" style="--tag-c:var(--gold);">Step 1 · Generate the deterministic story · dbldatagen</span>
+      <span class="tag kick-tag" style="--tag-c:var(--gold);">Module 02 · Generate the deterministic story · dbldatagen</span>
       <div class="cols" style="--cols:1.05fr 0.95fr;align-items:stretch;gap:clamp(18px,2.2vw,36px);">
         <div class="code-block" data-lang="terminal">
 <span class="c"># seed is fixed in the contract — no randomness</span>
@@ -2666,6 +2664,8 @@ $ uv run python -m json.tool data/fallback/manifest.json | head -60
 <span class="g">✓ seed 22082026 · 12 merchants · 100,000 orders</span>
 <span class="g">✓ 100,000 transactions · 102 disputes</span>
 <span class="g">✓ 98,791 baseline + 1,209 incident</span>
+<span class="c"># prove it</span>
+$ ./scripts/checkpoint.sh 02
         </div>
         <div>
           <span class="tag" style="--tag-c:var(--silver);margin-bottom:clamp(9px,1.5vh,15px);">The eight incident conditions</span>
@@ -2688,11 +2688,11 @@ $ uv run python -m json.tool data/fallback/manifest.json | head -60
     </div>
   </section>
 
-  <!-- S14 · STEP 2 — BRONZE -->
-  <section class="slide" data-act="BUILD" data-act-name="Step 2 · Bronze" data-accent="cyan">
+  <!-- S14 · MODULE 03 — BRONZE -->
+  <section class="slide" data-act="BUILD" data-act-name="Module 03 · Bronze" data-accent="cyan">
     <div class="aurora aurora--cyan" aria-hidden="true"><b></b></div>
     <div class="reveal" style="position:relative;z-index:2;width:100%;max-width:1720px;margin:0 auto;">
-      <span class="tag kick-tag" style="--tag-c:var(--cyan);">Step 2 · Bronze · four streaming tables with lineage</span>
+      <span class="tag kick-tag" style="--tag-c:var(--cyan);">Module 03 · Bronze · four streaming tables with lineage</span>
       <div class="plant" style="margin-top:clamp(18px,3vh,30px);">
         <div class="pst" style="--p-c:var(--cyan);"><div class="pst-in"><div class="pst-k">bronze_merchants</div><div class="pst-t">Merchants</div><div class="pst-s">raw rows, nothing dropped</div></div></div>
         <div class="pst" style="--p-c:var(--accent);"><div class="pst-in"><div class="pst-k">bronze_orders</div><div class="pst-t">Orders</div><div class="pst-s">file stream from Volume</div></div></div>
@@ -2700,22 +2700,24 @@ $ uv run python -m json.tool data/fallback/manifest.json | head -60
         <div class="pst" style="--p-c:var(--red);"><div class="pst-in"><div class="pst-k">bronze_disputes</div><div class="pst-t">Disputes</div><div class="pst-s">opened / closed timestamps</div></div></div>
       </div>
       <div class="callout cyan" style="margin-top:clamp(20px,3.2vh,34px);">
-        <div class="co-kicker">Every Bronze row keeps its receipt</div>
+        <div class="co-kicker">Auto Loader keeps schema evolution + rescued data</div>
         <div class="co-body"><b>_batch_id</b> · <b>_source_file</b> · <b>_ingested_at</b> · <b>_rescued_data</b> &mdash; lineage is a first-class column, not an afterthought.</div>
       </div>
       <div class="code-block" data-lang="verify" style="margin-top:clamp(14px,2.2vh,24px);">
 <span class="c"># prove the graph, not the rows — a dry-run proves construction</span>
 $ ./scripts/sdp.sh dry-run --spec pipelines/spark-pipeline.yaml
 <span class="g">✓ graph resolves · four Bronze nodes · exit 0</span>
+<span class="c"># checkpoint</span>
+$ ./scripts/checkpoint.sh 03
       </div>
     </div>
   </section>
 
-  <!-- S15 · STEP 3 — DQX + SILVER -->
-  <section class="slide" data-act="BUILD" data-act-name="Step 3 · DQX + Silver" data-accent="purple">
+  <!-- S15 · MODULE 04 — DQX + SILVER -->
+  <section class="slide" data-act="BUILD" data-act-name="Module 04 · DQX + Silver" data-accent="purple">
     <div class="aurora aurora--purple" aria-hidden="true"><b></b></div>
     <div class="reveal" style="position:relative;z-index:2;width:100%;max-width:1720px;margin:0 auto;">
-      <span class="tag kick-tag" style="--tag-c:var(--purple);">Step 3 · DQX + Silver · route quality, preserve the bad</span>
+      <span class="tag kick-tag" style="--tag-c:var(--purple);">Module 04 · DQX + Silver · route quality, preserve the bad</span>
       <div class="cols" style="--cols:1.05fr 0.95fr;align-items:stretch;gap:clamp(20px,2.6vw,44px);">
         <div>
           <div class="three-col" style="grid-template-columns:1fr;">
@@ -2740,14 +2742,15 @@ $ ./scripts/sdp.sh dry-run --spec pipelines/spark-pipeline.yaml
           <div class="cmac-body">
             <div class="etree" style="border:0;background:transparent;">
 <span class="et-dim">transactions:</span>
-  <span class="et-hi">txn_id_not_null</span>
-  <span class="et-hi">txn_id_unique</span>
-  <span class="et-hi">amount_positive</span>
-  <span class="et-hi">currency_allowed</span>      <span class="et-dim"># USD | EUR</span>
-  <span class="et-hi">processor_known</span>       <span class="et-dim"># stripe | adyen</span>
-  <span class="et-hi">order_exists</span>
+  <span class="et-hi">txn_id_is_null</span>
+  <span class="et-hi">txn_id_is_duplicate</span>
+  <span class="et-hi">amount_is_not_positive</span>
+  <span class="et-hi">currency_is_not_authorized</span>  <span class="et-dim"># USD · GBP · CAD · AUD</span>
+  <span class="et-hi">processor_is_unknown</span>         <span class="et-dim"># stripe · adyen</span>
+  <span class="et-hi">order_is_orphan</span>
 <span class="et-dim">disputes:</span>
-  <span class="et-hi">closed_after_opened</span>
+  <span class="et-hi">dispute_id_is_null</span>
+  <span class="et-hi">dispute_closes_before_open</span>
             </div>
           </div>
         </div>
@@ -2759,17 +2762,18 @@ $ ./scripts/sdp.sh dry-run --spec pipelines/spark-pipeline.yaml
     </div>
   </section>
 
-  <!-- S16 · STEP 4 — GOLD -->
-  <section class="slide" data-act="BUILD" data-act-name="Step 4 · Gold" data-accent="gold">
+  <!-- S16 · MODULE 05 — GOLD -->
+  <section class="slide" data-act="BUILD" data-act-name="Module 05 · Gold" data-accent="gold">
     <div class="aurora aurora--gold" aria-hidden="true"><b></b></div>
     <div class="reveal" style="position:relative;z-index:2;width:100%;max-width:1680px;margin:0 auto;">
-      <span class="tag kick-tag" style="--tag-c:var(--gold);">Step 4 · Gold · one merchant-grain risk score</span>
+      <span class="tag kick-tag" style="--tag-c:var(--gold);">Module 05 · Gold · one merchant-grain risk score</span>
       <div class="cols" style="--cols:0.95fr 1.05fr;align-items:center;gap:clamp(22px,3vw,56px);">
         <div class="code-block" data-lang="gold.py">
-<span class="c"># pipelines/src/psp-agentic/gold.py</span>
+<span class="c"># pipelines/src/gold.py</span>
 <span class="k">quality_risk_score</span>     = ceil(quarantine_count / <span class="n">50</span>)
 <span class="k">chargeback_risk_points</span> = chargeback_count * <span class="n">20</span>
 <span class="k">risk_score</span>             = min(<span class="n">100</span>, quality + chargeback)
+<span class="c"># risk_band: &ge; 70 critical &middot; &ge; 30 elevated &middot; else normal</span>
         </div>
         <div>
           <span class="tag" style="--tag-c:var(--silver);margin-bottom:clamp(11px,1.8vh,19px);">gold_merchant_risk · m-007</span>
@@ -2823,7 +2827,7 @@ $ ./scripts/sdp.sh dry-run --spec pipelines/spark-pipeline.yaml
     <div class="reveal" style="position:relative;z-index:2;width:100%;max-width:1780px;margin:0 auto;">
       <div class="cols" style="--cols:1.05fr 0.95fr;align-items:center;gap:clamp(24px,3.4vw,72px);">
         <div>
-          <span class="tag" style="--tag-c:var(--green);">Move 3 of 4 · Deploy · DABs to dev</span>
+          <span class="tag" style="--tag-c:var(--green);">Module 05 · Deploy · DABs to dev</span>
           <div class="act-num" style="--an-c:var(--green);margin-top:clamp(6px,1.2vh,14px);">03</div>
           <h2 class="h2" style="margin-top:clamp(4px,0.8vh,10px);">
             One bundle, one target,<br>every change <span style="color:var(--green);">tracked.</span>
@@ -2889,7 +2893,7 @@ $ ./scripts/verify_remote_data.sh baseline
            style="justify-content:center;align-items:flex-start;text-align:left;">
     <div class="aurora aurora--gold" aria-hidden="true"><b></b></div>
     <div class="reveal" style="position:relative;z-index:2;width:100%;max-width:1780px;margin:0 auto;">
-      <span class="tag" style="--tag-c:var(--gold);">Move 4 of 4 · Replay · the incident is released</span>
+      <span class="tag" style="--tag-c:var(--gold);">Module 06 · Replay · the incident is released</span>
       <div class="act-num" style="--an-c:var(--gold);margin-top:clamp(6px,1.2vh,14px);">04</div>
       <h2 class="h2" style="margin-top:clamp(4px,0.8vh,10px);max-width:32ch;">
         A valid chargeback arrives <span style="color:var(--gold);">late.</span> Now the number moves.
@@ -2898,6 +2902,7 @@ $ ./scripts/verify_remote_data.sh baseline
         The held <b>late-valid-chargeback</b> is replayed into the pipeline. It passes Silver &mdash; it's valid data &mdash; and lands as a chargeback in Gold. <b>m-007 moves from 25 to 45, one explainable component at a time.</b>
       </p>
       <div class="code-block" data-lang="terminal" style="margin-top:clamp(18px,3vh,32px);max-width:920px;">
+<span class="c"># release the held chargeback</span>
 $ ./scripts/release_incident.sh --remote
 $ ./scripts/verify_remote_data.sh replay
 <span class="g">✓ m-007 risk_score=45 risk_band=elevated · chargeback_count 0 &rarr; 1</span>
@@ -2909,7 +2914,7 @@ $ ./scripts/verify_remote_data.sh replay
   <section class="slide" data-act="REPLAY" data-act-name="Before & after" data-accent="gold">
     <div class="aurora aurora--gold" aria-hidden="true"><b></b></div>
     <div class="reveal" style="position:relative;z-index:2;width:100%;max-width:1680px;margin:0 auto;">
-      <span class="tag kick-tag" style="--tag-c:var(--gold);">The delta · m-007, before and after</span>
+      <span class="tag kick-tag" style="--tag-c:var(--gold);">The delta · NovaPay (m-007), before and after</span>
       <div class="cols" style="--cols:1fr 1fr 0.7fr;align-items:stretch;gap:clamp(16px,2vw,32px);">
         <div class="dcard" style="--dc:var(--green);">
           <div class="dc-head"><span class="dc-dot" aria-hidden="true"></span><span class="dc-name">baseline</span><span class="dc-batch">before replay</span></div>
@@ -2949,7 +2954,7 @@ $ ./scripts/verify_remote_data.sh replay
   <section class="slide" data-act="REPLAY" data-act-name="Genie" data-accent="purple">
     <div class="aurora aurora--purple" aria-hidden="true"><b></b></div>
     <div class="reveal" style="position:relative;z-index:2;width:100%;max-width:1680px;margin:0 auto;">
-      <span class="tag kick-tag" style="--tag-c:var(--purple);">Genie · four bounded questions, SQL shown</span>
+      <span class="tag kick-tag" style="--tag-c:var(--purple);">Genie Code · four bounded questions, SQL shown</span>
       <div class="four-col" style="grid-template-columns:repeat(2,1fr);">
         <div class="card purple"><div class="card-inner">
           <span class="tag" style="--tag-c:var(--purple);">Q1</span>
@@ -3007,7 +3012,7 @@ $ ./scripts/verify_remote_data.sh replay
         <div class="card red"><div class="card-inner"><span class="not-x">&#10007;</span><div class="db-h grad">Not fraud detection</div><p class="db-p">We describe observed data-quality and dispute evidence. We never infer guilt.</p></div></div>
         <div class="card red"><div class="card-inner"><span class="not-x">&#10007;</span><div class="db-h grad">Not production</div><p class="db-p">No prd resources, schedules, service principals, or classic compute. <b>dev only.</b></p></div></div>
         <div class="card red"><div class="card-inner"><span class="not-x">&#10007;</span><div class="db-h grad">Not drop-and-forget</div><p class="db-p">Invalid rows are preserved. <b>ON VIOLATION DROP ROW</b> has no home here.</p></div></div>
-        <div class="card red"><div class="card-inner"><span class="not-x">&#10007;</span><div class="db-h grad">Not the reference</div><p class="db-p"><b>pipelines/src/psp-analytics/**</b> stays read-only &mdash; context, not the target.</p></div></div>
+        <div class="card red"><div class="card-inner"><span class="not-x">&#10007;</span><div class="db-h grad">Not the full platform</div><p class="db-p">No customers, cards, payouts, or KYB &mdash; four entities only; those are out of scope.</p></div></div>
       </div>
       <div class="callout gold" style="margin-top:clamp(20px,3.2vh,34px);">
         <div class="co-kicker">The final gate</div>
@@ -3025,7 +3030,7 @@ $ ./scripts/verify_remote_data.sh replay
         <div>
           <h2 class="h2" style="font-size:clamp(24px,3.2vw,44px);">Where this goes from here</h2>
           <div class="hw-rail">
-            <li class="hw-i"><span class="hw-n">01</span><span class="hw-t">The advanced PSP reference &mdash; seven entities, 22 resources &mdash; is optional <span class="dim">after-workshop context</span>.</span></li>
+            <li class="hw-i"><span class="hw-n">01</span><span class="hw-t">The instructor solution lives on <b>main</b>; the curriculum is a linear <b>workshop-v1</b> branch with six tagged checkpoints.</span></li>
             <li class="hw-i"><span class="hw-n">02</span><span class="hw-t">Rehearse the same story in a <b>clean clone</b> to make it yours.</span></li>
             <li class="hw-i"><span class="hw-n">03</span><span class="hw-t">Swap the incident &mdash; <span class="dim">new bad rows, new ledger entries, new risk delta</span>.</span></li>
           </div>
