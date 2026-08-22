@@ -23,7 +23,7 @@ before you paste a prompt.
 Complete [setup.md](setup.md). Start from the immutable starter and create your own branch:
 
 ```bash
-git switch -c student/<name> workshop-v1-starter
+git switch -c student/<name> workshop-v2-starter
 export DATABRICKS_CONFIG_PROFILE=dbx-workshop
 ./scripts/bootstrap.sh
 ```
@@ -178,13 +178,13 @@ Finish with a three-minute walkthrough that labels each fact as local, deployed,
 Your branch is never overwritten. If a module cannot recover, branch from the latest completed curriculum tag:
 
 ```bash
-git switch -c student/<name>-recovery workshop-v1-m03-bronze
+git switch -c student/<name>-recovery workshop-v2-m03-bronze
 ```
 
 Choose the tag matching your last completed module and replay only your later commits. The curriculum tags are
-`workshop-v1-starter`, `workshop-v1-m01-contract-plan`, `workshop-v1-m02-synthetic-data`,
-`workshop-v1-m03-bronze`, `workshop-v1-m04-dqx-silver`, `workshop-v1-m05-gold-dabs`,
-`workshop-v1-m06-genie-delivered`, and `workshop-v1-solution`.
+`workshop-v2-starter`, `workshop-v2-m01-contract-plan`, `workshop-v2-m02-synthetic-data`,
+`workshop-v2-m03-bronze`, `workshop-v2-m04-dqx-silver`, `workshop-v2-m05-gold-dabs`,
+`workshop-v2-m06-genie-delivered`, and `workshop-v2-solution`.
 
 Cleanup is destructive and outside the four hours. Only the instructor runs the full reset-and-restore
 certification lane.

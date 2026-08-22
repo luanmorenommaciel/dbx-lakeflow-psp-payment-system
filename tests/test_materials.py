@@ -5,6 +5,7 @@ from pathlib import Path
 
 def test_materials_and_fallbacks_exist() -> None:
     expected = [
+        "docs/README.md",
         "docs/learner/README.md",
         "docs/learner/setup.md",
         "docs/learner/brd-psp.md",
@@ -62,7 +63,7 @@ def test_guide_is_a_complete_four_hour_delivery_path() -> None:
         "Genie Code",
         "./scripts/checkpoint.sh 06",
         "./scripts/release_incident.sh --remote",
-        "workshop-v1-starter",
+        "workshop-v2-starter",
         "Recovery",
     ]
     assert not [marker for marker in expected_markers if marker not in guide]

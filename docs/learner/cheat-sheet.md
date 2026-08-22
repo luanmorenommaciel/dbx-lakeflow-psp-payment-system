@@ -13,7 +13,7 @@ Read first: [BRD](brd-psp.md) · [foundations](foundations.md) · [techs](techs.
 
 | Goal | Command |
 |---|---|
-| Start learner branch | `git switch -c student/<name> workshop-v1-starter` |
+| Start learner branch | `git switch -c student/<name> workshop-v2-starter` |
 | Module checkpoint | `./scripts/checkpoint.sh 01` through `06` |
 | Setup preflight | `./scripts/preflight.sh` |
 | Runtime preflight before deploy | `./scripts/preflight.sh --runtime` |
@@ -28,7 +28,7 @@ Read first: [BRD](brd-psp.md) · [foundations](foundations.md) · [techs](techs.
 | Upload drift fixture | `./scripts/upload_fallback.sh drift` |
 | Assert rescued drift | `./scripts/verify_remote_drift.sh` |
 | Final read-only gate | `./scripts/verify.sh --remote` |
-| Recovery | `git switch -c student/<name>-recovery workshop-v1-mNN-...` |
+| Recovery | `git switch -c student/<name>-recovery workshop-v2-mNN-...` |
 
 Use Genie Code for the required four-question investigation. Genie Space creation is optional instructor
 enhancement material. Label evidence as local, remote dry-run, deployed, live runtime, or fallback; never

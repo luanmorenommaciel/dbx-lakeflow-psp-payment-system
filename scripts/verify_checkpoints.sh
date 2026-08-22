@@ -2,14 +2,14 @@
 set -euo pipefail
 
 tags=(
-  workshop-v1-starter
-  workshop-v1-m01-contract-plan
-  workshop-v1-m02-synthetic-data
-  workshop-v1-m03-bronze
-  workshop-v1-m04-dqx-silver
-  workshop-v1-m05-gold-dabs
-  workshop-v1-m06-genie-delivered
-  workshop-v1-solution
+  workshop-v2-starter
+  workshop-v2-m01-contract-plan
+  workshop-v2-m02-synthetic-data
+  workshop-v2-m03-bronze
+  workshop-v2-m04-dqx-silver
+  workshop-v2-m05-gold-dabs
+  workshop-v2-m06-genie-delivered
+  workshop-v2-solution
 )
 
 for tag in "${tags[@]}"; do
@@ -44,7 +44,7 @@ verify_tag() {
 }
 
 starter="$scratch/starter"
-git worktree add --detach "$starter" workshop-v1-starter >/dev/null
+git worktree add --detach "$starter" workshop-v2-starter >/dev/null
 for product in \
   "$starter/configs/contracts/psp-payment.contract.yaml" \
   "$starter/configs/contracts/incident-ledger.yaml" \
@@ -72,12 +72,12 @@ for harness in \
 done
 git worktree remove --force "$starter" >/dev/null
 
-verify_tag workshop-v1-m01-contract-plan 01
-verify_tag workshop-v1-m02-synthetic-data 02
-verify_tag workshop-v1-m03-bronze 03
-verify_tag workshop-v1-m04-dqx-silver 04
-verify_tag workshop-v1-m05-gold-dabs 05
-verify_tag workshop-v1-m06-genie-delivered 06
+verify_tag workshop-v2-m01-contract-plan 01
+verify_tag workshop-v2-m02-synthetic-data 02
+verify_tag workshop-v2-m03-bronze 03
+verify_tag workshop-v2-m04-dqx-silver 04
+verify_tag workshop-v2-m05-gold-dabs 05
+verify_tag workshop-v2-m06-genie-delivered 06
 
 mkdir -p .workshop-evidence/rehearsals
 printf '%s\n' \

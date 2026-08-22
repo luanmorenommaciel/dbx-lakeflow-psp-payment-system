@@ -46,7 +46,7 @@ The instructor workspace is the canonical rehearsal and replay environment. It m
 ### Direct evidence, inference, proposal
 
 This table records the pre-implementation research snapshot; the current implementation evidence is under
-`docs/rehearsals/`.
+`docs/instructor/rehearsals/`.
 
 | Boundary | Statement |
 |---|---|
@@ -65,7 +65,7 @@ This table records the pre-implementation research snapshot; the current impleme
 - Firecrawl: 30 developer-index results plus four forced-live scrapes, including structured extraction of the landing-page contract.
 - Authority rule: provider results were discovery/evidence inputs. Version and feature claims in this plan use Databricks, Apache Spark, PyPI, and official GitHub repositories as sources of truth.
 
-Normalized provider records are in `docs/plans/evidence/`.
+Normalized provider records are in `docs/instructor/history/evidence/`.
 
 ## 3. Landing-page contract
 

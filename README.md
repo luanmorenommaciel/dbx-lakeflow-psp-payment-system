@@ -12,7 +12,8 @@ Start here, in this order:
 3. [Four-hour guide](docs/learner/workshop-guide.md)
 4. [CLI cheat sheet](docs/learner/cheat-sheet.md)
 
-The student index is [docs/learner/README.md](docs/learner/README.md). Instructors use the
+The documentation map is [docs/README.md](docs/README.md). Students start at
+[docs/learner/README.md](docs/learner/README.md). Instructors use the
 [runbook](docs/instructor/instructor-runbook.md) and [evidence checklist](docs/instructor/expected-evidence.md).
 
 Automated rehearsals: `./scripts/e2e_local.sh` proves the clean-room local story; after explicitly selecting the

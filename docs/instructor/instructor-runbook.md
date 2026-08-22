@@ -33,8 +33,8 @@ recovery demonstrations only.
    ./scripts/e2e_local.sh
    ```
 
-5. Inspect `.workshop-evidence/local/` and `docs/instructor/expected-evidence.md`. A local pass is not hosted
-   evidence.
+5. Inspect `.workshop-evidence/local/` and [expected-evidence.md](expected-evidence.md). A local pass is not
+   hosted evidence. Copy sanitized receipts into [rehearsals/](rehearsals/).
 
 ## T-12 hours — canonical Free Edition rehearsal
 

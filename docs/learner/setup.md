@@ -11,7 +11,7 @@ Complete this before 09:00; setup is not part of the four-hour clock. After boot
    git clone https://github.com/luanmorenommaciel/dbx-lakeflow-psp-payment-system.git
    cd dbx-lakeflow-psp-payment-system
    git fetch --tags
-   git switch -c student/<name> workshop-v1-starter
+   git switch -c student/<name> workshop-v2-starter
    ```
 
 4. Authenticate without committing credentials. Choose the profile yourself; the agent must never choose one:
