@@ -158,7 +158,7 @@ flowchart LR
   pipeline runs directly.
 - Compute: serverless only; no cluster policy, instance pool, Docker, Terraform, service principal, production target, schedule, or email notification.
 
-All learner names derive from the authenticated user. The instructor host is supplied only through the `workshop-instructor` Databricks CLI profile. No org ID, token, or workspace URL is committed into the bundle.
+All learner names derive from the authenticated user. The instructor host is supplied only through the `dbx-dev-workspace` Databricks CLI profile. No org ID, token, or workspace URL is committed into the bundle.
 
 ### Medallion contract
 

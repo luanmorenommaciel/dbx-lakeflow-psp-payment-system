@@ -14,8 +14,8 @@ recovery demonstrations only.
    ```bash
    databricks auth login \
      --host https://dbc-ec01047b-2f32.cloud.databricks.com \
-     --profile workshop-instructor
-   export DATABRICKS_CONFIG_PROFILE=workshop-instructor
+     --profile dbx-dev-workspace
+   export DATABRICKS_CONFIG_PROFILE=dbx-dev-workspace
    ```
 
 3. Confirm the selected profile. Never rely on an implicit default profile:
@@ -42,7 +42,7 @@ This step deploys and runs dev resources, optionally refreshes the instructor Ge
 incident. Confirm the profile and intended workspace before running it:
 
 ```bash
-export DATABRICKS_CONFIG_PROFILE=workshop-instructor
+export DATABRICKS_CONFIG_PROFILE=dbx-dev-workspace
 ./scripts/preflight.sh --runtime
 ./scripts/e2e_remote.sh --confirm-remote --reset-and-restore
 ```
