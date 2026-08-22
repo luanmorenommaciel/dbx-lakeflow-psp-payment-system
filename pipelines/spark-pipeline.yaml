@@ -1,0 +1,10 @@
+name: dbx-agentic-psp-local
+libraries:
+  - glob:
+      include: src/psp-agentic/bronze.py
+storage: file:///tmp/dbx-agentic-psp-sdp
+configuration:
+  landing_path: data/fallback/generated
+  schema_tracking_path: data/fallback/generated/_schemas
+  source_format: json
+  workshop.local: "true"
