@@ -3,21 +3,15 @@ requires = ["setuptools>=77"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "psp-flowcheck"
+name = "dbx-agentic-psp-workshop"
 version = "0.1.0"
-description = "FlowCheck — End-to-End Pipeline Debugger for PSP Payment System"
+description = "Four-hour workshop: deterministic PSP merchant-risk quality on Lakeflow"
 requires-python = ">=3.11,<3.14"
 dependencies = [
-    "typer>=0.9.0",
-    "rich>=13.0.0",
-    "azure-storage-blob>=12.19.0",
-    "azure-identity>=1.15.0",
     "databricks-sdk>=0.20.0",
     "pyarrow>=14.0.0",
     "pyspark[pipelines]==4.2.0",
     "dbldatagen==0.4.0.post1",
-    "jmespath>=0.10.0,<1.1.0",
-    "pyparsing>=3.0.0,<3.3.0",
     "numpy>=1.26,<2.4",
     "pandas>=2.0,<3.0",
     "databricks-labs-dqx==0.16.0",
@@ -25,10 +19,7 @@ dependencies = [
 ]
 
 [tool.setuptools.packages.find]
-include = ["cli*", "gen*"]
-
-[project.scripts]
-flowcheck = "cli.app:app"
+include = ["gen*"]
 
 [dependency-groups]
 dev = [

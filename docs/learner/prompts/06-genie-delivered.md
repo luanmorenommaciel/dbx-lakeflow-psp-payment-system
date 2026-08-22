@@ -1,5 +1,14 @@
 # Module 06 — Genie Code investigation and delivery
 
+## How we work this slice
+
+1. Own: four Genie questions plus the valid replay that moves `m-007` from 25 to 45.
+2. Plan: propose four bounded investigation questions and a delivery plan, then wait for my approval.
+3. Execute: create only the learner-owned assets under `docs/genie/`.
+4. Verify: `./scripts/checkpoint.sh 06`
+5. Review: inspect generated SQL; quality evidence is not a fraud claim.
+6. Lesson: copy `docs/learner/lesson-template.md` to `.workshop-evidence/lessons/m06.md`
+
 Read `AGENTS.md`, the product specification, and the Genie skill. First propose four bounded investigation
 questions and a delivery plan, then wait for my approval.
 

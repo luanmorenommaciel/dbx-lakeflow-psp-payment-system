@@ -1,5 +1,16 @@
 # Workshop cheat sheet
 
+Read first: [BRD](brd-psp.md) · [foundations](foundations.md) · [techs](techs.md) · [how we work](how-we-work.md)
+
+| How we work | Move |
+|---|---|
+| Own | State the `m-007` 25 → 45 outcome before pasting a prompt |
+| Plan | Agent proposes; you approve before files change |
+| Execute | Current module prompt only |
+| Verify | `./scripts/checkpoint.sh 01` through `06` |
+| Review | Inspect evidence; you sign deploy |
+| Lesson | `cp docs/learner/lesson-template.md .workshop-evidence/lessons/mNN.md` |
+
 | Goal | Command |
 |---|---|
 | Start learner branch | `git switch -c student/<name> workshop-v1-starter` |

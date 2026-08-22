@@ -1,5 +1,7 @@
 # Payment quality product specification
 
+The business ticket is [docs/learner/brd-psp.md](../learner/brd-psp.md). This file is the encode target.
+
 Build a small payment-quality product that turns deterministic JSON events into explainable merchant risk.
 The learner owns the product implementation; the repository supplies governance, tests, recovery, and fallback
 data.

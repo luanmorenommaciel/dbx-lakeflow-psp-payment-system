@@ -1,7 +1,7 @@
 # DBX Agentic Development contract
 
-This repository has two products: the root four-hour workshop and the existing advanced PSP reference under
-`pipelines/src/psp-analytics/`. Read `configs/contracts/agent-contract.yaml`, the business specification in
+This repository is the four-hour workshop product. Read `configs/contracts/agent-contract.yaml`,
+the business requirement in `docs/learner/brd-psp.md`, the product specification in
 `docs/specs/psp-payment.md`, and the current module prompt before editing.
 
 ## Authority
@@ -9,7 +9,6 @@ This repository has two products: the root four-hour workshop and the existing a
 - Begin with a plan and wait for human approval before remote deployment.
 - Target only `dev` and never add production resources, schedules, service principals, or classic compute.
 - Do not read, print, or commit credentials or Databricks profile contents.
-- Keep the existing advanced-reference bundle and pipeline sources unchanged.
 
 ## Build contract
 

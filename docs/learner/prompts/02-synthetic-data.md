@@ -1,5 +1,14 @@
 # Module 02 — deterministic synthetic data
 
+## How we work this slice
+
+1. Own: produce the seeded 100,000-transaction story with eight named incidents.
+2. Plan: propose a plan and wait for my approval.
+3. Execute: implement only `gen/synthetic/`.
+4. Verify: `./scripts/checkpoint.sh 02`
+5. Review: inspect logical counts, seed `22082026`, and the held late chargeback.
+6. Lesson: copy `docs/learner/lesson-template.md` to `.workshop-evidence/lessons/m02.md`
+
 Read `AGENTS.md`, the product specification, both module-01 contracts, and the synthetic-data skill. First
 propose a plan and wait for my approval.
 

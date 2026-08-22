@@ -1,1 +1,1 @@
-"""Synthetic data generation for the PSP reference and workshop."""
+"""Synthetic data generation for the workshop payment-quality incident."""

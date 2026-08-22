@@ -1,6 +1,7 @@
 # Learner setup
 
-Complete this before 09:00; setup is not part of the four-hour clock.
+Complete this before 09:00; setup is not part of the four-hour clock. After bootstrap, follow
+[the learner path](README.md) starting with the BRD.
 
 1. Create your own Databricks Free Edition workspace.
 2. Install Git, Python 3.11–3.13, uv, Java 17 or 21, Databricks CLI 1.13.0, and Claude Code or Codex.

@@ -28,10 +28,12 @@ def test_workshop_avoids_an_unnecessary_jobs_api_dependency() -> None:
     assert "dbfs:/Volumes/$catalog/$schema/$volume" in upload
 
 
-def test_reference_bundle_is_not_in_workshop_include() -> None:
+def test_workshop_bundle_does_not_include_other_pipelines() -> None:
     root = Path("databricks.yml").read_text()
     assert "pipelines/resources/psp_analytics_pipeline.yml" not in root
-    assert Path("pipelines/databricks.yml").exists()
+    assert not Path("pipelines/databricks.yml").exists()
+    assert not Path("pipelines/src/psp-analytics").exists()
+    assert not Path("cli").exists()
 
 
 def test_reset_is_exactly_scoped_and_requires_confirmation() -> None:

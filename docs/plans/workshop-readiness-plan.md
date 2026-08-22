@@ -1,6 +1,7 @@
 # DBX Agentic Development — workshop-readiness plan
 
-Status: approved and locally implemented; Free Edition rehearsal pending
+Status: approved and locally implemented; Free Edition rehearsal pending. The seven-entity
+advanced reference described in this plan was later removed from the repository.
 
 Workshop: Saturday, 22 August 2026, 09:00–13:00 America/Sao_Paulo
 
@@ -492,4 +493,4 @@ Workshop-ready means all of the following are true:
 
 ## 16. Approval boundary
 
-Approval of this plan authorizes implementation only inside the paths declared by `tasks/.plans/dbx-agentic-workshop-readiness.yaml`. It does not authorize deployment, cleanup, or mutation of the instructor workspace. Those external actions remain separate, explicit rehearsal steps after local implementation and validation.
+Approval of this plan authorizes implementation only inside the workshop paths declared in this document. It does not authorize deployment, cleanup, or mutation of the instructor workspace. Those external actions remain separate, explicit rehearsal steps after local implementation and validation. Task-Spec is not part of the learner product.

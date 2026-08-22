@@ -5,7 +5,14 @@ from pathlib import Path
 
 def test_materials_and_fallbacks_exist() -> None:
     expected = [
+        "docs/learner/README.md",
         "docs/learner/setup.md",
+        "docs/learner/brd-psp.md",
+        "docs/learner/brd-psp.pdf",
+        "docs/learner/foundations.md",
+        "docs/learner/techs.md",
+        "docs/learner/how-we-work.md",
+        "docs/learner/lesson-template.md",
         "docs/learner/workshop-guide.md",
         "docs/learner/cheat-sheet.md",
         "docs/learner/prompts/01-contract-plan.md",
@@ -38,6 +45,7 @@ def test_readiness_gate_requires_named_release_evidence() -> None:
     assert "fallback.env" in gate
     assert "website.env" in gate
     assert "tasks/done" not in gate
+    assert not Path("tasks").exists()
     assert "WORKSHOP_READINESS=READY" in gate
 
 
@@ -45,7 +53,8 @@ def test_guide_is_a_complete_four_hour_delivery_path() -> None:
     guide = Path("docs/learner/workshop-guide.md").read_text()
     expected_markers = [
         "Before the clock starts",
-        "09:00–09:35",
+        "09:00–09:15",
+        "09:15–09:35",
         "12:30–13:00",
         "./scripts/e2e_local.sh",
         "databricks bundle validate --strict",
@@ -71,6 +80,8 @@ def test_six_prompts_are_tool_neutral_and_plan_gated() -> None:
         assert "propose" in text.lower()
         assert "wait for my approval" in text.lower()
         assert f"./scripts/checkpoint.sh {index:02d}" in text
+        for ritual in ("Own", "Plan", "Execute", "Verify", "Review", "Lesson"):
+            assert ritual in text, f"{prompt.name} missing ritual step {ritual}"
 
 
 def test_serialized_genie_space_has_stable_ids_and_bounded_sources() -> None:
@@ -87,3 +98,25 @@ def test_serialized_genie_space_has_stable_ids_and_bounded_sources() -> None:
     assert [item["identifier"] for item in space["data_sources"]["tables"]] == sorted(
         item["identifier"] for item in space["data_sources"]["tables"]
     )
+
+
+def test_root_readme_is_workshop_entry() -> None:
+    text = Path("README.md").read_text()
+    assert "docs/learner/brd-psp.md" in text
+    assert "18 DLT" not in text
+    assert "ShadowTraffic" not in text
+    assert not Path("docs/psp-use-case.pdf").exists()
+    assert not Path("docs/reference").exists()
+
+
+def test_brd_is_four_entity_ticket() -> None:
+    brd = Path("docs/learner/brd-psp.md").read_text()
+    in_scope, out_of_scope = brd.split("## 4. Out of scope", maxsplit=1)
+    for entity in ("merchants", "orders", "transactions", "disputes"):
+        assert entity in in_scope
+    for advanced in ("customers", "payment_instruments", "payouts"):
+        assert advanced not in in_scope
+        assert advanced in out_of_scope
+    assert "m-007" in brd
+    assert "25" in brd and "45" in brd
+    assert Path("docs/learner/brd-psp.pdf").stat().st_size > 0

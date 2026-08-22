@@ -16,6 +16,8 @@ __pycache__/
 .ruff_cache/
 .spark-pipelines/
 .workshop-evidence/
+# Task-Spec is not used in this workshop. Ignore leftover local state if a
+# global install is run by mistake.
 .taskspec/
 pipelines/.spark-pipelines/
 spark-warehouse/

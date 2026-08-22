@@ -1,5 +1,14 @@
 # Module 04 — DQX, Silver, and quarantine
 
+## How we work this slice
+
+1. Own: seven invalid conditions stay queryable in quarantine with `_errors` and `_warnings`.
+2. Plan: propose a plan and wait for my approval.
+3. Execute: author DQX rules and the Silver/quarantine routes only.
+4. Verify: `./scripts/checkpoint.sh 04`
+5. Review: reject any plan that drops invalid data or uses `ON VIOLATION DROP ROW`.
+6. Lesson: copy `docs/learner/lesson-template.md` to `.workshop-evidence/lessons/m04.md`
+
 Read `AGENTS.md`, the product specification, the contracts, and the DQX/Lakeflow skills. First propose a plan and
 wait for my approval.
 

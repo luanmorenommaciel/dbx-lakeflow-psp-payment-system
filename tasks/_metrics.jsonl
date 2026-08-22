@@ -1,2 +1,0 @@
-{"schema_version":1,"ts":"2026-08-21T19:58:03Z","task":"T-20260821-workshop-compatibility","event":"status_change","from":"ready","to":"in-progress","reason":"implementation and local evidence complete; finalizing lifecycle"}
-{"schema_version":1,"ts":"2026-08-21T19:59:30Z","task":"T-20260821-workshop-compatibility","event":"status_change","from":"in-progress","to":"blocked","reason":"hosted compatibility requires a valid OAuth profile for the exact instructor Free Edition workspace; retrospective handoff acceptance also failed blast-radius attribution"}

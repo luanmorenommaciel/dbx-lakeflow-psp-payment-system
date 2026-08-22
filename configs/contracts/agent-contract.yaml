@@ -20,12 +20,7 @@ scope:
     - tests/**
     - docs/**
     - data/fallback/**
-  protected:
-    - pipelines/databricks.yml
-    - pipelines/resources/psp_analytics_pipeline.yml
-    - pipelines/resources/psp_orchestration_job.yml
-    - pipelines/src/psp-analytics/**
-    - gen/psp.json
+  protected: []
 controls:
   - Never read, print, or commit credentials.
   - Preserve invalid rows with DQX errors and warnings.

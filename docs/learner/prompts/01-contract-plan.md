@@ -1,6 +1,15 @@
 # Module 01 — contract and plan
 
-Read `AGENTS.md`, `CLAUDE.md`, `docs/specs/psp-payment.md`, and
+## How we work this slice
+
+1. Own: encode the NovaPay (`m-007`) ticket so the four-entity incident is machine-readable.
+2. Plan: propose a concise implementation plan and wait for my approval.
+3. Execute: create only the two contract files listed below.
+4. Verify: `./scripts/checkpoint.sh 01`
+5. Review: confirm entities, currencies, counts, seven invalid conditions, and the held chargeback.
+6. Lesson: copy `docs/learner/lesson-template.md` to `.workshop-evidence/lessons/m01.md`
+
+Read `AGENTS.md`, `CLAUDE.md`, `docs/learner/brd-psp.md`, `docs/specs/psp-payment.md`, and
 `configs/contracts/agent-contract.yaml`. Use the installed Databricks skills to verify assumptions, but do not
 make any remote call.
 

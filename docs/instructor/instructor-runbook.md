@@ -2,9 +2,9 @@
 
 ## Delivery promise
 
-The room builds one explainable payment-quality incident, not a general payment platform. Keep the advanced PSP
-reference as optional after-workshop context. Learners use their own Databricks Free Edition workspaces; the
-instructor workspace supplies canonical rehearsal evidence and recovery demonstrations only.
+The room builds one explainable payment-quality incident, not a general payment platform. Learners use their
+own Databricks Free Edition workspaces; the instructor workspace supplies canonical rehearsal evidence and
+recovery demonstrations only.
 
 ## T-24 hours — prepare the machine and repository
 
@@ -78,23 +78,25 @@ export DATABRICKS_WAREHOUSE_ID=THE_CONFIRMED_WAREHOUSE
 
 ## Room opening — 30 minutes before
 
-- Open the learner guide, starter tag, prompts, pipeline graph, quarantine results, Gold view, and Genie Code.
+- Open the learner BRD, how-we-work loop, starter tag, prompts, pipeline graph, quarantine results, Gold view, and Genie Code.
 - Confirm the SQL warehouse and serverless pipeline are usable.
 - Put the exact profile setup command on screen, but never your credential material.
 - Ask learners to use their own Free Edition workspace and keep the cheat sheet open.
 - Pair anyone still blocked on authentication after ten minutes.
 - Keep fallback lanes visibly labeled: local, remote dry-run, deployed, live runtime, or replay.
+- Keep the four-entity incident in view. Do not introduce customers, payouts, or a production target.
 
 ## Four-hour clock
 
 | Time | Outcome | Instructor checkpoint |
 |---|---|---|
-| 09:00–09:35 | Contract + plan | Human approves the agent plan before code |
+| 09:00–09:15 | Own the outcome | Learners can state `m-007` 25 → 45 from the BRD |
+| 09:15–09:35 | Contract + plan | Human approves the agent plan before code |
 | 09:35–10:10 | dbldatagen story | 100,000 transactions and eight deterministic incidents |
 | 10:10–10:50 | Bronze | Four sources retain lineage, evolution, and rescue metadata |
 | 10:50–11:45 | DQX + Silver | Invalid records remain queryable and explained |
 | 11:45–12:30 | Gold + DABs | Local E2E, human deploy gate, hosted baseline |
-| 12:30–13:00 | Genie Code + replay | Four questions and risk change 25 to 45 |
+| 12:30–13:00 | Genie Code + replay | Four questions, risk change 25 to 45, one lesson written |
 
 ## Recovery thresholds
 
@@ -113,7 +115,7 @@ replayed.
 
 - Pause before deploy, incident replay, and reset. Read the active profile aloud.
 - Do not start a second active Free Edition pipeline.
-- Keep the advanced reference read-only throughout the workshop.
+- Keep the four contracted entities only throughout the workshop.
 - Never accept `ON VIOLATION DROP ROW` in the workshop pipeline.
 - Do not diagnose a merchant as fraudulent; describe observed data-quality and chargeback evidence.
 - Cleanup is after delivery, scoped to the exact dev bundle and `dbx_agentic_dev` schema.

@@ -2,7 +2,9 @@
 
 | Stage | Expected evidence |
 |---|---|
+| Opening | learners can state the `m-007` 25 → 45 ticket from `docs/learner/brd-psp.md` |
 | Contract | four entities, seed 22082026, eight ledger entries |
+| Lesson | `.workshop-evidence/lessons/mNN.md` exists after each checkpoint |
 | Skills | selected Databricks skills listed for Claude Code and Codex |
 | Generator | 100,000 transactions; 98,791 baseline and 1,209 incident |
 | Bronze | four graph nodes with ingestion metadata |

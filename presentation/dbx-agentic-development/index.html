@@ -1,0 +1,3032 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="color-scheme" content="dark">
+<meta name="description" content="DBX Agentic Development — a four-hour build-along. Contract, generator, Lakeflow, DQX, Gold, DABs, Genie, replay.">
+<title>DBX Agentic Development · 4-Hour Build-Along</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%230b0d10'/%3E%3Cpath d='M16 6l7 10-7 10-7-10z' fill='%23ff3621'/%3E%3C/svg%3E">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&family=Fira+Code:wght@400;500;600;700&family=Instrument+Serif:ital@0;1&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;1,6..72,400&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+<style>
+/* ═══════════════════════════════════════════════════════════════════
+   DBX AGENTIC DEVELOPMENT — DECK DESIGN SYSTEM
+   Inherits the Dark Factory Operation system: tokens → atmosphere →
+   layout → typography → chrome → base components → motion.
+   DBX registers: rail, req tiles, spine, gate matrix, evidence ledger,
+   pipeline stations, terminal blocks, and the four-move climb.
+   ═══════════════════════════════════════════════════════════════════ */
+
+:root {
+  --bg: #0b0d10; --surface: #14181e; --surface2: #1b2029; --surface-elevated: #242b35;
+  --border: rgba(255,128,96,0.08); --border-bright: rgba(255,128,96,0.18);
+  --text: #e9edf2; --text-dim: #8d99a8;
+  --accent: #ff3621; --accent-dim: rgba(255,54,33,0.10);
+  --silver: #b7c0cc; --silver-bright: #d3dae2;
+  --silver-dim: rgba(183,192,204,0.10);
+  --gold: #ffc24b; --gold-dim: rgba(255,194,75,0.10);
+  --green: #21b35d; --green-dim: rgba(33,179,93,0.10);
+  --red: #ff4d3d; --red-dim: rgba(255,77,61,0.10);
+  --purple: #8b7cf6; --purple-dim: rgba(139,124,246,0.10);
+  --cyan: #38c6d9; --cyan-dim: rgba(56,198,217,0.10);
+  --orange: #ff7a1a; --orange-dim: rgba(255,122,26,0.10);
+  --code-bg: #0a0d11; --code-text: #c9d1d9;
+  --rule: rgba(255,146,118,0.13); --text-mute: #4e5764;
+  --font-display: 'Instrument Serif', Georgia, serif;
+  --font-editorial: 'Newsreader', Georgia, serif;
+  --font-body: 'DM Sans', system-ui, sans-serif;
+  --font-mono: 'Fira Code', 'SF Mono', Consolas, monospace;
+  --font-numeric: 'Space Grotesk', 'DM Sans', system-ui, sans-serif;
+  --spring: cubic-bezier(0.32,0.72,0,1);
+  --ease-out-expo: cubic-bezier(0.16,1,0.3,1);
+  --drift: cubic-bezier(0.45,0.05,0.55,0.95);
+}
+
+/* ── reset & base ─────────────────────────────────────────────────── */
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html { color-scheme: dark; }
+body {
+  font-family: var(--font-body); color: var(--text); background: var(--bg);
+  overflow: hidden; -webkit-font-smoothing: antialiased; text-rendering: optimizeLegibility;
+}
+::selection { background: var(--accent); color: #000; }
+:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; border-radius: 4px; }
+img, svg { max-width: 100%; display: block; }
+button { font: inherit; color: inherit; }
+
+/* film-grain */
+body::after {
+  content: ''; position: fixed; inset: 0; z-index: 9999; pointer-events: none; opacity: 0.04;
+  background: url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0naHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmcnIHdpZHRoPSczMDAnIGhlaWdodD0nMzAwJz48ZmlsdGVyIGlkPSduJz48ZmVUdXJidWxlbmNlIHR5cGU9J2ZyYWN0YWxOb2lzZScgYmFzZUZyZXF1ZW5jeT0nMC43NScgbnVtT2N0YXZlcz0nNCcgc3RpdGNoVGlsZXM9J3N0aXRjaCcvPjwvZmlsdGVyPjxyZWN0IHdpZHRoPSczMDAnIGhlaWdodD0nMzAwJyBmaWx0ZXI9J3VybCgjbiknIG9wYWNpdHk9JzEnLz48L3N2Zz4=");
+}
+
+/* ── atmosphere ───────────────────────────────────────────────────── */
+.atmosphere { position: fixed; inset: 0; z-index: 0; pointer-events: none; overflow: hidden; }
+.aurora {
+  position: absolute; inset: -12%; z-index: -1; pointer-events: none;
+  filter: blur(60px); opacity: 0.38; transition: opacity 1.4s ease;
+  --a1: rgba(255,54,33,0.16); --a2: rgba(56,198,217,0.09); --a3: rgba(139,124,246,0.10);
+}
+.atmosphere .aurora { z-index: 0; inset: -8%; opacity: 0.5; }
+.slide.is-active .aurora { opacity: 0.62; }
+.aurora::before, .aurora::after, .aurora > b {
+  content: ''; position: absolute; border-radius: 50%;
+  mix-blend-mode: screen; will-change: transform;
+}
+.aurora::before { width: 48vw; height: 48vw; left: -8%; top: -12%;  background: radial-gradient(circle, var(--a1), transparent 62%); animation: aurora-a 26s var(--drift) infinite alternate; }
+.aurora::after  { width: 38vw; height: 38vw; right: -5%; top: 16%;  background: radial-gradient(circle, var(--a2), transparent 62%); animation: aurora-b 34s var(--drift) infinite alternate; }
+.aurora > b     { width: 34vw; height: 34vw; left: 30%; bottom: -18%; background: radial-gradient(circle, var(--a3), transparent 62%); animation: aurora-c 40s var(--drift) infinite alternate; }
+@keyframes aurora-a { from { transform: translate3d(0,0,0) scale(1); }    to { transform: translate3d(7vw, 5vh, 0) scale(1.16); } }
+@keyframes aurora-b { from { transform: translate3d(0,0,0) scale(1.08); } to { transform: translate3d(-6vw, -4vh, 0) scale(0.94); } }
+@keyframes aurora-c { from { transform: translate3d(0,0,0) scale(0.96); } to { transform: translate3d(4vw, -6vh, 0) scale(1.12); } }
+
+.aurora--accent { --a1: rgba(255,54,33,0.18);  --a2: rgba(56,198,217,0.09);  --a3: rgba(183,192,204,0.08); }
+.aurora--gold   { --a1: rgba(255,194,75,0.16);  --a2: rgba(255,122,26,0.09);   --a3: rgba(255,54,33,0.07); }
+.aurora--red    { --a1: rgba(255,77,61,0.15);   --a2: rgba(255,122,26,0.09);   --a3: rgba(139,124,246,0.07); }
+.aurora--green  { --a1: rgba(33,179,93,0.15);   --a2: rgba(56,198,217,0.08);  --a3: rgba(255,54,33,0.07); }
+.aurora--purple { --a1: rgba(139,124,246,0.17); --a2: rgba(255,54,33,0.09);  --a3: rgba(56,198,217,0.07); }
+.aurora--cyan   { --a1: rgba(56,198,217,0.15);  --a2: rgba(255,54,33,0.10);  --a3: rgba(33,179,93,0.06); }
+.aurora--silver { --a1: rgba(183,192,204,0.13); --a2: rgba(211,219,226,0.08); --a3: rgba(255,54,33,0.06); }
+
+.grid-floor {
+  position: absolute; left: 50%; bottom: -16%; width: 150%; height: 60%;
+  transform: translateX(-50%) perspective(1100px) rotateX(64deg); transform-origin: 50% 0%;
+  background-image:
+    linear-gradient(rgba(255,128,96,0.07) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,128,96,0.07) 1px, transparent 1px);
+  background-size: 56px 56px;
+  -webkit-mask-image: radial-gradient(ellipse 58% 90% at 50% 0%, #000 4%, transparent 68%);
+  mask-image: radial-gradient(ellipse 58% 90% at 50% 0%, #000 4%, transparent 68%);
+  pointer-events: none;
+}
+
+/* ── deck / slide ─────────────────────────────────────────────────── */
+.deck {
+  position: relative; z-index: 1;
+  height: 100dvh; overflow-y: auto;
+  scroll-snap-type: y mandatory; scroll-behavior: smooth;
+  scrollbar-width: none;
+}
+.deck::-webkit-scrollbar { display: none; }
+
+.slide {
+  height: 100dvh; scroll-snap-align: start; overflow: hidden; position: relative;
+  display: flex; flex-direction: column; justify-content: center;
+  padding: clamp(24px, 3.6vh, 44px) clamp(36px, 5vw, 88px) clamp(78px, 10.4vh, 116px);
+  isolation: isolate;
+}
+.slide--title {
+  justify-content: center; align-items: center; text-align: center;
+  background-image:
+    radial-gradient(ellipse at 50% 30%, rgba(255,54,33,0.12) 0%, transparent 50%),
+    radial-gradient(ellipse at 80% 80%, rgba(255,194,75,0.04) 0%, transparent 40%);
+}
+.slide--silent { justify-content: center; align-items: center; text-align: center; }
+
+.slide::before {
+  content: ''; position: absolute; inset: 0; z-index: -2; pointer-events: none;
+  opacity: 0; transition: opacity 1.4s ease;
+  background:
+    radial-gradient(58% 50% at 28% 18%, rgba(255,54,33,0.05), transparent 68%),
+    radial-gradient(50% 46% at 82% 88%, rgba(255,194,75,0.03), transparent 70%);
+}
+.slide.is-active::before { opacity: 1; animation: ambient-drift 18s var(--drift) infinite; }
+.slide--title::before, .slide--silent::before { display: none; }
+@keyframes ambient-drift {
+  0%, 100% { transform: translate3d(0,0,0) scale(1); }
+  50%      { transform: translate3d(-2.5%, 1.5%, 0) scale(1.09); }
+}
+.slide::after {
+  content: ''; position: absolute; inset: 0; z-index: -2; pointer-events: none;
+  opacity: 0; transition: opacity 1s ease;
+  background: radial-gradient(760px circle at var(--mx, 50%) var(--my, 38%), rgba(255,128,96,0.07), transparent 62%);
+}
+.slide.is-active::after { opacity: 1; }
+
+/* ── type scale ───────────────────────────────────────────────────── */
+.slide__display {
+  font-family: var(--font-display); font-size: clamp(56px, 10vw, 120px);
+  font-weight: 400; letter-spacing: -1px; line-height: 0.92; text-wrap: balance;
+}
+.slide__display--act { font-size: clamp(110px, 20vw, 280px); letter-spacing: -2px; }
+.slide__heading {
+  font-family: var(--font-display); font-size: clamp(36px, 6vw, 72px);
+  font-weight: 400; letter-spacing: -0.5px; line-height: 1.08; text-wrap: balance;
+}
+.slide__body {
+  font-family: var(--font-editorial); font-size: clamp(19px, 2.1vw, 25px);
+  line-height: 1.55; color: var(--text-dim); letter-spacing: 0.01em;
+}
+.slide__body b, .slide__body strong { color: var(--text); font-weight: 600; }
+.slide__label {
+  font-family: var(--font-mono); font-size: clamp(11px, 1.1vw, 14px); font-weight: 600;
+  text-transform: uppercase; letter-spacing: 2.5px; color: var(--accent); margin-bottom: 16px;
+}
+.slide__label.gold { color: var(--gold); }   .slide__label.green { color: var(--green); }
+.slide__label.red { color: var(--red); }     .slide__label.purple { color: var(--purple); }
+.slide__label.cyan { color: var(--cyan); }   .slide__label.silver { color: var(--silver); }
+.act-marker {
+  font-family: var(--font-mono); font-size: 11px; letter-spacing: 4px; text-transform: uppercase;
+  color: var(--text-dim); opacity: 0.7; margin-bottom: 8px;
+  display: inline-flex; align-items: center; gap: 14px;
+}
+.act-marker::before { content: ''; width: 26px; height: 1px; background: var(--text-dim); opacity: 0.6; }
+
+.gradient-text   { background: linear-gradient(135deg, var(--accent) 0%, var(--silver-bright) 50%, #fff 100%); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; }
+.gradient-gold   { background: linear-gradient(135deg, var(--gold) 0%, #fff 50%, var(--accent) 100%); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; }
+.gradient-red    { background: linear-gradient(135deg, var(--red) 0%, #fff 50%, var(--orange) 100%); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; }
+.gradient-green  { background: linear-gradient(135deg, var(--green) 0%, #fff 60%, var(--green) 100%); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; }
+.gradient-cyan   { background: linear-gradient(135deg, var(--cyan) 0%, #fff 55%, var(--accent) 100%); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; }
+.gradient-purple { background: linear-gradient(135deg, var(--purple) 0%, #fff 50%, var(--accent) 100%); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; }
+
+/* ── navigation chrome ────────────────────────────────────────────── */
+.deck-progress {
+  position: fixed; top: 0; left: 0; height: 2px; width: 0;
+  background: linear-gradient(90deg, var(--accent), var(--cyan)); z-index: 100;
+  transition: width 0.3s var(--ease-out-expo); pointer-events: none;
+  box-shadow: 0 0 14px rgba(255,54,33,0.5);
+}
+
+/* HUD — compact one-line counter (register from d1) */
+.deck-counter {
+  position: fixed; bottom: clamp(16px,2.4vh,28px); right: clamp(16px,2.4vw,30px); z-index: 100;
+  display: flex; align-items: center; gap: 11px;
+  font-family: var(--font-mono); font-size: 10px; letter-spacing: 2px; text-transform: uppercase;
+  color: var(--text-dim);
+  --dc-c: var(--accent); --dc-glow: rgba(255,54,33,0.4);
+}
+.dc-act { color: #000; background: var(--dc-c, var(--accent)); padding: 3px 9px; border-radius: 3px; font-weight: 800; font-size: 9px; letter-spacing: 2px; transition: background .6s var(--spring); }
+.dc-pos { font-family: var(--font-mono); }
+.dc-n { color: var(--text); font-weight: 700; }
+.dc-bar { display: flex; gap: 3px; width: clamp(54px,5vw,76px); }
+.dc-seg { flex: 1 1 0; height: 2px; background: rgba(255,255,255,0.14); transition: background .4s var(--spring); }
+.dc-seg.passed { background: rgba(255,255,255,0.32); }
+.dc-seg.current { background: var(--dc-c, var(--accent)); }
+@keyframes counter-pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.4; } }
+@media (max-width: 900px) { .deck-counter { display: none; } }
+
+.deck-tracker {
+  position: fixed; top: 50%; right: clamp(10px,1.1vw,16px); transform: translateY(-50%);
+  display: flex; flex-direction: column; gap: 5px; z-index: 100;
+}
+.deck-tracker .dot {
+  appearance: none; border: 0; padding: 0; display: block; cursor: pointer;
+  width: 5px; height: 5px; border-radius: 50%; background: rgba(255,255,255,0.16);
+  transition: background .25s var(--spring), height .25s var(--spring);
+}
+.deck-tracker .dot:hover { background: rgba(255,255,255,0.5); }
+.deck-tracker .dot.passed { background: rgba(255,255,255,0.32); }
+.deck-tracker .dot.current { height: 20px; border-radius: 3px; background: var(--dc-c, var(--accent)); }
+@media (max-width: 900px) { .deck-tracker { display: none; } }
+
+/* ── pills / badges / kickers ─────────────────────────────────────── */
+.hero-badge {
+  display: inline-block; background: var(--accent); color: #000;
+  font-family: var(--font-mono); font-size: 11px; font-weight: 800;
+  letter-spacing: 3px; text-transform: uppercase; padding: 7px 18px; border-radius: 5px;
+  box-shadow: 0 6px 22px rgba(255,54,33,0.4), 0 0 0 1px rgba(255,54,33,0.6), inset 0 1px 0 rgba(255,255,255,0.3);
+  margin-bottom: clamp(20px, 3.2vh, 36px);
+}
+.hero-badge::before { content: '\25C6'; margin-right: 8px; opacity: 0.8; }
+.hero-badge::after  { content: '\25C6'; margin-left: 8px; opacity: 0.8; }
+
+.pill {
+  display: inline-block; padding: 7px 16px; border-radius: 5px;
+  font-family: var(--font-mono); font-size: 11px; font-weight: 800;
+  letter-spacing: 2px; text-transform: uppercase; color: #000;
+  background: var(--pill-c, var(--accent));
+  box-shadow: 0 5px 18px var(--pill-glow, rgba(255,54,33,0.35)), 0 0 0 1px var(--pill-ring, rgba(255,54,33,0.6)), inset 0 1px 0 rgba(255,255,255,0.3);
+}
+.pill::before { content: '\25C6'; margin-right: 7px; opacity: 0.7; }
+.pill.accent { --pill-c: var(--accent); --pill-glow: rgba(255,54,33,0.4);  --pill-ring: rgba(255,54,33,0.6); }
+.pill.purple { --pill-c: var(--purple); --pill-glow: rgba(139,124,246,0.4); --pill-ring: rgba(139,124,246,0.6); }
+.pill.gold   { --pill-c: var(--gold);   --pill-glow: rgba(255,194,75,0.4);  --pill-ring: rgba(255,194,75,0.6); }
+.pill.green  { --pill-c: var(--green);  --pill-glow: rgba(33,179,93,0.4);   --pill-ring: rgba(33,179,93,0.6); }
+.pill.cyan   { --pill-c: var(--cyan);   --pill-glow: rgba(56,198,217,0.4);  --pill-ring: rgba(56,198,217,0.6); }
+.pill.red    { --pill-c: var(--red);    --pill-glow: rgba(255,77,61,0.4);   --pill-ring: rgba(255,77,61,0.6); }
+.pill.silver { --pill-c: var(--silver); --pill-glow: rgba(183,192,204,0.35);--pill-ring: rgba(183,192,204,0.55); }
+
+.kicker {
+  display: inline-flex; align-items: center; gap: 12px; margin-bottom: clamp(14px,2vh,20px);
+  font-family: var(--font-mono); font-size: clamp(10.5px,1.05vw,13px); font-weight: 600;
+  letter-spacing: 2.5px; text-transform: uppercase; color: var(--kc-c, var(--accent));
+  padding: 8px 16px 8px 14px; border: 1px solid var(--kc-line, rgba(255,54,33,0.22));
+  border-radius: 999px; background: linear-gradient(180deg, rgba(255,255,255,0.03), transparent 70%), var(--kc-bg, rgba(255,54,33,0.05));
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.05);
+}
+.kicker::before {
+  content: ''; width: 7px; height: 7px; border-radius: 50%; flex-shrink: 0;
+  background: var(--kc-c, var(--accent)); box-shadow: 0 0 10px var(--kc-c, var(--accent));
+  animation: counter-pulse 2.6s var(--drift) infinite;
+}
+.kicker.red    { --kc-c: var(--red);    --kc-line: rgba(255,77,61,0.30);  --kc-bg: rgba(255,77,61,0.06); }
+.kicker.gold   { --kc-c: var(--gold);   --kc-line: rgba(255,194,75,0.30); --kc-bg: rgba(255,194,75,0.06); }
+.kicker.green  { --kc-c: var(--green);  --kc-line: rgba(33,179,93,0.30);  --kc-bg: rgba(33,179,93,0.06); }
+.kicker.purple { --kc-c: var(--purple); --kc-line: rgba(139,124,246,0.30);--kc-bg: rgba(139,124,246,0.06); }
+.kicker.cyan   { --kc-c: var(--cyan);   --kc-line: rgba(56,198,217,0.30); --kc-bg: rgba(56,198,217,0.06); }
+.kicker.silver { --kc-c: var(--silver); --kc-line: rgba(183,192,204,0.30);--kc-bg: rgba(183,192,204,0.06); }
+
+/* ── card (double bezel) ──────────────────────────────────────────── */
+.card {
+  position: relative; border-radius: 18px; padding: 6px;
+  background: linear-gradient(180deg, rgba(255,255,255,0.05), rgba(255,255,255,0.012) 45%, rgba(0,0,0,0.14)), var(--surface);
+  border: 1px solid var(--border);
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.05), 0 30px 60px -30px rgba(0,0,0,0.65);
+  transition: transform 0.55s var(--spring), box-shadow 0.55s var(--spring), border-color 0.55s var(--spring);
+  --card-c: var(--accent); --card-halo: rgba(255,54,33,0.16); --card-spot: rgba(255,128,96,0.09);
+}
+.card::before {
+  content: ''; position: absolute; top: 0; left: 22px; right: 22px; height: 3px;
+  border-radius: 0 0 4px 4px; background: linear-gradient(90deg, transparent, var(--card-c) 30%, var(--card-c) 70%, transparent);
+  opacity: 0.9; z-index: 1;
+}
+.card::after {
+  content: ''; position: absolute; top: -70px; right: -70px; width: 240px; height: 240px;
+  border-radius: 50%; background: radial-gradient(circle, var(--card-halo), transparent 70%);
+  pointer-events: none; z-index: 0;
+}
+.card-inner {
+  position: relative; z-index: 1; height: 100%; overflow: hidden; border-radius: 13px;
+  background: linear-gradient(180deg, var(--surface2), var(--surface) 70%);
+  border: 1px solid rgba(255,255,255,0.045);
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.06);
+  padding: clamp(18px, 2.4vh, 28px) clamp(18px, 1.6vw, 28px);
+}
+.card-inner::after {
+  content: ''; position: absolute; inset: 0; pointer-events: none; opacity: 0;
+  transition: opacity 0.5s var(--ease-out-expo);
+  background: radial-gradient(420px circle at var(--px, 50%) var(--py, 40%), var(--card-spot), transparent 65%);
+}
+.card:hover { transform: translateY(-5px) scale(1.008); border-color: var(--border-bright);
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.06), 0 22px 48px -18px rgba(0,0,0,0.55), 0 0 44px -8px var(--card-halo); }
+.card:hover .card-inner::after { opacity: 1; }
+.card:active { transform: translateY(-1px) scale(0.997); transition-duration: 0.18s; }
+.card.accent { --card-c: var(--accent); --card-halo: rgba(255,54,33,0.18);  --card-spot: rgba(255,128,96,0.10); }
+.card.purple { --card-c: var(--purple); --card-halo: rgba(139,124,246,0.18); --card-spot: rgba(177,166,252,0.10); }
+.card.gold   { --card-c: var(--gold);   --card-halo: rgba(255,194,75,0.16);  --card-spot: rgba(255,219,145,0.09); }
+.card.green  { --card-c: var(--green);  --card-halo: rgba(33,179,93,0.16);   --card-spot: rgba(96,219,150,0.08); }
+.card.cyan   { --card-c: var(--cyan);   --card-halo: rgba(56,198,217,0.16);  --card-spot: rgba(122,224,238,0.09); }
+.card.red    { --card-c: var(--red);    --card-halo: rgba(255,77,61,0.16);   --card-spot: rgba(255,158,154,0.08); }
+.card.silver { --card-c: var(--silver); --card-halo: rgba(183,192,204,0.14); --card-spot: rgba(211,219,226,0.08); }
+
+/* ── callout ──────────────────────────────────────────────────────── */
+.callout {
+  position: relative; border-radius: 14px; padding: 20px 26px;
+  border: 1px solid var(--co-c, var(--accent));
+  background: linear-gradient(135deg, var(--co-bg1, rgba(255,54,33,0.12)), var(--co-bg2, rgba(255,54,33,0.03)));
+  box-shadow: 0 8px 32px var(--co-glow, rgba(255,54,33,0.12)), inset 0 1px 0 rgba(255,255,255,0.06);
+}
+.callout::before {
+  content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px;
+  background: linear-gradient(90deg, transparent, var(--co-c, var(--accent)), transparent);
+}
+.callout .co-kicker {
+  font-family: var(--font-mono); font-size: 11px; letter-spacing: 2.5px; text-transform: uppercase;
+  font-weight: 700; margin-bottom: 6px; color: var(--co-c, var(--accent));
+}
+.callout .co-body { font-family: var(--font-editorial); font-size: clamp(15px, 1.7vw, 19px); color: var(--text); line-height: 1.45; }
+.callout .co-body b { color: var(--co-c, var(--accent)); font-weight: 600; }
+.callout.accent { --co-c: var(--accent); --co-bg1: rgba(255,54,33,0.12); --co-bg2: rgba(255,54,33,0.03); --co-glow: rgba(255,54,33,0.12); }
+.callout.red    { --co-c: var(--red);    --co-bg1: rgba(255,77,61,0.16);  --co-bg2: rgba(255,77,61,0.04);  --co-glow: rgba(255,77,61,0.14); }
+.callout.gold   { --co-c: var(--gold);   --co-bg1: rgba(255,194,75,0.16); --co-bg2: rgba(255,194,75,0.04); --co-glow: rgba(255,194,75,0.14); }
+.callout.green  { --co-c: var(--green);  --co-bg1: rgba(33,179,93,0.12);  --co-bg2: rgba(33,179,93,0.03);  --co-glow: rgba(33,179,93,0.10); }
+.callout.cyan   { --co-c: var(--cyan);   --co-bg1: rgba(56,198,217,0.12); --co-bg2: rgba(56,198,217,0.03); --co-glow: rgba(56,198,217,0.10); }
+
+/* ── grids / rules / code ─────────────────────────────────────────── */
+.two-col   { display: grid; grid-template-columns: 1fr 1fr; gap: clamp(16px, 1.8vw, 24px); }
+.three-col { display: grid; grid-template-columns: repeat(3, 1fr); gap: clamp(14px, 1.6vw, 20px); }
+.four-col  { display: grid; grid-template-columns: repeat(4, 1fr); gap: clamp(12px, 1.4vw, 20px); }
+@media (max-width: 900px) { .two-col, .three-col, .four-col { grid-template-columns: 1fr; } }
+
+.section-rule {
+  display: flex; align-items: center; gap: 14px; margin: 14px 0;
+  color: var(--text-dim); font-family: var(--font-mono); font-size: 10px;
+  letter-spacing: 2.5px; text-transform: uppercase;
+}
+.section-rule::before, .section-rule::after {
+  content: ''; flex: 1; height: 1px;
+  background: linear-gradient(90deg, transparent, var(--border-bright), transparent);
+}
+
+.code-block {
+  position: relative; overflow: hidden; background: var(--code-bg);
+  border: 1px solid var(--border); border-radius: 12px; padding: 22px 24px;
+  color: var(--code-text); white-space: pre-wrap; tab-size: 2;
+  font-family: var(--font-mono); font-feature-settings: 'calt' 1, 'liga' 1;
+  letter-spacing: 0.01em; font-size: clamp(12px, 1.15vw, 14px); line-height: 1.65;
+}
+.code-block::before {
+  content: ''; position: absolute; top: 0; left: 0; right: 0; height: 1px;
+  background: linear-gradient(90deg, transparent, var(--accent) 50%, transparent); opacity: 0.4;
+}
+.code-block[data-lang]::after {
+  content: attr(data-lang); position: absolute; top: 10px; right: 12px;
+  font-family: var(--font-mono); font-size: 9px; font-weight: 800; letter-spacing: 2.5px;
+  text-transform: uppercase; color: #000; background: var(--accent); padding: 4px 11px; border-radius: 5px;
+  box-shadow: 0 4px 14px rgba(255,54,33,0.35), 0 0 0 1px rgba(255,54,33,0.6), inset 0 1px 0 rgba(255,255,255,0.3);
+}
+.code-block.cb-green::before { background: linear-gradient(90deg, transparent, var(--green) 50%, transparent); }
+.code-block.cb-green[data-lang]::after { background: var(--green); box-shadow: 0 4px 14px rgba(33,179,93,0.35), 0 0 0 1px rgba(33,179,93,0.6), inset 0 1px 0 rgba(255,255,255,0.3); }
+.code-block .k { color: #7dd3fc; font-weight: 600; }
+.code-block .s { color: #86efac; }
+.code-block .c { color: #94a3b8; font-style: italic; opacity: 0.85; }
+.code-block .n { color: #fcd34d; }
+.code-block .r { color: #fda4a4; }
+.code-block .h { color: #c4b5fd; }
+.code-block .g { color: #86efac; font-weight: 600; }
+
+/* ── flow effects ─────────────────────────────────────────────────── */
+.sdd-glow { position: absolute; inset: 0; border-radius: inherit; pointer-events: none; opacity: 0.1; animation: sdd-hand 5.4s var(--drift) infinite; }
+@keyframes sdd-hand { 0%, 100% { opacity: 0.08; } 22% { opacity: 0.85; } 48% { opacity: 0.08; } }
+.flow-arrow { display: inline-block; animation: arrow-flow 2.2s ease-in-out infinite; }
+@keyframes arrow-flow { 0%, 100% { opacity: 0.35; transform: translateX(0); } 50% { opacity: 1; transform: translateX(5px); } }
+.slide.is-active .hr-flow { stroke-dasharray: 12 16; animation: dash-flow 1.5s linear infinite; }
+@keyframes dash-flow { to { stroke-dashoffset: -28; } }
+.slide.is-active .hr-core-c { transform-box: fill-box; transform-origin: center; animation: core-pulse 4s ease-in-out infinite; }
+@keyframes core-pulse { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.045); } }
+
+/* ── reveal motion ────────────────────────────────────────────────── */
+body.anim-ready .reveal > * {
+  opacity: 0; transform: translateY(28px); filter: blur(6px);
+  transition: opacity 0.9s var(--ease-out-expo), transform 0.9s var(--ease-out-expo), filter 0.75s var(--ease-out-expo);
+  transition-delay: 0ms;
+}
+body.anim-ready .reveal.in > * { opacity: 1; transform: translateY(0); filter: blur(0); }
+body.anim-ready .reveal.in > *:nth-child(1) { transition-delay: 60ms; }
+body.anim-ready .reveal.in > *:nth-child(2) { transition-delay: 140ms; }
+body.anim-ready .reveal.in > *:nth-child(3) { transition-delay: 220ms; }
+body.anim-ready .reveal.in > *:nth-child(4) { transition-delay: 300ms; }
+body.anim-ready .reveal.in > *:nth-child(5) { transition-delay: 380ms; }
+body.anim-ready .reveal.in > *:nth-child(6) { transition-delay: 460ms; }
+body.anim-ready .reveal.in > *:nth-child(7) { transition-delay: 540ms; }
+body.anim-ready .reveal.in > *:nth-child(n+8) { transition-delay: 620ms; }
+
+body.anim-ready .slide--silent .reveal > *, body.anim-ready .slide--title .reveal > * {
+  transform: translateY(40px) scale(0.985); filter: blur(8px); transition-duration: 1.05s;
+}
+body.anim-ready .slide--silent .reveal.in > *, body.anim-ready .slide--title .reveal.in > * {
+  transform: translateY(0) scale(1); filter: blur(0);
+}
+.slide--silent.is-active .slide__display--act { animation: numeral-float 7s var(--drift) 1.8s infinite; }
+@keyframes numeral-float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-12px); } }
+.slide--title.is-active .slide__display.gradient-text,
+.slide--title.is-active .slide__display .gradient-text {
+  background-size: 220% auto; animation: title-shimmer 7s var(--drift) infinite;
+}
+@keyframes title-shimmer { 0%, 100% { background-position: 0% center; } 50% { background-position: 100% center; } }
+
+/* ── cinematic background slides ──────────────────────────────────── */
+.slide--hands { justify-content: center; align-items: flex-start; text-align: left; }
+.hands-bg {
+  position: absolute; inset: 0; z-index: 0; pointer-events: none;
+  background-size: cover; background-position: center right;
+  transform: scale(1.06); transform-origin: center;
+  transition: transform 8s ease-out;
+}
+.slide--hands.is-active .hands-bg { transform: scale(1.12); }
+.hands-wash {
+  position: absolute; inset: 0; z-index: 1; pointer-events: none;
+  background:
+    linear-gradient(90deg, rgba(11,13,16,0.95) 0%, rgba(11,13,16,0.82) 34%, rgba(11,13,16,0.34) 62%, rgba(11,13,16,0.12) 100%),
+    linear-gradient(180deg, rgba(11,13,16,0.5) 0%, transparent 26%, transparent 62%, rgba(11,13,16,0.6) 100%);
+}
+.slide--hands .slide__display, .slide--hands .slide__heading { position: relative; }
+@media (prefers-reduced-motion: reduce) { .hands-bg { transform: none !important; } }
+
+/* ═══ DAY-0 COMPONENTS ═══════════════════════════════════════════ */
+
+/* canonical tag — one pill treatment (HUD act, contract keys, title eyebrow) */
+.tag {
+  display: inline-block; font-family: var(--font-mono);
+  font-size: clamp(8.5px,0.79vw,9.5px); font-weight: 800; letter-spacing: 2px;
+  text-transform: uppercase; color: #000; background: var(--tag-c, var(--accent));
+  padding: 3px 9px; border-radius: 3px; white-space: nowrap;
+}
+
+/* ── S01 TITLE — asymmetric editorial (register from d1 · The Foundations) ── */
+.title-grid {
+  display: grid; grid-template-columns: 1.32fr 0.68fr;
+  gap: clamp(30px,4.4vw,86px); align-items: start; width: 100%;
+  max-width: 1680px; margin: 0 auto;
+}
+.title-rule {
+  width: 46px; height: 3px; background: var(--purple); margin-bottom: clamp(18px,2.8vh,30px);
+  box-shadow: 0 0 22px rgba(139,124,246,0.7);
+}
+.title-sub {
+  font-family: var(--font-editorial); font-size: clamp(17px,1.85vw,25px);
+  line-height: 1.42; color: var(--text-dim); max-width: 33ch;
+  margin-top: clamp(18px,2.8vh,30px);
+}
+.title-sub b { color: var(--text); font-weight: 600; }
+
+.fnd-label {
+  display: block;
+  font-family: var(--font-mono); font-size: clamp(8.5px,0.8vw,10px); font-weight: 600;
+  letter-spacing: 2.6px; text-transform: uppercase; color: var(--text-mute);
+  padding-bottom: clamp(11px,1.8vh,19px);
+}
+.ts-spine { list-style: none; position: relative; }
+.ts-spine::before {
+  content: ''; position: absolute; left: 8px; top: 12px; bottom: 12px; width: 2px; border-radius: 2px;
+  background: linear-gradient(180deg, var(--purple) 0%, var(--accent) 34%, var(--green) 67%, var(--gold) 100%);
+  opacity: 0.6;
+}
+.ts-item {
+  position: relative; display: grid; grid-template-columns: 20px minmax(0,1fr);
+  align-items: start; gap: clamp(11px,1.15vw,19px);
+  padding: clamp(8px,1.45vh,15px) 0;
+}
+.ts-dot {
+  width: 10px; height: 10px; border-radius: 50%; margin: 7px 0 0 4px; flex-shrink: 0;
+  background: var(--c);
+  box-shadow: 0 0 0 4px var(--bg), 0 0 16px var(--c);
+  transition: box-shadow .45s var(--spring);
+}
+.ts-item:hover .ts-dot { box-shadow: 0 0 0 4px var(--bg), 0 0 26px var(--c); }
+.ts-head { display: flex; align-items: baseline; gap: clamp(8px,0.85vw,13px); }
+.ts-n { font-family: var(--font-mono); font-size: clamp(8.5px,0.8vw,10px); letter-spacing: 1.4px; color: var(--c); opacity: 0.85; }
+.ts-name {
+  font-family: var(--font-display); font-style: normal; letter-spacing: -0.3px;
+  font-size: clamp(21px,2.05vw,31px); line-height: 1; color: var(--text);
+}
+.ts-job { font-family: var(--font-editorial); font-style: italic; font-size: clamp(11.5px,1.05vw,14px); color: var(--text-dim); margin-top: 5px; }
+.ts-note {
+  font-family: var(--font-editorial); font-style: italic;
+  font-size: clamp(11.5px,1.05vw,14px); color: var(--text-mute); line-height: 1.4;
+  margin-top: clamp(9px,1.5vh,15px); padding-top: clamp(10px,1.7vh,16px);
+  border-top: 1px solid var(--rule);
+}
+.ts-note b { color: var(--text-dim); font-weight: 600; }
+
+.pullquote {
+  position: relative; padding-left: clamp(18px,1.9vw,32px);
+  border-left: 2px solid var(--pq-c, var(--purple)); margin-top: clamp(20px,3.2vh,38px);
+}
+.pq-text {
+  font-family: var(--font-display); font-style: normal;
+  font-size: clamp(23px,2.85vw,44px); line-height: 1.1; color: var(--text);
+  letter-spacing: -0.6px; text-wrap: balance;
+}
+.pq-attr {
+  display: flex; align-items: baseline; flex-wrap: wrap;
+  gap: clamp(9px,0.95vw,15px); margin-top: clamp(12px,1.9vh,21px);
+}
+.pq-dash { width: clamp(20px,1.9vw,32px); height: 1px; background: var(--pq-c, var(--purple)); transform: translateY(-5px); flex-shrink: 0; }
+.pq-who { font-family: var(--font-editorial); font-size: clamp(13.5px,1.32vw,18px); color: var(--text); }
+.pq-sep { color: var(--text-mute); font-size: 12px; }
+.pq-gloss { font-family: var(--font-editorial); font-style: italic; font-size: clamp(12px,1.15vw,15.5px); color: var(--text-dim); }
+
+.title-foot {
+  display: grid; grid-template-columns: minmax(0,auto) minmax(0,1fr);
+  align-items: center; gap: clamp(22px,3vw,64px);
+  width: 100%; max-width: 1680px; margin: clamp(20px,3.2vh,40px) auto 0;
+  padding-top: clamp(13px,2.2vh,20px); border-top: 1px solid var(--rule);
+}
+.presenter { display: flex; align-items: center; gap: clamp(12px,1.1vw,17px); }
+.presenter .photo {
+  width: clamp(48px,4vw,64px); height: clamp(48px,4vw,64px); border-radius: 50%;
+  object-fit: cover; object-position: 50% 45%; flex-shrink: 0;
+  border: 1px solid var(--border-bright);
+  box-shadow: 0 8px 26px rgba(0,0,0,0.55), 0 0 30px -10px rgba(139,124,246,0.5);
+  filter: grayscale(1) contrast(1.05);
+}
+.presenter .p-name { font-family: var(--font-display); font-size: clamp(17px,1.6vw,23px); line-height: 1; }
+.presenter .p-role { font-family: var(--font-editorial); font-size: clamp(10.5px,0.98vw,13px); color: var(--text-dim); margin-top: 5px; }
+
+.contract { display: grid; grid-template-columns: repeat(3, minmax(0,1fr)); }
+.ct { padding: 0 clamp(13px,1.35vw,26px); border-left: 1px solid var(--rule); }
+.ct:first-child { padding-left: 0; border-left: 0; }
+.ct:last-child { padding-right: 0; }
+.ct-k {
+  display: inline-block; font-family: var(--font-mono); font-size: clamp(8.5px,0.79vw,9.5px);
+  font-weight: 800; letter-spacing: 2px; text-transform: uppercase;
+  color: #000; background: var(--ck, var(--purple));
+  padding: 3px 9px; border-radius: 3px;
+}
+.ct-v {
+  display: block; font-family: var(--font-editorial); font-size: clamp(11.5px,1.08vw,15px);
+  color: var(--text); line-height: 1.32; margin-top: 9px;
+}
+@media (max-width: 1080px) { .contract { grid-template-columns: 1fr; gap: 10px; } .ct { padding: 0; border-left: 0; } }
+@media (max-width: 1080px) { .title-grid { grid-template-columns: 1fr; gap: 26px; } }
+
+/* ── BLOCK DIVIDER — huge gradient numeral + lede (register from d1) ── */
+.cols { display: grid; grid-template-columns: var(--cols, 1fr 1fr); gap: clamp(18px,2.2vw,40px); align-items: start; }
+@media (max-width: 1080px) { .cols { grid-template-columns: 1fr; } }
+.act-num {
+  font-family: var(--font-display); font-style: normal; line-height: 0.8;
+  font-size: clamp(120px,19vw,290px); letter-spacing: -6px;
+  background: linear-gradient(180deg, var(--an-c, var(--accent)) 0%, color-mix(in srgb, var(--an-c, var(--accent)) 12%, transparent) 100%);
+  -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent;
+}
+.kick {
+  font-family: var(--font-mono); font-size: clamp(8.5px,0.8vw,10.5px); font-weight: 600;
+  letter-spacing: 2.8px; text-transform: uppercase; color: var(--kc, var(--accent));
+  display: block; margin-bottom: clamp(9px,1.5vh,15px);
+}
+.h2 { font-family: var(--font-display); font-style: normal; letter-spacing: -0.8px; line-height: 1.04; font-size: clamp(28px,4.1vw,56px); text-wrap: balance; }
+.lede { font-family: var(--font-editorial); font-size: clamp(13.5px,1.35vw,19px); line-height: 1.45; color: var(--text-dim); }
+.lede b { color: var(--text); font-weight: 600; }
+
+/* ── WEEK RAIL — editorial timetable: display numerals + a lit rule ── */
+.wkrail { list-style: none; }
+.wkr {
+  display: grid; grid-template-columns: clamp(44px,3.9vw,62px) minmax(0,1fr);
+  gap: clamp(15px,1.5vw,24px); align-items: center;
+  padding: clamp(9px,1.55vh,16px) 0;
+  transition: opacity .5s var(--spring);
+}
+.wkr-d {
+  font-family: var(--font-display); font-style: normal;
+  font-size: clamp(26px,2.7vw,42px); line-height: 1; letter-spacing: -1.5px;
+  text-align: right; color: var(--wk-c, var(--text-mute));
+}
+.wkr-body {
+  border-left: 1px solid var(--rule);
+  padding-left: clamp(15px,1.5vw,25px);
+  transition: border-color .5s var(--spring);
+}
+.wkr-seat {
+  font-family: var(--font-display); font-style: normal; letter-spacing: -0.3px;
+  font-size: clamp(18px,1.78vw,27px); line-height: 1; color: var(--text-dim);
+}
+.wkr-job {
+  font-family: var(--font-editorial); font-style: italic;
+  font-size: clamp(11px,1.02vw,13.5px); line-height: 1.35;
+  color: var(--text-mute); margin-top: 6px;
+}
+.wkr:hover .wkr-body { border-left-color: var(--wk-c, var(--border-bright)); }
+.wkr:hover .wkr-seat { color: var(--text); }
+
+/* today — the only lit row */
+.wkr--now .wkr-d { color: var(--purple); }
+.wkr--now .wkr-body { border-left: 2px solid var(--purple); }
+.wkr--now .wkr-seat { color: var(--text); }
+.wkr--now .wkr-job { color: var(--text-dim); }
+.wkr-now-tag {
+  font-family: var(--font-mono); font-size: 8.5px; font-weight: 800; letter-spacing: 2px;
+  text-transform: uppercase; color: #000; background: var(--purple);
+  padding: 2px 8px; border-radius: 3px; margin-left: 12px; vertical-align: 3px;
+}
+
+
+/* ═══ STAGE BLOCK COMPONENTS ═══════════════════════════════════ */
+
+/* ── S03 · ARCHITECTURE DIAGRAM — glowing nodes, numbered connectors ── */
+.arch { width: 100%; display: block; overflow: visible; }
+.arch .nd rect, .arch .nd path, .arch .nd ellipse { transition: opacity .45s var(--spring); }
+.arch .nd:hover { opacity: 0.88; }
+.arch text { paint-order: stroke; }
+
+/* ── S04 · SPECIMEN PANEL — annotate the artifact in place ── */
+.mac {
+  position: relative; overflow: hidden;
+  border: 1px solid rgba(255,54,33,0.3); border-radius: 17px;
+  background: #0e1116;
+  box-shadow: 0 44px 84px -46px rgba(0,0,0,0.92),
+              0 0 70px -34px rgba(255,54,33,0.38),
+              inset 0 1px 0 rgba(255,255,255,0.05);
+}
+.mac-bar {
+  display: flex; align-items: center; gap: clamp(12px,1.35vw,24px);
+  padding: clamp(10px,1.6vh,15px) clamp(16px,1.6vw,26px);
+  background: linear-gradient(180deg, rgba(255,255,255,0.05), rgba(255,255,255,0.012));
+  border-bottom: 1px solid var(--rule);
+}
+.mac-dots { display: flex; gap: 8px; flex-shrink: 0; }
+.mac-dots i {
+  width: 12px; height: 12px; border-radius: 50%; display: block;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.28);
+}
+.mac-body {
+  padding: clamp(20px,3vh,34px) clamp(20px,2vw,38px) clamp(18px,2.6vh,30px);
+  background: linear-gradient(180deg, rgba(255,54,33,0.022), transparent 42%);
+}
+.fx-rec { display: grid; grid-template-columns: clamp(26px,2.1vw,34px) minmax(0,1fr); gap: clamp(10px,1vw,16px); align-items: center; }
+.fx-badge {
+  font-family: var(--font-mono); font-size: clamp(9px,0.85vw,11.5px); font-weight: 800; text-align: center;
+  color: #000; background: var(--rc, var(--silver)); border-radius: 3px; padding: 3px 0;
+}
+.fx-line {
+  font-family: var(--font-mono); font-size: var(--fx); line-height: 1.5;
+  letter-spacing: 0; color: var(--code-text); white-space: pre;
+}
+/* box-shadow, never border/padding — those shift the glyph grid and break ch-alignment */
+.fx-line mark {
+  background: color-mix(in srgb, var(--rc, var(--accent)) 16%, transparent);
+  box-shadow: 0 0 0 1px color-mix(in srgb, var(--rc, var(--accent)) 55%, transparent);
+  border-radius: 3px; color: var(--hi, #ffb3a6); font-weight: 600;
+}
+/* the elbow lands under column --col of the byte line above */
+.fx-note {
+  font-family: var(--font-mono); font-size: var(--fx); line-height: 1.5;
+  color: var(--text-mute); white-space: pre;
+  padding-left: calc(var(--col) * 1ch);
+  margin: 2px 0 clamp(9px,1.5vh,15px) calc(clamp(26px,2.1vw,34px) + clamp(10px,1vw,16px));
+}
+.fx-note b { color: var(--text); font-weight: 700; }
+.fx-note i { font-style: normal; color: var(--text-dim); }
+.fx-note .ok { color: var(--green); font-weight: 700; }
+
+.spec-rule { height: 1px; background: var(--rule); margin: clamp(14px,2.2vh,22px) 0 clamp(13px,2vh,20px); }
+
+.ovp { display: flex; align-items: center; flex-wrap: wrap; gap: clamp(14px,1.6vw,30px); }
+.ovp-grp { display: flex; align-items: center; gap: clamp(8px,0.9vw,14px); }
+.ovp-k { font-family: var(--font-mono); font-size: clamp(8px,0.74vw,10px); font-weight: 700; letter-spacing: 2.2px; text-transform: uppercase; color: var(--ok-c, var(--green)); }
+.ovp-cells { display: flex; gap: 4px; }
+.ovp-c {
+  min-width: clamp(24px,2.05vw,32px); text-align: center; padding: clamp(4px,0.7vh,7px) 0;
+  border: 1px solid var(--rule); border-radius: 5px; background: var(--code-bg);
+  font-family: var(--font-mono);
+}
+.ovp-c b { display: block; font-size: clamp(11px,1.02vw,15px); font-weight: 700; color: var(--text-dim); line-height: 1; }
+.ovp-c span { display: block; font-size: clamp(7px,0.62vw,8.5px); color: var(--text-mute); margin-top: 3px; }
+.ovp-c.on {
+  border-color: color-mix(in srgb, var(--ok-c, var(--green)) 70%, transparent);
+  background: color-mix(in srgb, var(--ok-c, var(--green)) 15%, transparent);
+}
+.ovp-c.on b { color: var(--ok-c, var(--green)); }
+.ovp-note { font-family: var(--font-editorial); font-style: italic; font-size: clamp(11.5px,1.06vw,15px); color: var(--text-dim); margin-left: auto; }
+
+.spec-sum {
+  display: flex; align-items: center; flex-wrap: wrap; gap: clamp(12px,1.4vw,24px);
+  margin-top: clamp(14px,2.2vh,22px); padding: clamp(11px,1.8vh,17px) clamp(15px,1.5vw,24px);
+  border: 1px solid rgba(33,179,93,0.42); border-radius: 13px;
+  background: linear-gradient(90deg, rgba(33,179,93,0.11), transparent 70%);
+}
+.spec-sum .ss-math { font-family: var(--font-numeric); font-size: clamp(15px,1.55vw,23px); color: var(--text); }
+.spec-sum .ss-math b { color: var(--green); font-weight: 700; }
+.spec-sum .ss-say { font-family: var(--font-editorial); font-style: italic; font-size: clamp(12px,1.15vw,16px); color: var(--text-dim); }
+.spec-sum .ss-tag {
+  margin-left: auto; font-family: var(--font-mono); font-size: clamp(9px,0.85vw,11px); font-weight: 800;
+  letter-spacing: 2px; text-transform: uppercase; color: #000; background: var(--green);
+  padding: 5px 13px; border-radius: 4px;
+}
+
+/* ── S04 · CROSS-RECORD RULES — what the contract checks beyond the fields ── */
+.rules { display: grid; grid-template-columns: repeat(4, minmax(0,1fr)); }
+.rl { padding: 0 clamp(13px,1.35vw,26px); border-left: 1px solid var(--rule); }
+.rl:first-child { padding-left: 0; border-left: 0; }
+.rl:last-child { padding-right: 0; }
+.rl-v {
+  display: block; font-family: var(--font-editorial); font-size: clamp(11.5px,1.08vw,15px);
+  color: var(--text-dim); line-height: 1.34; margin-top: 10px;
+}
+.rl-v b { color: var(--text); font-weight: 600; }
+.rl--hot .rl-v { color: var(--text); }
+.rl--hot .rl-v b { color: var(--gold); }
+
+.oplbl { font-family: var(--font-mono); font-size: clamp(8px,0.74vw,9.5px); letter-spacing: 1.8px; text-transform: uppercase; color: var(--text-mute); margin-bottom: clamp(7px,1.1vh,10px); }
+/* ── S05 · TRAILER DIFF — two file cards, one character apart ── */
+.dif { display: flex; flex-direction: column; gap: clamp(13px,2vh,21px); }
+.dcard {
+  position: relative; overflow: hidden;
+  border: 1px solid var(--rule); border-left: 3px solid var(--dc, var(--silver));
+  border-radius: 16px;
+  background: linear-gradient(135deg, color-mix(in srgb, var(--dc, var(--silver)) 9%, transparent), rgba(11,13,16,0.62) 58%), #101319;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.04), 0 26px 54px -36px rgba(0,0,0,0.85);
+  transition: transform .5s var(--spring), box-shadow .5s var(--spring);
+}
+.dcard:hover { transform: translateY(-4px); box-shadow: inset 0 1px 0 rgba(255,255,255,0.05), 0 30px 60px -30px rgba(0,0,0,0.85), 0 0 48px -16px var(--dc, var(--silver)); }
+.dc-head {
+  display: flex; align-items: center; gap: clamp(9px,1vw,16px);
+  padding: clamp(10px,1.6vh,15px) clamp(15px,1.5vw,24px);
+  border-bottom: 1px solid var(--rule);
+  background: linear-gradient(180deg, rgba(255,255,255,0.035), transparent);
+}
+.dc-dot { width: 9px; height: 9px; border-radius: 50%; background: var(--dc); box-shadow: 0 0 12px var(--dc); flex-shrink: 0; }
+.dc-name { font-family: var(--font-mono); font-size: clamp(11px,1.04vw,14px); font-weight: 700; letter-spacing: 0.4px; color: var(--text); }
+.dc-batch { font-family: var(--font-mono); font-size: clamp(8.5px,0.82vw,11px); color: var(--text-mute); }
+.dc-body { padding: clamp(13px,2vh,20px) clamp(15px,1.5vw,24px) clamp(14px,2.2vh,22px); }
+.dc-well {
+  font-family: var(--font-mono); font-size: clamp(9.5px,0.94vw,13.5px); letter-spacing: 0.4px;
+  color: var(--code-text); white-space: nowrap; overflow: hidden;
+  background: var(--code-bg); border: 1px solid var(--rule); border-radius: 10px;
+  padding: clamp(10px,1.6vh,15px) clamp(12px,1.2vw,18px);
+}
+.dc-well .dim { color: var(--text-mute); }
+.dc-well .ch {
+  display: inline-block; color: #000; background: var(--dc); font-weight: 800;
+  border-radius: 4px; padding: 1px 7px; margin: 0 2px;
+  box-shadow: 0 0 26px -2px var(--dc);
+}
+.dc-foot { display: flex; align-items: baseline; gap: clamp(13px,1.5vw,26px); margin-top: clamp(12px,1.9vh,18px); }
+.dc-val { font-family: var(--font-numeric); font-size: clamp(30px,3.4vw,52px); font-weight: 700; letter-spacing: -1.4px; color: var(--dc); line-height: 0.95; }
+.dc-say { font-family: var(--font-editorial); font-size: clamp(12px,1.15vw,16px); line-height: 1.36; color: var(--text-dim); }
+.dc-say b { font-style: normal; font-weight: 600; }
+
+/* the arithmetic column */
+.arith { display: flex; flex-direction: column; gap: 2px; }
+.ar { display: flex; align-items: baseline; justify-content: space-between; gap: 14px; padding: clamp(7px,1.2vh,12px) 0; border-bottom: 1px solid var(--rule); }
+.ar:last-child { border-bottom: 0; }
+.ar-k { font-family: var(--font-mono); font-size: clamp(8.5px,0.82vw,11px); letter-spacing: 1.4px; text-transform: uppercase; color: var(--text-mute); }
+.ar-v { font-family: var(--font-numeric); font-size: clamp(16px,1.62vw,24px); color: var(--text-dim); }
+.ar--sum .ar-k { color: var(--green); } .ar--sum .ar-v { color: var(--green); font-weight: 700; }
+.ar--dec .ar-k { color: var(--red); }   .ar--dec .ar-v { color: var(--red); font-weight: 700; }
+.ar--delta { border-top: 1px solid rgba(255,77,61,0.4); border-bottom: 0; margin-top: 5px; padding-top: clamp(10px,1.7vh,16px); }
+.ar--delta .ar-k { color: var(--text-dim); }
+.ar--delta .ar-v { font-size: clamp(26px,2.7vw,42px); color: var(--red); font-weight: 700; letter-spacing: -1.2px; }
+
+.rulequote {
+  font-family: var(--font-editorial); font-size: clamp(12px,1.14vw,15.5px); line-height: 1.4;
+  color: var(--text-dim); padding-left: clamp(13px,1.3vw,20px); border-left: 2px solid rgba(255,194,75,0.55);
+}
+.rulequote b { color: var(--gold); font-weight: 600; }
+
+/* the scale of it — one line of measured numbers */
+.scale { display: grid; grid-template-columns: repeat(4, minmax(0,1fr)); }
+.sc { padding: 0 clamp(13px,1.35vw,28px); border-left: 1px solid var(--rule); }
+.sc:first-child { padding-left: 0; border-left: 0; }
+.sc:last-child { padding-right: 0; }
+.sc-n { font-family: var(--font-numeric); font-size: clamp(26px,3vw,46px); font-weight: 700; letter-spacing: -1.6px; color: var(--sc-c, var(--text)); line-height: 0.95; }
+.sc-l { font-family: var(--font-editorial); font-size: clamp(11.5px,1.06vw,15px); color: var(--text-dim); line-height: 1.32; margin-top: 10px; }
+.sc-l b { color: var(--text); font-weight: 600; }
+@media (max-width: 1000px) { .scale { grid-template-columns: 1fr 1fr; } }
+
+/* ── S04 · CROSS-RECORD RULES — what the contract checks beyond the fields ── */
+.rules { display: grid; grid-template-columns: repeat(4, minmax(0,1fr)); }
+.rl { padding: 0 clamp(13px,1.35vw,26px); border-left: 1px solid var(--rule); }
+.rl:first-child { padding-left: 0; border-left: 0; }
+.rl:last-child { padding-right: 0; }
+.rl-v {
+  display: block; font-family: var(--font-editorial); font-size: clamp(11.5px,1.08vw,15px);
+  color: var(--text-dim); line-height: 1.34; margin-top: 10px;
+}
+.rl-v b { color: var(--text); font-weight: 600; }
+.rl--hot .rl-v { color: var(--text); }
+.rl--hot .rl-v b { color: var(--gold); }
+
+/* ── S05 · TRAILER DIFF — two files, one character apart ── */
+.dif { display: flex; flex-direction: column; gap: clamp(10px,1.5vh,16px); }
+
+/* the arithmetic column */
+.arith { display: flex; flex-direction: column; gap: 2px; }
+.ar { display: flex; align-items: baseline; justify-content: space-between; gap: 14px; padding: clamp(6px,1.05vh,10px) 0; border-bottom: 1px solid var(--rule); }
+.ar:last-child { border-bottom: 0; }
+.ar-k { font-family: var(--font-mono); font-size: clamp(8.5px,0.8vw,10.5px); letter-spacing: 1.4px; text-transform: uppercase; color: var(--text-mute); }
+.ar-v { font-family: var(--font-numeric); font-size: clamp(14px,1.35vw,19px); color: var(--text-dim); }
+.ar--sum .ar-k { color: var(--green); } .ar--sum .ar-v { color: var(--green); font-weight: 700; }
+.ar--dec .ar-k { color: var(--red); }   .ar--dec .ar-v { color: var(--red); font-weight: 700; }
+.ar--delta { border-top: 1px solid rgba(255,77,61,0.4); border-bottom: 0; margin-top: 4px; padding-top: clamp(9px,1.5vh,14px); }
+.ar--delta .ar-k { color: var(--text-dim); }
+.ar--delta .ar-v { font-size: clamp(21px,2.1vw,31px); color: var(--red); font-weight: 700; }
+
+.rulequote {
+  font-family: var(--font-editorial); font-size: clamp(12.5px,1.18vw,16px); line-height: 1.42;
+  color: var(--text-dim); padding-left: clamp(13px,1.3vw,20px); border-left: 2px solid rgba(255,194,75,0.55);
+}
+.rulequote b { color: var(--gold); font-weight: 600; }
+
+/* ── S06 · GATE MATRIX — the d4 "complete, valid, never run" register ── */
+.gmx {
+  margin-top: clamp(16px,2.4vh,26px); overflow: hidden;
+  border: 1px solid var(--border-bright); border-radius: 14px;
+  background: linear-gradient(160deg, color-mix(in srgb, var(--green) 5%, transparent), var(--surface) 62%);
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.05), 0 26px 62px -34px #000;
+}
+.gmx-head, .gmx-row {
+  display: grid; grid-template-columns: minmax(300px,1.6fr) repeat(4, minmax(118px,0.72fr));
+  align-items: center;
+}
+.gmx-head { min-height: 44px; border-bottom: 1px solid var(--border-bright); background: rgba(255,255,255,0.025); }
+.gmx-row { min-height: clamp(52px,7vh,64px); border-bottom: 1px solid var(--rule); }
+.gmx-row:last-child { border-bottom: 0; }
+.gmx-k, .gmx-state {
+  font-family: var(--font-mono); font-size: clamp(8px,0.76vw,10px); font-weight: 800;
+  letter-spacing: 1.5px; text-transform: uppercase; color: var(--text-mute); text-align: center;
+}
+.gmx-k { padding-left: clamp(15px,1.45vw,23px); text-align: left; }
+.gmx-id {
+  min-width: 0; padding-left: clamp(15px,1.45vw,23px);
+  font-family: var(--font-mono); font-size: clamp(10px,0.94vw,12.5px); color: var(--text);
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+.gmx-id small { display: block; font-size: 0.82em; color: var(--text-mute); margin-top: 4px; letter-spacing: 0.3px; }
+.gmx-cell { align-self: stretch; display: grid; place-items: center; border-left: 1px solid var(--rule); }
+.gmx-mark {
+  width: clamp(22px,2vw,30px); height: clamp(22px,2vw,30px); border-radius: 50%;
+  display: grid; place-items: center; font-family: var(--font-mono);
+  font-size: clamp(10px,0.95vw,13px); font-weight: 800;
+}
+.gmx-mark.is-pass { color: var(--bg); background: var(--green); box-shadow: 0 0 20px color-mix(in srgb, var(--green) 34%, transparent); }
+.gmx-mark.is-fail { color: var(--bg); background: var(--red);   box-shadow: 0 0 22px color-mix(in srgb, var(--red) 42%, transparent); }
+.gmx-mark.is-none { color: var(--silver); border: 1px solid color-mix(in srgb, var(--silver) 36%, transparent); background: color-mix(in srgb, var(--silver) 4%, transparent); }
+
+.grd { display: grid; grid-template-columns: repeat(3, minmax(0,1fr)); gap: clamp(14px,1.6vw,28px); margin-top: clamp(14px,2.2vh,22px); }
+.grd-item { padding-left: clamp(11px,1vw,16px); border-left: 2px solid var(--rc, var(--green)); }
+.grd-main { display: grid; grid-template-columns: auto 1fr; gap: 10px; align-items: baseline; }
+.grd-num { font-family: var(--font-display); font-size: clamp(25px,2.8vw,42px); line-height: 0.9; color: var(--rc, var(--green)); }
+.grd-label { font-family: var(--font-editorial); font-size: clamp(11px,1.03vw,14px); line-height: 1.34; color: var(--text-dim); }
+.grd-label b { color: var(--text); font-weight: 600; }
+.grd-caveat { font-family: var(--font-mono); font-size: clamp(7px,0.66vw,8.8px); line-height: 1.35; color: var(--text-mute); margin-top: 6px; }
+
+.gstill {
+  display: flex; align-items: baseline; justify-content: space-between; gap: 18px;
+  margin-top: clamp(11px,1.7vh,17px); padding-top: clamp(8px,1.2vh,12px); border-top: 1px solid var(--rule);
+  font-family: var(--font-mono); font-size: clamp(7.5px,0.7vw,9.2px); letter-spacing: 1.3px;
+  text-transform: uppercase; color: var(--text-mute);
+}
+.gstill-states { display: flex; gap: 12px; color: var(--silver); }
+.gstill-states b { color: var(--red); }
+
+.gmeaning {
+  font-family: var(--font-editorial); font-style: italic; font-size: clamp(14px,1.45vw,20px);
+  color: var(--text-dim); text-align: center; margin-top: clamp(14px,2.2vh,26px);
+}
+.gmeaning b { color: var(--gold); font-style: normal; font-weight: 600; }
+
+.gsrc {
+  font-family: var(--font-mono); font-size: clamp(8px,0.72vw,9.5px); line-height: 1.45; letter-spacing: 0.35px;
+  color: var(--text-mute); border-top: 1px solid var(--rule);
+  padding-top: clamp(7px,1.1vh,11px); margin-top: clamp(10px,1.6vh,16px);
+}
+
+/* ── S02 · STORY JOURNEY — the week as one climb ── */
+.climb { width: 100%; display: block; overflow: visible; }
+
+
+
+/* ═══ DAY 0 · CRAFT COMPONENTS ═══════════════════════════════════ */
+
+/* req tiles — machine four */
+.req {
+  position: relative; border-radius: 16px; padding: 6px;
+  background: linear-gradient(180deg, rgba(255,255,255,0.05), rgba(255,255,255,0.012) 45%, rgba(0,0,0,0.14)), var(--surface);
+  border: 1px solid var(--border);
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.05), 0 26px 50px -28px rgba(0,0,0,0.65);
+  --rq-c: var(--cyan); --rq-halo: rgba(56,198,217,0.16);
+}
+.req::before {
+  content: ''; position: absolute; top: 0; left: 22px; right: 22px; height: 3px;
+  border-radius: 0 0 4px 4px;
+  background: linear-gradient(90deg, transparent, var(--rq-c) 30%, var(--rq-c) 70%, transparent);
+  opacity: 0.9; z-index: 1;
+}
+.req-inner {
+  position: relative; border-radius: 11px;
+  background: linear-gradient(180deg, var(--surface2), var(--surface) 70%);
+  border: 1px solid rgba(255,255,255,0.045);
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.06);
+  padding: clamp(18px, 2.4vh, 26px) clamp(16px, 1.4vw, 24px);
+  display: flex; flex-direction: column; gap: clamp(10px, 1.6vh, 16px);
+  min-height: clamp(150px, 22vh, 210px);
+}
+
+.req-logo {
+  height: clamp(26px, 2.6vw, 34px); width: auto; object-fit: contain;
+  margin-bottom: clamp(12px, 1.8vh, 18px); align-self: flex-start;
+}
+.req-idx {
+  font-family: var(--font-mono); font-size: clamp(10px, 0.9vw, 12px); font-weight: 800;
+  letter-spacing: 2px; text-transform: uppercase; color: var(--rq-c);
+}
+.req-name {
+  font-family: var(--font-display); font-size: clamp(26px, 2.6vw, 40px); line-height: 1; color: var(--text);
+}
+.req-note {
+  font-family: var(--font-editorial); font-size: clamp(12.5px, 1.15vw, 15px);
+  color: var(--text-dim); line-height: 1.42; margin-top: auto;
+}
+.req-note b { color: var(--text); font-weight: 600; }
+.req.gold { --rq-c: var(--gold); --rq-halo: rgba(255,194,75,0.16); }
+.req.green { --rq-c: var(--green); --rq-halo: rgba(33,179,93,0.16); }
+.req.red { --rq-c: var(--red); --rq-halo: rgba(255,77,61,0.16); }
+.req.purple { --rq-c: var(--purple); --rq-halo: rgba(139,124,246,0.16); }
+.req.silver { --rq-c: var(--silver); --rq-halo: rgba(183,192,204,0.14); }
+
+/* spine bar — converge 0..8 */
+.spine { display: flex; flex-wrap: wrap; gap: clamp(8px, 0.9vw, 14px); align-items: stretch; }
+.sp-p {
+  flex: 1 1 128px; min-width: 118px; position: relative;
+  border-radius: 12px; padding: clamp(14px, 2vh, 20px) clamp(11px, 1vw, 16px);
+  border: 1px solid var(--border);
+  background: linear-gradient(180deg, var(--surface2), var(--surface));
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.05);
+  display: flex; flex-direction: column; gap: 8px;
+}
+.sp-p::before {
+  content: ''; position: absolute; top: 0; left: 14px; right: 14px; height: 2px;
+  background: var(--sp-c, var(--silver)); opacity: 0.7;
+}
+.sp-n {
+  font-family: var(--font-mono); font-size: 10px; font-weight: 800; letter-spacing: 2px;
+  text-transform: uppercase; color: var(--sp-c, var(--silver));
+}
+.sp-t {
+  font-family: var(--font-display); font-size: clamp(17px, 1.6vw, 24px); line-height: 1; color: var(--text);
+}
+.sp-d {
+  font-family: var(--font-editorial); font-size: clamp(10.5px, 0.95vw, 12.5px);
+  color: var(--text-dim); line-height: 1.35;
+}
+.sp-p--barrier {
+  border-color: var(--gold);
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.06), 0 0 34px -8px rgba(255,194,75,0.5);
+}
+.sp-p--barrier::before { background: var(--gold); }
+.sp-p--barrier .sp-t { color: var(--gold); }
+
+/* tree — frozen fence */
+.tree {
+  font-family: var(--font-mono); font-size: clamp(12px, 1.15vw, 14px);
+  line-height: 2; color: var(--text-dim); white-space: pre;
+}
+.tr-dim { color: var(--text-mute); }
+.tr-lock { color: var(--red); }
+.tr-ro { color: var(--cyan); }
+.tr-ok { color: var(--green); }
+.tr-badge {
+  font-family: var(--font-mono); font-size: 9px; font-weight: 800; letter-spacing: 1.5px;
+  text-transform: uppercase; color: #000; padding: 2px 8px; border-radius: 3px; margin-left: 8px;
+}
+.tr-badge.frozen { background: var(--red); }
+.tr-badge.read { background: var(--cyan); }
+.tr-badge.live { background: var(--green); }
+
+/* what / how rule rows */
+.wh-row {
+  display: grid; grid-template-columns: auto 1fr; gap: clamp(12px, 1.2vw, 18px);
+  align-items: start; padding: clamp(10px, 1.6vh, 16px) 0; border-bottom: 1px solid var(--rule);
+}
+.wh-row:last-child { border-bottom: 0; }
+.wh-dot { width: 7px; height: 7px; border-radius: 50%; margin-top: 8px; background: var(--cyan); box-shadow: 0 0 12px var(--cyan); }
+.wh-rule { font-family: var(--font-editorial); font-size: clamp(14.5px, 1.35vw, 18px); color: var(--text); line-height: 1.4; }
+.wh-rule b { color: var(--cyan); font-weight: 600; }
+.wh-why { font-family: var(--font-editorial); font-style: italic; font-size: clamp(12px, 1.05vw, 14px); color: var(--text-dim); line-height: 1.4; margin-top: 4px; }
+
+/* agent row — vendors */
+.agentrow { display: flex; flex-wrap: wrap; gap: clamp(12px, 1.2vw, 18px); }
+.agent {
+  display: flex; align-items: center; gap: 12px;
+  padding: clamp(12px, 1.8vh, 18px) clamp(16px, 1.4vw, 24px);
+  border-radius: 12px; border: 1px solid var(--border);
+  background: linear-gradient(180deg, var(--surface2), var(--surface));
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.05);
+}
+.agent img { height: clamp(22px, 2.4vw, 30px); width: auto; filter: grayscale(0.15) contrast(1.02); }
+.agent .a-name { font-family: var(--font-display); font-size: clamp(16px, 1.5vw, 22px); color: var(--text); line-height: 1; }
+.agent .a-note { font-family: var(--font-mono); font-size: 9px; letter-spacing: 1.5px; text-transform: uppercase; color: var(--text-mute); margin-top: 4px; }
+
+/* verdict rows — evidence ledger */
+.vr-row {
+  display: flex; align-items: center; justify-content: space-between; gap: 16px;
+  padding: 11px 2px; border-bottom: 1px solid var(--rule);
+}
+.vr-row:last-child { border-bottom: 0; }
+.vr-l { font-family: var(--font-mono); font-size: 11px; letter-spacing: 1.5px; text-transform: uppercase; color: var(--text-mute); }
+.vr-v { font-family: var(--font-numeric); font-size: clamp(14px, 1.4vw, 18px); font-weight: 600; color: var(--green); letter-spacing: 0.3px; }
+.vr-v.accent { color: var(--accent); }
+.vr-v.gold { color: var(--gold); }
+
+
+/* seat panel — organized agent grid (slide C02) */
+.seat-group { padding: clamp(8px, 1.4vh, 14px) 0; }
+.seat-group + .seat-group { border-top: 1px solid var(--rule); }
+.seat-label {
+  font-family: var(--font-mono); font-size: 9px; font-weight: 800; letter-spacing: 2.5px;
+  text-transform: uppercase; color: var(--text-mute); margin-bottom: 10px;
+}
+.a-mark {
+  display: flex; align-items: center; justify-content: center;
+  width: clamp(22px, 2.2vw, 28px); height: clamp(22px, 2.2vw, 28px); flex-shrink: 0;
+  color: var(--cyan);
+}
+.a-mark svg { width: 100%; height: 100%; display: block; }
+.a-mark .pi { font-family: var(--font-display); font-size: clamp(22px, 2.3vw, 30px); line-height: 1; color: var(--text); }
+.agent img { width: clamp(22px, 2.2vw, 28px); height: clamp(22px, 2.2vw, 28px); object-fit: contain; border-radius: 4px; }
+.seat-group .agentrow { gap: clamp(9px, 0.9vw, 13px); }
+.seat-group .agent { padding: clamp(9px, 1.4vh, 14px) clamp(12px, 1.1vw, 18px); }
+.seat-group .a-name { font-size: clamp(14.5px, 1.35vw, 20px); }
+
+/* ── premium terminal (mac) + vivid evidence + numbered rules ── */
+.cmac {
+  position: relative; overflow: hidden;
+  border: 1px solid rgba(255,54,33,0.3); border-radius: 17px;
+  background: #0e1116;
+  box-shadow: 0 44px 84px -46px rgba(0,0,0,0.92),
+              0 0 70px -34px rgba(255,54,33,0.38),
+              inset 0 1px 0 rgba(255,255,255,0.05);
+}
+.cmac-bar {
+  display: flex; align-items: center; gap: clamp(12px,1.35vw,24px);
+  padding: clamp(10px,1.6vh,15px) clamp(16px,1.6vw,26px);
+  background: linear-gradient(180deg, rgba(255,255,255,0.05), rgba(255,255,255,0.012));
+  border-bottom: 1px solid var(--rule);
+}
+.cmac-dots { display: flex; gap: 8px; flex-shrink: 0; }
+.cmac-dots i {
+  width: 12px; height: 12px; border-radius: 50%; display: block;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.28);
+}
+.cmac-body {
+  padding: clamp(20px,3vh,34px) clamp(20px,2vw,38px) clamp(18px,2.6vh,30px);
+  background: linear-gradient(180deg, rgba(255,54,33,0.022), transparent 42%);
+}
+.cmac-body.cmac-green { background: linear-gradient(180deg, rgba(33,179,93,0.035), transparent 42%); }
+.tm-c { color: #94a3b8; font-style: italic; }
+.tm-k { color: #7dd3fc; font-weight: 600; }
+.tm-s { color: #86efac; }
+.tm-n { color: #fcd34d; }
+
+.vr-badge {
+  font-family: var(--font-mono); font-size: clamp(10px,0.95vw,12px); font-weight: 800;
+  letter-spacing: 1.5px; text-transform: uppercase; color: #000;
+  background: var(--vb-c, var(--green)); padding: 4px 11px; border-radius: 4px;
+  box-shadow: 0 4px 14px var(--vb-glow, rgba(33,179,93,0.42)), inset 0 1px 0 rgba(255,255,255,0.3);
+}
+.vr-badge.green { --vb-c: var(--green); --vb-glow: rgba(33,179,93,0.42); }
+.vr-badge.gold { --vb-c: var(--gold); --vb-glow: rgba(255,194,75,0.42); }
+
+.wh-num {
+  width: 26px; height: 26px; border-radius: 7px; flex-shrink: 0; margin-top: 2px;
+  display: flex; align-items: center; justify-content: center;
+  font-family: var(--font-mono); font-size: 12px; font-weight: 800; color: #000;
+  background: var(--cyan); box-shadow: 0 4px 12px rgba(56,198,217,0.35), inset 0 1px 0 rgba(255,255,255,0.3);
+}
+
+
+
+
+/* ── C08 · KIT LEGEND + spine badges ── */
+.kit-row { display: grid; grid-template-columns: repeat(3, 1fr); gap: clamp(12px, 1.3vw, 20px); }
+@media (max-width: 900px) { .kit-row { grid-template-columns: 1fr; } }
+.kit {
+  position: relative; border-radius: 14px; padding: 6px;
+  background: linear-gradient(180deg, rgba(255,255,255,0.05), rgba(255,255,255,0.012) 45%, rgba(0,0,0,0.14)), var(--surface);
+  border: 1px solid var(--border);
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.05), 0 22px 44px -26px rgba(0,0,0,0.65);
+  --kit-c: var(--gold);
+}
+.kit::before {
+  content: ''; position: absolute; top: 0; left: 18px; right: 18px; height: 3px;
+  border-radius: 0 0 4px 4px;
+  background: linear-gradient(90deg, transparent, var(--kit-c) 30%, var(--kit-c) 70%, transparent);
+  opacity: 0.9;
+}
+.kit-inner {
+  display: flex; align-items: center; gap: clamp(12px, 1.2vw, 18px);
+  border-radius: 9px; background: linear-gradient(180deg, var(--surface2), var(--surface) 70%);
+  border: 1px solid rgba(255,255,255,0.045);
+  padding: clamp(12px, 1.8vh, 18px) clamp(14px, 1.3vw, 20px);
+}
+.kit img { width: clamp(34px, 3.2vw, 46px); height: clamp(34px, 3.2vw, 46px); flex-shrink: 0; filter: drop-shadow(0 4px 12px rgba(0,0,0,0.5)); }
+.kit-name { font-family: var(--font-display); font-size: clamp(16px, 1.6vw, 22px); color: var(--text); line-height: 1; letter-spacing: -0.2px; }
+.kit-desc { font-family: var(--font-editorial); font-size: clamp(11px, 1.05vw, 13.5px); color: var(--text-dim); line-height: 1.4; margin-top: 4px; }
+.kit-desc b { color: var(--kit-c); font-weight: 600; }
+
+.sp-p--kit {
+  border-color: color-mix(in srgb, var(--sp-c) 42%, transparent);
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.05), 0 0 26px -14px color-mix(in srgb, var(--sp-c) 78%, transparent);
+}
+
+
+/* ── C08 · KIT LEGS — seam/swimlane/leg + leaf/eval/signed-off ── */
+.leg-row { display: grid; grid-template-columns: repeat(3, 1fr); gap: clamp(6px, 0.6vw, 10px); margin-top: clamp(8px, 1.2vh, 12px); }
+.leg {
+  position: relative; border-radius: 10px;
+  padding: clamp(9px, 1.3vh, 13px) clamp(9px, 0.9vw, 12px);
+  border: 1px solid var(--border);
+  background: linear-gradient(180deg, var(--surface2), var(--surface));
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.05);
+  --lg-c: var(--silver);
+}
+.leg::before {
+  content: ''; position: absolute; top: 0; left: 10px; right: 10px; height: 2px;
+  background: var(--lg-c); opacity: 0.85;
+}
+.leg-name { font-family: var(--font-display); font-size: clamp(13px, 1.25vw, 17px); color: var(--text); line-height: 1; letter-spacing: -0.2px; }
+.leg-desc { font-family: var(--font-editorial); font-size: clamp(9.5px, 0.9vw, 12px); color: var(--text-dim); line-height: 1.35; margin-top: 5px; }
+
+
+/* ── C08 · converge engine box + compact badges ── */
+.engine {
+  position: relative;
+  border: 1px solid rgba(255,194,75,0.28); border-radius: 16px;
+  padding: clamp(18px, 2.6vh, 26px) clamp(14px, 1.4vw, 22px) clamp(16px, 2.2vh, 22px);
+  background: linear-gradient(180deg, rgba(255,194,75,0.05), rgba(255,194,75,0.012) 60%, transparent);
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.05), 0 0 44px -24px rgba(255,194,75,0.35);
+}
+.engine-label {
+  position: absolute; top: -11px; left: clamp(16px, 1.6vw, 24px);
+  font-family: var(--font-mono); font-size: 9px; font-weight: 800;
+  letter-spacing: 2.5px; text-transform: uppercase; color: #000;
+  background: #F3B64C; padding: 4px 11px; border-radius: 4px;
+  box-shadow: 0 4px 14px rgba(255,194,75,0.4);
+}
+.sp-badge {
+  font-family: var(--font-mono); font-size: 7px; font-weight: 800;
+  letter-spacing: 1px; text-transform: uppercase; color: #000;
+  background: var(--spb-c, var(--gold)); padding: 2px 5px; border-radius: 3px;
+  flex-shrink: 0; white-space: nowrap;
+}
+
+
+/* ── C08 · brief-spec reading interface + github links ── */
+.bspc {
+  position: relative; border-radius: 14px; padding: 6px; flex-shrink: 0;
+  background: linear-gradient(180deg, rgba(255,255,255,0.05), rgba(255,255,255,0.012) 45%, rgba(0,0,0,0.14)), var(--surface);
+  border: 1px solid rgba(255,77,109,0.38);
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.05), 0 22px 44px -26px rgba(0,0,0,0.65), 0 0 36px -18px rgba(255,77,109,0.45);
+}
+.bspc::before {
+  content: ''; position: absolute; top: 0; left: 18px; right: 18px; height: 3px;
+  border-radius: 0 0 4px 4px;
+  background: linear-gradient(90deg, transparent, #D6456A 30%, #D6456A 70%, transparent);
+  opacity: 0.9;
+}
+.bspc-inner {
+  display: flex; align-items: center; gap: clamp(12px, 1.2vw, 18px);
+  border-radius: 9px; background: linear-gradient(180deg, var(--surface2), var(--surface) 70%);
+  border: 1px solid rgba(255,255,255,0.045);
+  padding: clamp(14px, 2vh, 20px) clamp(16px, 1.5vw, 22px);
+}
+.bspc img { width: clamp(38px, 3.6vw, 50px); height: clamp(38px, 3.6vw, 50px); flex-shrink: 0; filter: drop-shadow(0 4px 12px rgba(0,0,0,0.5)); }
+.bspc-k { font-family: var(--font-mono); font-size: 8.5px; font-weight: 800; letter-spacing: 2px; text-transform: uppercase; color: #D6456A; }
+.bspc-name { font-family: var(--font-display); font-size: clamp(18px, 1.8vw, 24px); color: var(--text); line-height: 1; margin-top: 3px; }
+.bspc-link { display: inline-block; font-family: var(--font-mono); font-size: 9px; letter-spacing: 1px; color: var(--text-dim); text-decoration: none; margin-top: 7px; transition: color .3s; }
+.bspc-link:hover { color: #D6456A; }
+
+.ghub {
+  border-radius: 14px; padding: 6px;
+  background: linear-gradient(180deg, rgba(255,255,255,0.05), rgba(255,255,255,0.012) 45%, rgba(0,0,0,0.14)), var(--surface);
+  border: 1px solid var(--border);
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.05), 0 22px 44px -26px rgba(0,0,0,0.65);
+}
+.ghub-inner {
+  display: flex; align-items: center; gap: clamp(14px, 1.6vw, 26px);
+  border-radius: 9px; background: linear-gradient(180deg, var(--surface2), var(--surface) 70%);
+  border: 1px solid rgba(255,255,255,0.045);
+  padding: clamp(12px, 1.8vh, 18px) clamp(18px, 1.7vw, 26px);
+}
+.ghub-icon { width: clamp(20px, 2vw, 26px); height: clamp(20px, 2vw, 26px); color: var(--text); flex-shrink: 0; }
+.ghub-label { font-family: var(--font-mono); font-size: 9px; font-weight: 800; letter-spacing: 2px; text-transform: uppercase; color: var(--text-mute); white-space: nowrap; }
+.ghub-links { display: flex; flex-wrap: wrap; gap: clamp(8px, 0.9vw, 12px); margin-left: auto; }
+.ghub-link {
+  display: inline-flex; align-items: center; gap: 6px;
+  font-family: var(--font-mono); font-size: 10px; font-weight: 700; letter-spacing: 1px;
+  color: var(--text); text-decoration: none;
+  padding: 6px 12px; border-radius: 999px;
+  border: 1px solid var(--border-bright);
+  background: rgba(255,255,255,0.03);
+  transition: border-color .3s, background .3s, transform .3s;
+}
+.ghub-link:hover { border-color: var(--ghl-c, var(--accent)); background: color-mix(in srgb, var(--ghl-c, var(--accent)) 12%, transparent); transform: translateY(-1px); }
+
+
+/* ── C08 · d5-repo cards (github links) ── */
+.repo-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: clamp(10px, 1vw, 16px); margin-top: clamp(16px, 2.6vh, 28px); }
+@media (max-width: 1080px) { .repo-grid { grid-template-columns: repeat(2, 1fr); } }
+.d5-repo {
+  --rpc: var(--cyan);
+  display: flex; align-items: center; gap: clamp(10px, 1vw, 14px);
+  padding: clamp(11px, 1.6vh, 15px) clamp(13px, 1.3vw, 18px);
+  border: 1px solid color-mix(in srgb, var(--rpc) 32%, var(--border-bright));
+  border-radius: 14px;
+  background: linear-gradient(120deg, color-mix(in srgb, var(--rpc) 9%, transparent), rgba(20,24,30,0.9) 70%);
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.05), 0 0 40px -22px var(--rpc);
+  text-decoration: none;
+  transition: border-color .25s ease, box-shadow .25s ease, transform .25s ease;
+}
+.d5-repo:hover {
+  border-color: color-mix(in srgb, var(--rpc) 62%, transparent);
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.06), 0 0 46px -14px var(--rpc);
+  transform: translateY(-1px);
+}
+.d5-repo svg {
+  width: clamp(20px, 1.9vw, 26px); height: auto; flex: none;
+  fill: var(--text);
+  filter: drop-shadow(0 0 10px color-mix(in srgb, var(--rpc) 40%, transparent));
+}
+.d5-repo-name {
+  display: block; font-family: var(--font-mono); font-size: clamp(9.5px, 0.9vw, 12px);
+  font-weight: 700; letter-spacing: 0.4px; color: var(--rpc);
+}
+.d5-repo-desc {
+  display: block; margin-top: 3px;
+  font-family: var(--font-editorial); font-style: italic;
+  font-size: clamp(9.5px, 0.9vw, 12px); color: var(--text-dim); line-height: 1.35;
+}
+.d5-repo-arrow { margin-left: auto; font-family: var(--font-mono); color: var(--text-mute); font-size: clamp(13px, 1.2vw, 16px); }
+
+/* ═══ DAY 0 · FLOOR COMPONENTS ═══════════════════════════════════ */
+/* ═══ DAY-0 REGISTERS (carried from agenda-d0-onboard.html) ════════ */
+
+/* canonical tag — one pill treatment (HUD act, contract keys, title eyebrow) */
+.tag {
+  display: inline-block; font-family: var(--font-mono);
+  font-size: clamp(8.5px,0.79vw,9.5px); font-weight: 800; letter-spacing: 2px;
+  text-transform: uppercase; color: #000; background: var(--tag-c, var(--accent));
+  padding: 3px 9px; border-radius: 3px; white-space: nowrap;
+}
+.ts-state {
+  font-family: var(--font-mono); font-size: 8.5px; font-weight: 800; letter-spacing: 2px;
+  text-transform: uppercase; color: #000; background: var(--sc, var(--green));
+  padding: 2px 8px; border-radius: 3px; margin-left: 10px; vertical-align: 3px;
+}
+@media (max-width: 1080px) { .contract { grid-template-columns: 1fr; gap: 10px; } .ct { padding: 0; border-left: 0; } }
+@media (max-width: 1080px) { .title-grid { grid-template-columns: 1fr; gap: 26px; } }
+@media (max-width: 900px) {
+  .slide { overflow-y: auto; justify-content: flex-start; padding-top: clamp(22px,4vh,36px); padding-bottom: 48px; }
+  .title-foot { grid-template-columns: 1fr; }
+  .contract { margin-top: 12px; }
+  .tag { white-space: normal; }
+}
+@media (max-width: 1080px) { .cols { grid-template-columns: 1fr; } }
+.plant-fill {
+  display: flex; flex-direction: column; align-items: stretch;
+  width: 100%; max-width: 1780px; margin: 0 auto;
+}
+.plant-fill > .tag {
+  align-self: center; width: max-content; flex: 0 0 auto;
+}
+.plant-head { text-align: center; }
+.plant-head .h2 { margin-left: auto; margin-right: auto; }
+.plant-head .lede { margin-left: auto; margin-right: auto; }
+.boot-notes {
+  display: grid; grid-template-columns: repeat(7, minmax(0,1fr));
+  gap: clamp(10px,1.1vw,18px);
+  margin-top: clamp(12px,2vh,22px);
+}
+.boot-note {
+  font-family: var(--font-editorial); font-style: italic;
+  font-size: clamp(12px,1.08vw,15.5px); line-height: 1.42; color: var(--text-dim);
+  text-align: center;
+}
+.boot-note b { color: var(--text); font-style: normal; font-weight: 600; }
+.boot-tonight {
+  margin-top: clamp(18px,2.8vh,32px);
+  display: flex; align-items: center; justify-content: center; flex-wrap: wrap;
+  gap: clamp(10px,1.15vw,17px);
+  padding-top: clamp(14px,2.2vh,22px);
+  border-top: 1px solid var(--rule);
+}
+@media (max-width: 1080px) { .boot-notes { grid-template-columns: 1fr 1fr; } }
+/* done / next — the lit rows of the debrief */
+.wkr--done .wkr-d { color: var(--green); }
+.wkr--done .wkr-body { border-left: 2px solid var(--green); }
+.wkr--done .wkr-seat { color: var(--text); }
+.wkr--done .wkr-job { color: var(--text-dim); }
+.wkr--next .wkr-d { color: var(--purple); }
+.wkr--next .wkr-body { border-left: 2px solid var(--purple); }
+.wkr--next .wkr-seat { color: var(--text); }
+.wkr--next .wkr-job { color: var(--text-dim); }
+.wkr-tag {
+  font-family: var(--font-mono); font-size: 8.5px; font-weight: 800; letter-spacing: 2px;
+  text-transform: uppercase; color: #000; background: var(--wt-c, var(--purple));
+  padding: 2px 8px; border-radius: 3px; margin-left: 12px; vertical-align: 3px;
+}
+/* ═══ DEBRIEF COMPONENTS ═══════════════════════════════════════════ */
+
+/* truth / not cards */
+.db-h {
+  font-family: var(--font-display); font-style: normal; letter-spacing: -0.4px;
+  font-size: clamp(21px,2vw,30px); line-height: 1.1; color: var(--text);
+  margin-top: clamp(10px,1.6vh,16px); text-wrap: balance;
+}
+.db-p {
+  font-family: var(--font-editorial); font-size: clamp(12.5px,1.18vw,16px);
+  color: var(--text-dim); line-height: 1.5; margin-top: clamp(8px,1.3vh,13px);
+}
+.db-p b { color: var(--text); font-weight: 600; }
+.db-p code, .lg-v code, .xt code {
+  font-family: var(--font-mono); font-size: 0.84em; color: var(--code-text);
+  background: var(--code-bg); padding: 2px 7px; border-radius: 5px; border: 1px solid var(--border);
+  white-space: nowrap;
+}
+.not-x {
+  font-family: var(--font-mono); font-size: clamp(20px,2vw,30px); font-weight: 800;
+  color: var(--red); line-height: 1; text-shadow: 0 0 18px rgba(255,77,61,0.5);
+}
+/* evidence ledger */
+.ledger {
+  border: 1px solid var(--border); border-radius: 14px; overflow: hidden;
+  background: linear-gradient(180deg, var(--surface2), var(--surface) 75%);
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.05), 0 30px 60px -30px rgba(0,0,0,0.65);
+}
+.lgr {
+  display: grid; grid-template-columns: minmax(0,0.85fr) minmax(0,1.15fr);
+  gap: clamp(12px,1.4vw,22px); align-items: baseline;
+  padding: clamp(10px,1.6vh,15px) clamp(16px,1.6vw,24px);
+  border-top: 1px solid var(--rule);
+}
+.lgr:first-child { border-top: 0; }
+.lg-k {
+  font-family: var(--font-mono); font-size: clamp(9px,0.88vw,11px); font-weight: 700;
+  letter-spacing: 2px; text-transform: uppercase; color: var(--lg-c, var(--accent));
+}
+.lg-v { font-family: var(--font-editorial); font-size: clamp(13px,1.28vw,17px); color: var(--text); line-height: 1.4; }
+.lg-v b { font-weight: 600; }
+.lg-v .dim { color: var(--text-dim); }
+/* homework step rail */
+.hw-rail { list-style: none; counter-reset: hw; }
+.hw-i {
+  display: grid; grid-template-columns: clamp(40px,3.6vw,58px) minmax(0,1fr);
+  gap: clamp(14px,1.5vw,22px); align-items: center;
+  padding: clamp(8px,1.5vh,14px) 0; border-top: 1px solid var(--rule);
+}
+.hw-i:first-child { border-top: 0; }
+.hw-n {
+  font-family: var(--font-display); font-style: normal;
+  font-size: clamp(24px,2.5vw,40px); line-height: 1; letter-spacing: -1.5px;
+  text-align: right; color: var(--gold);
+}
+.hw-t { font-family: var(--font-editorial); font-size: clamp(13px,1.3vw,17.5px); color: var(--text); line-height: 1.4; }
+.hw-t b { font-weight: 600; }
+.hw-t .dim { color: var(--text-dim); }
+.hw-t code {
+  font-family: var(--font-mono); font-size: 0.84em; color: var(--code-text);
+  background: var(--code-bg); padding: 2px 7px; border-radius: 5px; border: 1px solid var(--border);
+  white-space: nowrap;
+}
+/* exit checklist */
+.xlist { list-style: none; display: grid; gap: clamp(10px,1.7vh,16px); }
+.xli {
+  display: grid; grid-template-columns: auto minmax(0,1fr);
+  gap: clamp(14px,1.5vw,22px); align-items: center;
+  padding: clamp(13px,2vh,20px) clamp(16px,1.8vw,26px);
+  border: 1px solid var(--border); border-radius: 14px;
+  background: linear-gradient(180deg, rgba(255,255,255,0.03), transparent 60%), var(--surface);
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.04);
+  transition: border-color .45s var(--spring), transform .45s var(--spring);
+}
+.xli:hover { border-color: var(--border-bright); transform: translateX(5px); }
+.xbox {
+  width: clamp(24px,2.1vw,30px); height: clamp(24px,2.1vw,30px); border-radius: 8px;
+  border: 1.5px solid var(--green); display: grid; place-items: center; color: var(--green);
+  box-shadow: 0 0 18px rgba(33,179,93,0.28), inset 0 0 10px rgba(33,179,93,0.14);
+}
+.xbox svg { width: 58%; height: 58%; }
+.xt { font-family: var(--font-editorial); font-size: clamp(14px,1.4vw,19px); color: var(--text); line-height: 1.38; }
+.xt b { font-weight: 600; }
+.xt .dim { color: var(--text-dim); }
+/* closing */
+.close-tags { display: flex; gap: clamp(9px,1vw,15px); flex-wrap: wrap; justify-content: center; margin-top: clamp(22px,3.4vh,40px); }
+/* journey rail — four live beats */
+.jrn { position: relative; display: grid; grid-template-columns: repeat(4, 1fr); gap: clamp(16px,1.8vw,34px); }
+.jrn::before {
+  content: ''; position: absolute; left: 6px; right: 6px; top: 6px; height: 1px;
+  background: linear-gradient(90deg, var(--cyan), var(--accent) 34%, var(--green) 67%, var(--gold));
+  opacity: 0.5;
+}
+.jst { position: relative; padding-top: clamp(24px,3.4vh,34px); }
+.jst::before {
+  content: ''; position: absolute; top: 0; left: 0; width: 13px; height: 13px; border-radius: 50%;
+  background: var(--j-c, var(--accent)); transform: translateY(-6px);
+  box-shadow: 0 0 0 5px var(--bg), 0 0 18px var(--j-c, var(--accent));
+}
+.jst-n { font-family: var(--font-mono); font-size: clamp(8px,0.76vw,9.5px); font-weight: 800; letter-spacing: 2px; color: var(--j-c, var(--accent)); }
+.jst-t { font-family: var(--font-display); font-size: clamp(19px,1.85vw,28px); line-height: 1.02; letter-spacing: -0.3px; color: var(--text); margin-top: 7px; }
+.jst-s { font-family: var(--font-editorial); font-style: italic; font-size: clamp(11px,1.02vw,14px); line-height: 1.38; color: var(--text-dim); margin-top: 6px; }
+.jst-c { font-family: var(--font-mono); font-size: clamp(8.5px,0.78vw,10px); letter-spacing: 0.4px; color: var(--text-mute); margin-top: 8px; }
+@media (max-width: 1080px) { .jrn { grid-template-columns: 1fr 1fr; } }
+/* beat cards — d4 rec-card, four instructor steps */
+.beat-grid {
+  display: grid; grid-template-columns: repeat(4, minmax(0,1fr));
+  gap: clamp(11px,1.3vw,20px); margin-top: clamp(6px,1vh,12px);
+}
+.beat-card {
+  --rc: var(--accent);
+  position: relative; min-height: clamp(210px,28vh,280px);
+  display: flex; flex-direction: column; overflow: hidden;
+  border: 1px solid var(--border-bright); border-top: 3px solid var(--rc);
+  border-radius: 14px; padding: clamp(14px,2vh,20px) clamp(13px,1.3vw,20px);
+  background: linear-gradient(155deg, color-mix(in srgb, var(--rc) 9%, transparent), var(--surface) 72%);
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.05), 0 20px 48px -34px rgba(0,0,0,0.8);
+}
+.beat-card::after {
+  content: ''; position: absolute; width: 104px; height: 104px; right: -42px; top: -52px;
+  border: 1px solid color-mix(in srgb, var(--rc) 32%, transparent); border-radius: 50%; opacity: 0.45;
+}
+.beat-top { display: flex; align-items: center; gap: 10px; }
+.beat-n {
+  font-family: var(--font-mono); font-size: clamp(8.5px,0.8vw,10px); font-weight: 800;
+  letter-spacing: 0.8px; color: #000; background: var(--rc); padding: 3px 7px; border-radius: 3px;
+}
+.beat-k {
+  font-family: var(--font-mono); font-size: clamp(8px,0.74vw,9.5px); font-weight: 700;
+  letter-spacing: 1.8px; text-transform: uppercase; color: var(--text-mute);
+}
+.beat-h {
+  margin-top: clamp(10px,1.5vh,15px); font-family: var(--font-display);
+  font-size: clamp(20px,1.85vw,28px); line-height: 1.08; color: var(--text); letter-spacing: -0.3px;
+}
+.beat-b {
+  margin-top: clamp(7px,1.1vh,11px); font-family: var(--font-editorial);
+  font-size: clamp(12.5px,1.12vw,15.5px); line-height: 1.4; color: var(--text-dim);
+}
+.beat-b b { color: var(--text); font-weight: 600; }
+.beat-b code {
+  font-family: var(--font-mono); font-size: 0.86em; color: var(--code-text);
+  background: var(--code-bg); padding: 1px 6px; border-radius: 4px; border: 1px solid var(--border);
+  white-space: nowrap;
+}
+.beat-foot {
+  margin-top: auto; padding-top: clamp(8px,1.2vh,12px); border-top: 1px solid var(--rule);
+  font-family: var(--font-mono); font-size: clamp(8px,0.75vw,9.5px); line-height: 1.45; color: var(--text-mute);
+  letter-spacing: 0.3px; white-space: nowrap;
+}
+.beat-foot b { color: var(--rc); font-weight: 700; letter-spacing: 1.4px; }
+@media (max-width: 1080px) { .beat-grid { grid-template-columns: 1fr 1fr; } .beat-card { min-height: 0; } }
+/* plant stations — horizontal architecture */
+.plant {
+  display: grid; grid-template-columns: repeat(7, minmax(0,1fr));
+  gap: clamp(8px,0.9vw,14px); align-items: stretch;
+}
+.pst {
+  position: relative; border-radius: 14px; padding: 1px;
+  background: linear-gradient(180deg, rgba(255,255,255,0.06), rgba(255,255,255,0.01));
+  border: 1px solid var(--border);
+}
+.pst-in {
+  height: 100%; border-radius: 13px; padding: clamp(12px,1.8vh,18px) clamp(10px,1vw,14px);
+  background: linear-gradient(180deg, var(--surface2), var(--surface) 72%);
+  border-top: 2px solid var(--p-c, var(--accent));
+}
+.pst-k {
+  font-family: var(--font-mono); font-size: clamp(8px,0.72vw,9.5px); font-weight: 800;
+  letter-spacing: 1.8px; text-transform: uppercase; color: var(--p-c, var(--accent));
+}
+.pst-t { font-family: var(--font-display); font-size: clamp(15px,1.35vw,20px); line-height: 1.08; margin-top: 8px; }
+.pst-s { font-family: var(--font-editorial); font-style: italic; font-size: clamp(11px,0.98vw,13px); color: var(--text-dim); margin-top: 6px; line-height: 1.35; }
+@media (max-width: 1080px) { .plant { grid-template-columns: 1fr 1fr; } }
+/* four-role × eight-zone matrix */
+.zwrap { overflow: auto; border: 1px solid var(--border); border-radius: 14px; background: var(--surface); }
+.zmat { width: 100%; border-collapse: collapse; font-family: var(--font-mono); }
+.zmat th, .zmat td { padding: clamp(8px,1.3vh,12px) clamp(8px,1vw,14px); text-align: center; border-bottom: 1px solid var(--rule); }
+.zmat th { font-size: clamp(9px,0.82vw,11px); letter-spacing: 1.6px; text-transform: uppercase; color: var(--text-mute); font-weight: 700; }
+.zmat td { font-size: clamp(13px,1.2vw,16px); }
+.zmat .zh { text-align: left; color: var(--text); font-size: clamp(11px,1.05vw,14px); letter-spacing: 0.3px; }
+.zok { color: var(--green); text-shadow: 0 0 12px rgba(33,179,93,0.5); }
+.zno { color: var(--text-mute); opacity: 0.35; }
+.zmat thead th:nth-child(2) { color: var(--cyan); }
+.zmat thead th:nth-child(3) { color: var(--accent); }
+.zmat thead th:nth-child(4) { color: var(--gold); }
+.zmat thead th:nth-child(5) { color: var(--silver); }
+/* role tiles */
+.roles { display: grid; grid-template-columns: repeat(4, 1fr); gap: clamp(12px,1.4vw,20px); }
+@media (max-width: 1080px) { .roles { grid-template-columns: 1fr 1fr; } }
+.role {
+  border-radius: 14px; padding: clamp(14px,2vh,20px) clamp(14px,1.4vw,20px);
+  border: 1px solid var(--border); background: linear-gradient(180deg, rgba(255,255,255,0.03), transparent 60%), var(--surface);
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.04);
+}
+.role-k { font-family: var(--font-mono); font-size: clamp(8.5px,0.78vw,10px); font-weight: 800; letter-spacing: 2px; text-transform: uppercase; color: var(--r-c, var(--accent)); }
+.role-t { font-family: var(--font-display); font-size: clamp(18px,1.7vw,26px); line-height: 1.05; margin-top: 8px; }
+.role-s { font-family: var(--font-editorial); font-style: italic; font-size: clamp(12px,1.05vw,14.5px); color: var(--text-dim); margin-top: 7px; line-height: 1.4; }
+.role-st {
+  display: inline-block; margin-top: 12px;
+  font-family: var(--font-mono); font-size: 9px; font-weight: 800; letter-spacing: 2px; text-transform: uppercase;
+  color: #000; background: var(--green); padding: 3px 9px; border-radius: 3px;
+}
+/* evidence tree */
+.etree {
+  font-family: var(--font-mono); font-size: clamp(11px,1.05vw,13.5px); line-height: 1.7;
+  color: var(--code-text); background: var(--code-bg); border: 1px solid var(--border);
+  border-radius: 12px; padding: 18px 22px; position: relative;
+  white-space: pre; overflow: auto;
+}
+.etree::before {
+  content: ''; position: absolute; top: 0; left: 0; right: 0; height: 1px;
+  background: linear-gradient(90deg, transparent, var(--green) 50%, transparent); opacity: 0.5;
+}
+.et-hi { color: var(--green); font-weight: 600; }
+.et-dim { color: var(--text-mute); }
+/* run pipeline */
+.rpipe { display: grid; grid-template-columns: repeat(7, minmax(0,1fr)); gap: 0; align-items: stretch; }
+.rst {
+  position: relative; padding: clamp(10px,1.6vh,16px) clamp(8px,0.9vw,12px);
+  border-left: 1px solid var(--rule);
+}
+.rst:first-child { border-left: 0; }
+.rst-n { font-family: var(--font-mono); font-size: clamp(8px,0.72vw,9.5px); font-weight: 800; letter-spacing: 1.6px; color: var(--r-c, var(--accent)); }
+.rst-t { font-family: var(--font-display); font-size: clamp(14px,1.25vw,19px); line-height: 1.08; margin-top: 6px; }
+.rst-s { font-family: var(--font-editorial); font-style: italic; font-size: clamp(10.5px,0.95vw,13px); color: var(--text-dim); margin-top: 5px; line-height: 1.35; }
+@media (max-width: 1080px) { .rpipe { grid-template-columns: 1fr 1fr; } .rst { border-left: 0; border-top: 1px solid var(--rule); } }
+
+/* ═══ DAY 0 · DEBRIEF COMPONENTS ═════════════════════════════════ */
+@media (max-width: 1080px) { .contract { grid-template-columns: 1fr; gap: 10px; } .ct { padding: 0; border-left: 0; } }
+@media (max-width: 1080px) { .title-grid { grid-template-columns: 1fr; gap: 26px; } }
+@media (max-width: 1080px) { .cols { grid-template-columns: 1fr; } }
+/* section eyebrows share the solid tag look (same register as the HUD act chip) */
+.kick-tag { margin-bottom: clamp(14px,2vh,20px); font-size: clamp(9px,0.88vw,11.5px); padding: 5px 13px; letter-spacing: 2.2px; }
+/* truth cards — trio register: gradient serif title + arrow-bullet footer */
+.card--flow .card-inner { display: flex; flex-direction: column; }
+.card--flow .card-inner .tag { align-self: flex-start; }
+.db-h.grad {
+  background-image: linear-gradient(135deg, var(--card-c) 0%, #fff 140%);
+  -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent;
+}
+.db-ghost {
+  position: absolute; top: clamp(4px,0.8vh,10px); right: clamp(12px,1.2vw,20px);
+  font-family: var(--font-display); font-size: clamp(46px,4.6vw,72px); line-height: 1;
+  letter-spacing: -2px; pointer-events: none;
+  color: color-mix(in srgb, var(--card-c) 15%, transparent);
+}
+.db-list { list-style: none; margin-top: auto; padding-top: clamp(9px,1.4vh,14px); border-top: 1px solid var(--rule); }
+.db-list li {
+  display: flex; align-items: baseline; gap: 9px; padding: 3px 0;
+  font-family: var(--font-editorial); font-size: clamp(11.5px,1.08vw,14px);
+  color: var(--text); line-height: 1.4;
+}
+.db-list li::before { content: '\2192'; font-weight: 700; color: var(--card-c); }
+.db-list li .dim { color: var(--text-dim); }
+.substrip { display: grid; grid-template-columns: repeat(3,1fr); gap: clamp(10px,1.3vw,16px); margin-top: clamp(10px,1.6vh,16px); margin-bottom: clamp(34px,5.5vh,52px); }
+.subcell {
+  position: relative; overflow: hidden; text-align: center;
+  padding: clamp(9px,1.4vh,13px) clamp(11px,1.2vw,16px);
+  background: linear-gradient(135deg, var(--surface2), var(--surface) 72%);
+  border: 1px solid var(--border); border-top: 3px solid var(--sb-c, var(--accent)); border-radius: 12px;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.05);
+  transition: transform .45s var(--spring), box-shadow .45s var(--spring), border-color .45s var(--spring);
+}
+.subcell::after {
+  content: ''; position: absolute; top: -46px; right: -46px; width: 150px; height: 150px;
+  border-radius: 50%; pointer-events: none;
+  background: radial-gradient(circle, color-mix(in srgb, var(--sb-c, var(--accent)) 16%, transparent), transparent 70%);
+}
+.subcell:hover {
+  transform: translateY(-3px);
+  border-color: color-mix(in srgb, var(--sb-c, var(--accent)) 40%, transparent);
+  box-shadow: 0 14px 32px -14px rgba(0,0,0,0.65), 0 0 28px -10px var(--sb-c, var(--accent));
+}
+.subcell .sb-ic {
+  display: grid; place-items: center; width: 26px; height: 26px; margin: 0 auto 6px;
+  border-radius: 7px; color: var(--sb-c, var(--accent));
+  border: 1px solid color-mix(in srgb, var(--sb-c, var(--accent)) 45%, transparent);
+  background: color-mix(in srgb, var(--sb-c, var(--accent)) 10%, transparent);
+  box-shadow: 0 0 16px -6px var(--sb-c, var(--accent));
+}
+.subcell .sb-k {
+  font-family: var(--font-mono); font-size: clamp(8px,0.75vw,9.5px); font-weight: 800;
+  letter-spacing: 2px; text-transform: uppercase; color: var(--sb-c, var(--accent));
+}
+.subcell .sb-v { font-family: var(--font-editorial); font-size: clamp(11px,1.02vw,13.5px); color: var(--text-dim); margin-top: 4px; line-height: 1.35; }
+.subcell .sb-v b { color: var(--sb-c, var(--accent)); font-weight: 600; }
+@media (max-width: 900px) { .substrip { grid-template-columns: 1fr; } }
+
+/* ── S14 · AGENTIC-DEVELOPMENT TRANSITION (recap-transition register from d5) ── */
+.rec-trans-wrap { width: 100%; max-width: 1660px; margin: 0 auto; }
+.rec-trans-kicker {
+  margin-top: clamp(16px,2.5vh,28px);
+  font-family: var(--font-mono); font-size: clamp(9px,0.86vw,11px); font-weight: 700;
+  letter-spacing: 2.4px; text-transform: uppercase; color: var(--rc, var(--cyan));
+}
+.rec-trans-title {
+  max-width: 22ch; margin-top: clamp(8px,1.4vh,15px);
+  font-family: var(--font-display); font-size: clamp(44px,6vw,92px); line-height: 0.9; letter-spacing: -1px;
+}
+.rec-trans-lede {
+  max-width: 62ch; margin-top: clamp(16px,2.6vh,28px);
+  font-family: var(--font-editorial); font-size: clamp(16px,1.6vw,22px); line-height: 1.42; color: var(--text-dim);
+}
+.rec-trans-lede b { color: var(--text); font-weight: 600; }
+.rec-trans-path {
+  display: grid; grid-template-columns: minmax(0,1fr) auto minmax(0,1fr) auto minmax(0,1fr);
+  gap: clamp(10px,1.25vw,20px); align-items: stretch; margin-top: clamp(24px,3.9vh,42px);
+}
+.rec-trans-node {
+  --nc: var(--cyan); min-width: 0;
+  border: 1px solid var(--border-bright); border-top: 3px solid var(--nc); border-radius: 14px;
+  padding: clamp(14px,2.1vh,22px) clamp(15px,1.5vw,24px);
+  background: linear-gradient(155deg, color-mix(in srgb, var(--nc) 9%, transparent), var(--surface) 72%);
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.05), 0 20px 48px -34px rgba(0,0,0,0.8);
+}
+.rec-trans-day { font-family: var(--font-mono); font-size: clamp(8.5px,0.78vw,10px); font-weight: 800; letter-spacing: 2px; text-transform: uppercase; color: var(--nc); }
+.rec-trans-q { margin-top: clamp(9px,1.4vh,14px); font-family: var(--font-display); font-size: clamp(24px,2.5vw,37px); line-height: 1.04; color: var(--text); }
+.rec-trans-earned { margin-top: clamp(8px,1.2vh,12px); font-family: var(--font-editorial); font-style: italic; font-size: clamp(11.5px,1.08vw,14.5px); line-height: 1.35; color: var(--text-dim); }
+.rec-trans-arrow { align-self: center; font-family: var(--font-mono); font-size: clamp(19px,2vw,30px); color: var(--text-mute); }
+.rec-trans-invariant {
+  display: grid; grid-template-columns: auto minmax(0,1fr); gap: clamp(14px,1.6vw,26px); align-items: center;
+  margin-top: clamp(18px,3vh,32px); padding-top: clamp(13px,2vh,20px); border-top: 1px solid var(--rule);
+}
+.rec-trans-invariant-k { font-family: var(--font-mono); font-size: clamp(8px,0.75vw,9.5px); font-weight: 800; letter-spacing: 2px; text-transform: uppercase; color: var(--gold); white-space: nowrap; }
+.rec-trans-invariant-v { font-family: var(--font-editorial); font-size: clamp(13px,1.3vw,18px); line-height: 1.4; color: var(--text-dim); }
+.rec-trans-invariant-v b { color: var(--text); font-weight: 600; }
+
+
+/* ── DEMO · LIVE — floating badge on hands-on slides ── */
+.demo-live {
+  position: absolute; top: clamp(16px,2.6vh,28px); right: clamp(18px,3vw,44px); z-index: 6;
+  display: inline-flex; align-items: center; gap: 8px;
+  font-family: var(--font-mono); font-size: clamp(9px,0.9vw,11.5px); font-weight: 800;
+  letter-spacing: 2.5px; text-transform: uppercase; color: #000;
+  background: linear-gradient(135deg, #86efac, var(--green));
+  padding: 8px 17px;
+  clip-path: polygon(9px 0, 100% 0, 100% calc(100% - 9px), calc(100% - 9px) 100%, 0 100%, 0 9px);
+  box-shadow: 0 8px 30px rgba(33,179,93,0.45);
+  animation: demo-pulse 2.8s ease-in-out infinite;
+}
+.demo-live::before { content: '\25CF'; animation: demo-dot 1.4s ease-in-out infinite; }
+@keyframes demo-pulse { 0%, 100% { box-shadow: 0 8px 30px rgba(33,179,93,0.45); } 50% { box-shadow: 0 8px 42px rgba(33,179,93,0.75); } }
+@keyframes demo-dot { 0%, 100% { opacity: 1; } 50% { opacity: 0.3; } }
+
+
+/* ── ghost-word background + framework icons (Agentic Development transition) ── */
+.rtw-ghost {
+  position: absolute; inset: 0;
+  display: flex; align-items: center; justify-content: center;
+  font-family: var(--font-display);
+  font-size: clamp(140px,19vw,310px);
+  letter-spacing: clamp(4px,1vw,16px);
+  line-height: 1;
+  white-space: nowrap;
+  color: transparent;
+  -webkit-text-stroke: 1.5px rgba(56,198,217,0.10);
+  transform: translateY(-4%);
+  pointer-events: none; user-select: none;
+  z-index: 0;
+}
+.rec-trans-icon { width: clamp(30px,3vw,42px); height: clamp(30px,3vw,42px); margin-bottom: clamp(10px,1.5vh,14px); filter: drop-shadow(0 4px 12px rgba(0,0,0,0.5)); }
+
+
+/* ── reduced motion ───────────────────────────────────────────────── */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation: none !important; transition: none !important; }
+  .deck { scroll-behavior: auto; }
+  body.anim-ready .reveal > * { opacity: 1; transform: none; filter: none; }
+}
+</style>
+</head>
+<body>
+
+<!-- global living background -->
+<div class="atmosphere" aria-hidden="true">
+  <div class="aurora"><b></b></div>
+  <div class="grid-floor"></div>
+</div>
+
+<!-- navigation chrome -->
+<div class="deck-progress" aria-hidden="true"></div>
+<div class="deck-counter" id="hud" aria-hidden="true">
+  <span class="dc-act" id="dcAct">OPENING</span>
+  <span><span class="dc-n" id="n">01</span> / <span id="total">00</span></span>
+  <span class="dc-bar" id="dcBar"></span>
+</div>
+<nav class="deck-tracker" id="tracker" aria-label="Slide navigation"></nav>
+
+<div class="deck">
+<!-- ═══════════════ OPENING ═══════════════ -->
+
+  <!-- S01 · TITLE — asymmetric editorial -->
+  <section class="slide" data-act="OPENING" data-act-name="DBX Agentic Development" data-accent="accent"
+           style="justify-content:center;padding-top:clamp(40px,5.4vh,64px);padding-bottom:clamp(50px,6.6vh,78px);">
+    <div class="aurora aurora--accent" style="z-index:1;" aria-hidden="true"><b></b></div>
+    <div class="reveal" style="position:relative;z-index:2;width:100%;">
+      <div style="max-width:1680px;margin:0 auto;">
+        <span class="tag" style="--tag-c:var(--accent);">Databricks Free Edition &nbsp;·&nbsp; Four-Hour Build-Along &nbsp;·&nbsp; Payment Quality</span>
+      </div>
+      <div class="title-grid" style="margin-top:clamp(14px,2.3vh,26px);">
+        <div>
+          <div class="title-rule" style="background:var(--accent);box-shadow:0 0 22px rgba(255,54,33,0.7);" aria-hidden="true"></div>
+          <h1 class="slide__display" style="font-size:clamp(30px,4.8vw,68px);letter-spacing:-1.5px;line-height:0.9;">Agentic Development<br><span style="color:var(--accent);">on Databricks</span></h1>
+          <p class="title-sub" style="max-width:58ch;">
+            <b>One platform, one incident, one explainable number.</b> Generate 100,000 transactions, route quality with DQX, deploy with DABs, and watch one merchant move from <b>risk 25 to 45</b> &mdash; all on a four-hour clock.
+          </p>
+          <div style="margin-top:clamp(13px,2.1vh,23px);padding-top:clamp(11px,1.7vh,16px);border-top:1px solid var(--rule);">
+            <span style="display:block;font-family:var(--font-mono);font-size:clamp(8px,0.74vw,10px);letter-spacing:2.6px;text-transform:uppercase;color:var(--text-mute);margin-bottom:clamp(9px,1.4vh,13px);">the two seats you sit in today</span>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:clamp(16px,1.7vw,30px);">
+              <div style="padding-left:clamp(12px,1.2vw,18px);border-left:2px solid var(--accent);">
+                <span class="tag" style="--tag-c:var(--accent);">Operator</span>
+                <div style="font-family:var(--font-display);font-size:clamp(20px,1.95vw,29px);line-height:1;color:var(--text);margin-top:10px;">The Platform Operator</div>
+                <div style="font-family:var(--font-editorial);font-size:clamp(11.5px,1.06vw,14.5px);line-height:1.36;color:var(--text-dim);margin-top:7px;">Your workspace, your CLI. Deploy to <b style="color:var(--text);font-weight:600;">dev</b>, run the pipeline, keep every command's evidence distinct.</div>
+              </div>
+              <div style="padding-left:clamp(12px,1.2vw,18px);border-left:2px solid var(--cyan);">
+                <span class="tag" style="--tag-c:var(--cyan);">Agent</span>
+                <div style="font-family:var(--font-display);font-size:clamp(20px,1.95vw,29px);line-height:1;color:var(--text);margin-top:10px;">The Coding Agent</div>
+                <div style="font-family:var(--font-editorial);font-size:clamp(11.5px,1.06vw,14.5px);line-height:1.36;color:var(--text-dim);margin-top:7px;">Claude Code or Codex, bounded by a <b style="color:var(--text);font-weight:600;">contract</b>. It proposes; you approve. Nothing deploys without you.</div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div>
+          <span class="tag" style="--tag-c:var(--silver);margin-bottom:clamp(11px,1.8vh,19px);">Four moves &nbsp;·&nbsp; 09:00 &rarr; 13:00</span>
+          <ol class="ts-spine">
+            <li class="ts-item" style="--c:var(--accent);">
+              <span class="ts-dot" aria-hidden="true"></span>
+              <div><div class="ts-head"><span class="ts-n">01</span><span class="ts-name">Frame</span></div>
+              <div class="ts-job">the reason why, the use case, the platform</div></div>
+            </li>
+            <li class="ts-item" style="--c:var(--cyan);">
+              <span class="ts-dot" aria-hidden="true"></span>
+              <div><div class="ts-head"><span class="ts-n">02</span><span class="ts-name">Build</span></div>
+              <div class="ts-job">contract &rarr; generator &rarr; Bronze &rarr; Silver &rarr; Gold</div></div>
+            </li>
+            <li class="ts-item" style="--c:var(--green);">
+              <span class="ts-dot" aria-hidden="true"></span>
+              <div><div class="ts-head"><span class="ts-n">03</span><span class="ts-name">Deploy</span></div>
+              <div class="ts-job">DABs to dev, Unity Catalog, live runtime evidence</div></div>
+            </li>
+            <li class="ts-item" style="--c:var(--gold);">
+              <span class="ts-dot" aria-hidden="true"></span>
+              <div><div class="ts-head"><span class="ts-n">04</span><span class="ts-name">Replay</span></div>
+              <div class="ts-job">the late chargeback, Genie, and the number that moves</div></div>
+            </li>
+          </ol>
+          <p class="ts-note">Everyone arrives brownfield &mdash; <b>the generator, the pipeline, and the bad data already exist</b>. Your job is to make the incident explainable, then prove it.</p>
+        </div>
+      </div>
+      <div style="max-width:1680px;margin:0 auto;width:100%;">
+        <div class="pullquote" style="max-width:1180px;">
+          <p class="pq-text">Bad data preserved is a lesson.<br>Bad data dropped is a liability.</p>
+          <div class="pq-attr">
+            <span class="pq-dash" aria-hidden="true"></span>
+            <span class="pq-who">The rule of the room</span>
+            <span class="pq-sep" aria-hidden="true">◆</span>
+            <span class="pq-gloss">DQX is the single source of quality &mdash; invalid rows live in quarantine, never vanish</span>
+          </div>
+        </div>
+      </div>
+      <div class="title-foot">
+        <div class="presenter">
+          <div>
+            <div class="p-name">Luan Moreno</div>
+            <div class="p-role">Principal Forward-Deployed Engineer · Agentic Engineering · Data &amp; AI</div>
+          </div>
+        </div>
+        <div class="contract">
+          <div class="ct" style="--ck:var(--cyan);">
+            <span class="ct-k">Machine</span>
+            <span class="ct-v">Databricks CLI · uv · Spark 4.2 · Java 17/21. One fails &mdash; stop.</span>
+          </div>
+          <div class="ct" style="--ck:var(--red);">
+            <span class="ct-k">Fence</span>
+            <span class="ct-v">dev only · never <b style="font-weight:600;">DROP ROW</b> · reference stays read-only.</span>
+          </div>
+          <div class="ct" style="--ck:var(--green);">
+            <span class="ct-k">Proof</span>
+            <span class="ct-v">m-007 risk 25 &rarr; 45 · VERIFY=PASS · four Genie answers.</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- S02 · SYSTEM MAP — the PSP and the chargeback -->
+  <section class="slide" data-act="OPENING" data-act-name="System map" data-accent="gold"
+           style="justify-content:flex-start;padding-top:clamp(18px,3vh,36px);">
+    <div class="aurora aurora--gold" aria-hidden="true"><b></b></div>
+    <div class="reveal" style="position:relative;z-index:2;width:100%;max-width:1780px;margin:0 auto;">
+      <span class="tag" style="--tag-c:var(--gold);">The system map &nbsp;·&nbsp; what a Payment Service Provider is</span>
+      <h2 class="h2" style="margin-top:clamp(10px,1.6vh,16px);font-size:clamp(29px,4.1vw,55px);">
+        A store never talks to Visa.<br><span style="color:var(--gold);">The PSP does.</span>
+      </h2>
+      <p class="lede" style="max-width:104ch;margin-top:clamp(10px,1.7vh,17px);">
+        Every card payment rides one chain: the shopper, the store, a Payment Service Provider, and the card networks.
+        The store never talks to Visa &mdash; the PSP does. Stripe, Adyen, PagSeguro, and Cielo all play this role: take the
+        shopper's money, keep a small fee, and settle with the store a few days later. <b>That delay is where the PSP's
+        own money is at risk.</b>
+      </p>
+
+      <div style="margin-top:clamp(4px,0.8vh,10px);">
+        <svg class="arch" viewBox="0 0 1780 460" role="img"
+             aria-label="System map: a shopper buys from the store; the PSP routes the sale through Visa or Mastercard to the issuing bank; the PSP pays the store a few days later; on a chargeback the bank pulls the money back out of the PSP.">
+          <defs>
+            <linearGradient id="sm-f1" gradientUnits="userSpaceOnUse" x1="340" y1="0" x2="470" y2="0">
+              <stop offset="0%" stop-color="#38c6d9" stop-opacity=".6"/><stop offset="100%" stop-color="#ff3621" stop-opacity=".4"/>
+            </linearGradient>
+            <linearGradient id="sm-f2" gradientUnits="userSpaceOnUse" x1="800" y1="0" x2="950" y2="0">
+              <stop offset="0%" stop-color="#ff3621" stop-opacity=".6"/><stop offset="100%" stop-color="#ffc24b" stop-opacity=".4"/>
+            </linearGradient>
+            <linearGradient id="sm-f3" gradientUnits="userSpaceOnUse" x1="1250" y1="0" x2="1400" y2="0">
+              <stop offset="0%" stop-color="#ffc24b" stop-opacity=".55"/><stop offset="100%" stop-color="#b7c0cc" stop-opacity=".35"/>
+            </linearGradient>
+            <filter id="sm-glow" x="-60%" y="-60%" width="220%" height="220%"><feGaussianBlur stdDeviation="4" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+          </defs>
+
+          <!-- the sale — forward flow -->
+          <path d="M 340 135 C 405 135, 415 135, 470 135" fill="none" stroke="url(#sm-f1)" stroke-width="2.4"/>
+          <path d="M 800 135 C 870 135, 880 135, 950 135" fill="none" stroke="url(#sm-f2)" stroke-width="2.4"/>
+          <path d="M 1250 135 C 1320 135, 1330 135, 1400 135" fill="none" stroke="url(#sm-f3)" stroke-width="2.4"/>
+          <text x="890" y="30" text-anchor="middle" font-family="Newsreader" font-style="italic" font-size="15" fill="#8d99a8">the sale &#183; the shopper pays, the PSP routes it, the bank debits</text>
+
+          <!-- settlement — PSP pays the store, days later -->
+          <path d="M 470 330 C 420 330, 380 330, 340 330" fill="none" stroke="#ffc24b" stroke-width="2.4" stroke-dasharray="7 6"/>
+          <text x="405" y="312" text-anchor="middle" font-family="Newsreader" font-style="italic" font-size="15" fill="#8d99a8">the store is paid &#183; a few days later</text>
+
+          <!-- chargeback — the bank pulls the money back -->
+          <path d="M 800 385 C 870 385, 880 385, 950 385" fill="none" stroke="#ff4d3d" stroke-width="2.4" stroke-dasharray="7 6"/>
+          <path d="M 1250 385 C 1320 385, 1330 385, 1400 385" fill="none" stroke="#ff4d3d" stroke-width="2.4" stroke-dasharray="7 6"/>
+          <text x="1100" y="432" text-anchor="middle" font-family="Newsreader" font-style="italic" font-size="15" fill="#ff9d94">the chargeback &#8212; &#8220;I did not authorize this&#8221; &#8212; the bank pulls the money back out of the PSP</text>
+
+          <!-- STORE — shopper card -->
+          <rect x="40" y="60" width="300" height="150" rx="16" fill="#14181e" stroke="#38c6d9" stroke-opacity=".6" stroke-width="1.5"/>
+          <rect x="40" y="60" width="300" height="150" rx="16" fill="none" stroke="#38c6d9" stroke-opacity=".3" stroke-width="5" filter="url(#sm-glow)"/>
+          <g transform="translate(60,82)" stroke="#7fe0ec" stroke-width="1.7" fill="none" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M8.5 7V5.5a3.5 3.5 0 0 1 7 0V7"/>
+            <path d="M4.5 7h15l-1.3 12a1.6 1.6 0 0 1-1.6 1.4H7.4a1.6 1.6 0 0 1-1.6-1.4L4.5 7z"/>
+          </g>
+          <text x="100" y="100" font-family="Fira Code" font-size="11.5" font-weight="700" letter-spacing="2.4" fill="#7fe0ec">THE STORE</text>
+          <text x="60" y="142" font-family="Instrument Serif" font-size="30" fill="#e9edf2">Shoes online</text>
+          <text x="60" y="170" font-family="Fira Code" font-size="11.5" fill="#8d99a8">the shopper pays here</text>
+          <text x="60" y="190" font-family="Fira Code" font-size="11.5" fill="#8d99a8">never talks to a network</text>
+
+          <!-- PSP — the hero card -->
+          <rect x="470" y="50" width="330" height="160" rx="16" fill="#14181e" stroke="#ff3621" stroke-opacity=".6" stroke-width="1.5"/>
+          <rect x="470" y="50" width="330" height="160" rx="16" fill="none" stroke="#ff3621" stroke-opacity=".3" stroke-width="5" filter="url(#sm-glow)"/>
+          <rect x="482" y="62" width="306" height="136" rx="13" fill="none" stroke="#ff3621" stroke-opacity=".22" stroke-width="1"/>
+          <g transform="translate(490,72)" stroke="#ff9d8a" stroke-width="1.7" fill="none" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="3" y="5" width="18" height="14" rx="2"/>
+            <path d="M3 10h18"/>
+            <path d="M7 15h4"/>
+          </g>
+          <text x="530" y="90" font-family="Fira Code" font-size="11.5" font-weight="700" letter-spacing="2.4" fill="#ff9d8a">THE PSP</text>
+          <text x="490" y="132" font-family="Instrument Serif" font-size="30" fill="#e9edf2">Payment Provider</text>
+          <text x="490" y="162" font-family="Fira Code" font-size="11.5" fill="#8d99a8">Stripe &#183; Adyen &#183; PagSeguro &#183; Cielo</text>
+          <text x="490" y="182" font-family="Fira Code" font-size="11.5" fill="#8d99a8">takes the money &#183; keeps a fee &#183; pays days later</text>
+
+          <!-- NETWORK — the rails (cylinder) -->
+          <path d="M950 60 L950 210 A150 22 0 0 0 1250 210 L1250 60 Z" fill="#14181e" stroke="#ffc24b" stroke-opacity=".6" stroke-width="1.5"/>
+          <path d="M950 60 L950 210 A150 22 0 0 0 1250 210 L1250 60 Z" fill="none" stroke="#ffc24b" stroke-opacity=".26" stroke-width="5" filter="url(#sm-glow)"/>
+          <ellipse cx="1100" cy="60" rx="150" ry="22" fill="#1b2029" stroke="#ffc24b" stroke-opacity=".6" stroke-width="1.5"/>
+          <g transform="translate(1010,84)" stroke="#ffdb9e" stroke-width="1.7" fill="none" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="9"/>
+            <path d="M3 12h18"/>
+            <path d="M12 3c2.6 2.7 4 5.7 4 9s-1.4 6.3-4 9c-2.6-2.7-4-5.7-4-9s1.4-6.3 4-9z"/>
+          </g>
+          <text x="1050" y="102" font-family="Fira Code" font-size="11.5" font-weight="700" letter-spacing="2.4" fill="#ffdb9e">THE NETWORK</text>
+          <text x="1010" y="146" font-family="Instrument Serif" font-size="30" fill="#e9edf2">Visa &#183; Mastercard</text>
+          <text x="1010" y="174" font-family="Fira Code" font-size="11.5" fill="#8d99a8">routes the authorization</text>
+          <text x="1010" y="194" font-family="Fira Code" font-size="11.5" fill="#8d99a8">the rails in between</text>
+
+          <!-- BANK — issuing bank card -->
+          <rect x="1400" y="60" width="340" height="150" rx="16" fill="#14181e" stroke="#b7c0cc" stroke-opacity=".6" stroke-width="1.5"/>
+          <rect x="1400" y="60" width="340" height="150" rx="16" fill="none" stroke="#b7c0cc" stroke-opacity=".3" stroke-width="5" filter="url(#sm-glow)"/>
+          <g transform="translate(1420,82)" stroke="#d3dae2" stroke-width="1.7" fill="none" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M4 10l8-6 8 6"/>
+            <path d="M4 10h16v9H4z"/>
+            <path d="M7 19v-5M12 19v-5M17 19v-5"/>
+            <path d="M2.5 21h19"/>
+          </g>
+          <text x="1460" y="100" font-family="Fira Code" font-size="11.5" font-weight="700" letter-spacing="2.4" fill="#d3dae2">THE BANK</text>
+          <text x="1420" y="142" font-family="Instrument Serif" font-size="30" fill="#e9edf2">Issuing bank</text>
+          <text x="1420" y="170" font-family="Fira Code" font-size="11.5" fill="#8d99a8">holds the shopper's money</text>
+          <text x="1420" y="190" font-family="Fira Code" font-size="11.5" fill="#8d99a8">can pull it back</text>
+        </svg>
+      </div>
+
+      <div class="callout red" style="margin-top:clamp(14px,2.4vh,26px);">
+        <div class="co-kicker">The loss lands on the PSP</div>
+        <div class="co-body">The PSP has usually already paid the store. A careless or fraudulent store leaves the PSP absorbing the chargeback &mdash; <b>which is exactly the number we will score in this workshop</b>.</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- S03 · WHY — block divider -->
+  <section class="slide" data-act="OPENING" data-act-name="Why agentic" data-accent="accent"
+           style="justify-content:center;align-items:flex-start;text-align:left;">
+    <div class="aurora aurora--accent" aria-hidden="true"><b></b></div>
+    <div class="reveal" style="position:relative;z-index:2;width:100%;max-width:1780px;margin:0 auto;">
+      <div class="cols" style="--cols:1.05fr 0.95fr;align-items:center;gap:clamp(24px,3.4vw,72px);">
+        <div>
+          <span class="tag" style="--tag-c:var(--accent);">Move 1 of 4 · Frame · the reason why</span>
+          <div class="act-num" style="--an-c:var(--accent);margin-top:clamp(6px,1.2vh,14px);">01</div>
+          <h2 class="h2" style="margin-top:clamp(4px,0.8vh,10px);">
+            Agents write code.<br>Contracts make it <span style="color:var(--accent);">verifiable.</span>
+          </h2>
+          <p class="lede" style="max-width:54ch;margin-top:clamp(14px,2.4vh,24px);">
+            Vibe coding moves fast and breaks silently. This workshop swaps vibes for a machine-readable
+            contract and a five-rung evidence ladder. <b>The same command proves something different at every rung &mdash; name the rung.</b>
+          </p>
+          <div style="display:flex;gap:clamp(9px,1vw,15px);flex-wrap:wrap;margin-top:clamp(16px,2.6vh,28px);">
+            <span class="tag" style="--tag-c:var(--red);">contracts, not vibes</span>
+            <span class="tag" style="--tag-c:var(--cyan);">evidence, not screenshots</span>
+            <span class="tag" style="--tag-c:var(--gold);">quarantine, not deletion</span>
+          </div>
+        </div>
+        <div>
+          <span class="tag" style="--tag-c:var(--silver);margin-bottom:clamp(9px,1.5vh,15px);">Full Circle · Four Moves</span>
+          <ul class="wkrail">
+            <li class="wkr wkr--now">
+              <span class="wkr-d">01</span>
+              <div class="wkr-body"><div class="wkr-seat">Frame<span class="wkr-now-tag">now</span></div>
+              <div class="wkr-job">why, what, and the platform</div></div>
+            </li>
+            <li class="wkr" style="--wk-c:var(--cyan);opacity:0.88;">
+              <span class="wkr-d">02</span>
+              <div class="wkr-body"><div class="wkr-seat">Build</div>
+              <div class="wkr-job">contract &rarr; generator &rarr; Bronze &rarr; Silver &rarr; Gold</div></div>
+            </li>
+            <li class="wkr" style="--wk-c:var(--green);opacity:0.74;">
+              <span class="wkr-d">03</span>
+              <div class="wkr-body"><div class="wkr-seat">Deploy</div>
+              <div class="wkr-job">DABs &rarr; dev · Unity Catalog · runtime evidence</div></div>
+            </li>
+            <li class="wkr" style="--wk-c:var(--gold);opacity:0.62;">
+              <span class="wkr-d">04</span>
+              <div class="wkr-body"><div class="wkr-seat">Replay</div>
+              <div class="wkr-job">late chargeback &rarr; Genie &rarr; risk 45</div></div>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- S04 · THE THREE TRUTHS -->
+  <section class="slide" data-act="OPENING" data-act-name="Three truths" data-accent="accent"
+           style="justify-content:center;align-items:flex-start;text-align:left;">
+    <div class="aurora aurora--accent" aria-hidden="true"><b></b></div>
+    <div class="reveal" style="position:relative;z-index:2;width:100%;max-width:1680px;margin:0 auto;">
+      <span class="tag kick-tag" style="--tag-c:var(--accent);">Why this matters · three truths</span>
+      <div class="three-col">
+        <div class="card card--flow accent">
+          <div class="card-inner">
+            <span class="tag" style="--tag-c:var(--accent);">Truth 1</span>
+            <div class="db-h grad">Agents are real production labor</div>
+            <p class="db-p">Claude Code and Codex edit repos every day. The risk is not that they <b>write</b> code &mdash; it's that nobody can prove what they changed and why.</p>
+            <ul class="db-list">
+              <li>plan-before-edit, not autopilot</li>
+              <li>a contract names the boundary</li>
+              <li>evidence is captured per change</li>
+            </ul>
+          </div>
+        </div>
+        <div class="card card--flow cyan">
+          <div class="card-inner">
+            <span class="tag" style="--tag-c:var(--cyan);">Truth 2</span>
+            <div class="db-h grad">Databricks collapses the stack</div>
+            <p class="db-p">Ingest, quality, deploy, govern, and investigate live in <b>one serverless platform</b>. No separate orchestrator, no DIY lineage, no hand-rolled data checks.</p>
+            <ul class="db-list">
+              <li>Lakeflow for the pipeline</li>
+              <li>DQX for quality, UC for lineage</li>
+              <li>DABs for deploy, Genie for answers</li>
+            </ul>
+          </div>
+        </div>
+        <div class="card card--flow gold">
+          <div class="card-inner">
+            <span class="tag" style="--tag-c:var(--gold);">Truth 3</span>
+            <div class="db-h grad">Quality is preserved, not dropped</div>
+            <p class="db-p">Real payment systems see null IDs, bad currencies, orphaned orders. Dropping them hides the story. <b>Quarantining them</b> makes it explainable.</p>
+            <ul class="db-list">
+              <li><code>_errors</code> / <code>_warnings</code> columns</li>
+              <li>seven quarantine causes, all queryable</li>
+              <li>one held valid chargeback to replay</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- S05 · THE LOOP — how effective AI teams work -->
+  <section class="slide" data-act="OPENING" data-act-name="The loop" data-accent="purple"
+           style="justify-content:flex-start;padding-top:clamp(18px,3vh,36px);">
+    <div class="aurora aurora--purple" aria-hidden="true"><b></b></div>
+    <div class="reveal" style="position:relative;z-index:2;width:100%;max-width:1560px;margin:0 auto;">
+      <span class="tag" style="--tag-c:var(--purple);">The loop &nbsp;·&nbsp; how effective AI teams work</span>
+      <h2 class="h2" style="margin-top:clamp(8px,1.3vh,14px);font-size:clamp(26px,3.6vw,48px);">
+        Done is observed, <span style="color:var(--purple);">not narrated.</span>
+      </h2>
+      <p class="lede" style="max-width:82ch;margin-top:clamp(6px,1vh,12px);">
+        Six steps, one owner, and proof you can point at. Every pass around the ring writes evidence &mdash; and the last step teaches the next run.
+      </p>
+
+      <div style="display:flex;align-items:center;flex-wrap:wrap;gap:clamp(14px,1.6vw,30px);margin-top:clamp(12px,2vh,20px);">
+        <span style="font-family:var(--font-mono);font-size:clamp(8px,0.74vw,9.5px);letter-spacing:2px;text-transform:uppercase;color:var(--text-mute);">Named talks &nbsp;&middot;&nbsp; not a leaked stack</span>
+        <span style="display:inline-flex;align-items:center;gap:10px;">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+            <path d="M12 2.5l7.5 4.33v8.34L12 21.5l-7.5-4.33V6.83L12 2.5z" stroke="#e9edf2" stroke-width="1.5" stroke-linejoin="round"/>
+            <path d="M12 6.6l5 2.9v5.8l-5 2.9-5-2.9V9.5l5-2.9z" stroke="#e9edf2" stroke-width="1.1" stroke-linejoin="round"/>
+          </svg>
+          <span><span style="display:block;font-family:var(--font-display);font-size:clamp(13px,1.15vw,16px);color:var(--text);line-height:1;">OpenAI</span><span style="display:block;font-family:var(--font-mono);font-size:8px;letter-spacing:1.4px;text-transform:uppercase;color:var(--text-mute);margin-top:3px;">Codex</span></span>
+        </span>
+        <span style="display:inline-flex;align-items:center;gap:10px;">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+            <path d="M12 3v6M12 15v6M4.5 7.5l5.2 3M14.3 13.5l5.2 3M4.5 16.5l5.2-3M14.3 10.5l5.2-3" stroke="#e9edf2" stroke-width="1.5" stroke-linecap="round"/>
+          </svg>
+          <span><span style="display:block;font-family:var(--font-display);font-size:clamp(13px,1.15vw,16px);color:var(--text);line-height:1;">Anthropic</span><span style="display:block;font-family:var(--font-mono);font-size:8px;letter-spacing:1.4px;text-transform:uppercase;color:var(--text-mute);margin-top:3px;">Claude Code</span></span>
+        </span>
+        <span style="display:inline-flex;align-items:center;gap:10px;">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+            <path d="M5 5C10 8 14 14 19 19" stroke="#e9edf2" stroke-width="1.8" stroke-linecap="round"/>
+            <path d="M19 5C14 8 10 14 5 19" stroke="#e9edf2" stroke-width="1.8" stroke-linecap="round"/>
+          </svg>
+          <span><span style="display:block;font-family:var(--font-display);font-size:clamp(13px,1.15vw,16px);color:var(--text);line-height:1;">SpaceX</span><span style="display:block;font-family:var(--font-mono);font-size:8px;letter-spacing:1.4px;text-transform:uppercase;color:var(--text-mute);margin-top:3px;">Responsible Engineer</span></span>
+        </span>
+      </div>
+
+      <div style="margin-top:clamp(0px,0.2vh,4px);">
+        <svg class="arch" viewBox="0 0 1560 610" role="img"
+             aria-label="Six-step loop of how effective AI teams work: own the outcome, write the plan, run parallel agents, verify in the loop, human review, teach the house — with an evidence hub in the center.">
+          <defs>
+            <linearGradient id="lg-12" gradientUnits="userSpaceOnUse" x1="925" y1="115" x2="965" y2="245">
+              <stop offset="0%" stop-color="#ffc24b" stop-opacity=".6"/><stop offset="100%" stop-color="#38c6d9" stop-opacity=".4"/>
+            </linearGradient>
+            <linearGradient id="lg-23" gradientUnits="userSpaceOnUse" x1="1110" y1="293" x2="1110" y2="357">
+              <stop offset="0%" stop-color="#38c6d9" stop-opacity=".6"/><stop offset="100%" stop-color="#8b7cf6" stop-opacity=".4"/>
+            </linearGradient>
+            <linearGradient id="lg-34" gradientUnits="userSpaceOnUse" x1="965" y1="405" x2="925" y2="515">
+              <stop offset="0%" stop-color="#8b7cf6" stop-opacity=".6"/><stop offset="100%" stop-color="#ffc24b" stop-opacity=".4"/>
+            </linearGradient>
+            <linearGradient id="lg-45" gradientUnits="userSpaceOnUse" x1="635" y1="515" x2="595" y2="405">
+              <stop offset="0%" stop-color="#ffc24b" stop-opacity=".6"/><stop offset="100%" stop-color="#21b35d" stop-opacity=".4"/>
+            </linearGradient>
+            <linearGradient id="lg-56" gradientUnits="userSpaceOnUse" x1="450" y1="357" x2="450" y2="293">
+              <stop offset="0%" stop-color="#21b35d" stop-opacity=".6"/><stop offset="100%" stop-color="#ff3621" stop-opacity=".4"/>
+            </linearGradient>
+            <linearGradient id="lg-61" gradientUnits="userSpaceOnUse" x1="595" y1="245" x2="635" y2="115">
+              <stop offset="0%" stop-color="#ff3621" stop-opacity=".6"/><stop offset="100%" stop-color="#ffc24b" stop-opacity=".4"/>
+            </linearGradient>
+            <marker id="lp-chev" viewBox="0 0 10 10" refX="7" refY="5" markerWidth="6" markerHeight="6" orient="auto">
+              <path d="M1 1 L7 5 L1 9" fill="none" stroke="#b7c0cc" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+            </marker>
+            <marker id="lp-chev-gate" viewBox="0 0 10 10" refX="7" refY="5" markerWidth="6" markerHeight="6" orient="auto">
+              <path d="M1 1 L7 5 L1 9" fill="none" stroke="#ffc24b" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+            </marker>
+            <filter id="lp-glow" x="-60%" y="-60%" width="220%" height="220%"><feGaussianBlur stdDeviation="4" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+          </defs>
+
+          <!-- the ring — clockwise, gradient flows -->
+          <path d="M 925 115 C 962 115, 972 180, 965 245" fill="none" stroke="url(#lg-12)" stroke-width="2.4" marker-end="url(#lp-chev)"/>
+          <path d="M 1110 293 C 1126 325, 1126 325, 1110 357" fill="none" stroke="url(#lg-23)" stroke-width="2.4" marker-end="url(#lp-chev)"/>
+          <path d="M 965 405 C 972 465, 962 490, 925 515" fill="none" stroke="url(#lg-34)" stroke-width="2.4" marker-end="url(#lp-chev)"/>
+          <path d="M 635 515 C 598 490, 588 465, 595 405" fill="none" stroke="url(#lg-45)" stroke-width="2.4" marker-end="url(#lp-chev)"/>
+          <path d="M 450 357 C 434 325, 434 325, 450 293" fill="none" stroke="url(#lg-56)" stroke-width="2.4" marker-end="url(#lp-chev)"/>
+          <path d="M 595 245 C 588 180, 598 140, 635 115" fill="none" stroke="url(#lg-61)" stroke-width="2.4" marker-end="url(#lp-chev)"/>
+
+          <!-- the gate — dotted amber spine: 4 → evidence → 1 -->
+          <path d="M 780 467 L 780 359" fill="none" stroke="#ffc24b" stroke-width="2.2" stroke-linecap="round" stroke-dasharray="0.1 7" marker-end="url(#lp-chev-gate)"/>
+          <path d="M 780 271 L 780 163" fill="none" stroke="#ffc24b" stroke-width="2.2" stroke-linecap="round" stroke-dasharray="0.1 7" marker-end="url(#lp-chev-gate)"/>
+
+          <!-- 1 · OWN — gate -->
+          <rect x="635" y="67" width="290" height="96" rx="14" fill="#14181e" stroke="#ffc24b" stroke-opacity=".6" stroke-width="1.5"/>
+          <rect x="635" y="67" width="290" height="96" rx="14" fill="none" stroke="#ffc24b" stroke-opacity=".3" stroke-width="5" filter="url(#lp-glow)"/>
+          <g transform="translate(648,78)" stroke="#ffc24b" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="10" cy="6.4" r="3.3"/>
+            <path d="M4.5 18.5c0-3 2.5-5.4 5.5-5.4s5.5 2.4 5.5 5.4"/>
+          </g>
+          <text x="674" y="93" font-family="Fira Code" font-size="7.5" font-weight="700" letter-spacing="1.5" fill="#ffc24b">OWN</text>
+          <circle cx="905" cy="87" r="11" fill="#ffc24b"/>
+          <text x="905" y="91" text-anchor="middle" font-family="Fira Code" font-size="10" font-weight="700" fill="#0b0d10">1</text>
+          <text x="648" y="120" font-family="Instrument Serif" font-size="18" fill="#e9edf2">Own the outcome</text>
+          <text x="648" y="136" font-family="Fira Code" font-size="8" fill="#8d99a8">One named engineer owns the ticket</text>
+          <text x="648" y="150" font-family="Fira Code" font-size="8" fill="#8d99a8">through merge and the next green CI.</text>
+
+          <!-- 2 · PLAN -->
+          <rect x="965" y="197" width="290" height="96" rx="14" fill="#14181e" stroke="#38c6d9" stroke-opacity=".6" stroke-width="1.5"/>
+          <rect x="965" y="197" width="290" height="96" rx="14" fill="none" stroke="#38c6d9" stroke-opacity=".3" stroke-width="5" filter="url(#lp-glow)"/>
+          <g transform="translate(978,208)" stroke="#7fe0ec" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M6.5 3.5h6.8l3.2 3.2V18a1.5 1.5 0 0 1-1.5 1.5h-8.5A1.5 1.5 0 0 1 5 18V5a1.5 1.5 0 0 1 1.5-1.5z"/>
+            <path d="M13.5 3.5v3.5h3.2"/>
+            <path d="M8 11h5M8 14h5"/>
+          </g>
+          <text x="1004" y="223" font-family="Fira Code" font-size="7.5" font-weight="700" letter-spacing="1.5" fill="#7fe0ec">PLAN</text>
+          <circle cx="1235" cy="217" r="11" fill="#14181e" stroke="#38c6d9" stroke-opacity=".55" stroke-width="1.2"/>
+          <text x="1235" y="221" text-anchor="middle" font-family="Fira Code" font-size="10" font-weight="700" fill="#7fe0ec">2</text>
+          <text x="978" y="250" font-family="Instrument Serif" font-size="18" fill="#e9edf2">Write the plan</text>
+          <text x="978" y="266" font-family="Fira Code" font-size="8" fill="#8d99a8">Seal success criteria first — plan mode,</text>
+          <text x="978" y="280" font-family="Fira Code" font-size="8" fill="#8d99a8">then one-shot. Delete fat scope first.</text>
+
+          <!-- 3 · PARALLEL -->
+          <rect x="965" y="357" width="290" height="96" rx="14" fill="#14181e" stroke="#8b7cf6" stroke-opacity=".6" stroke-width="1.5"/>
+          <rect x="965" y="357" width="290" height="96" rx="14" fill="none" stroke="#8b7cf6" stroke-opacity=".3" stroke-width="5" filter="url(#lp-glow)"/>
+          <g transform="translate(978,368)" stroke="#c4b7fb" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="5" cy="10" r="2.4"/>
+            <circle cx="15" cy="5" r="2.4"/>
+            <circle cx="15" cy="15" r="2.4"/>
+            <path d="M7.4 10l5.1-3.4M7.4 10l5.1 3.4"/>
+          </g>
+          <text x="1004" y="383" font-family="Fira Code" font-size="7.5" font-weight="700" letter-spacing="1.5" fill="#c4b7fb">RUN MANY</text>
+          <circle cx="1235" cy="377" r="11" fill="#14181e" stroke="#8b7cf6" stroke-opacity=".55" stroke-width="1.2"/>
+          <text x="1235" y="381" text-anchor="middle" font-family="Fira Code" font-size="10" font-weight="700" fill="#c4b7fb">3</text>
+          <text x="978" y="410" font-family="Instrument Serif" font-size="18" fill="#e9edf2">Parallel agents</text>
+          <text x="978" y="426" font-family="Fira Code" font-size="8" fill="#8d99a8">Isolated worktrees. Human steers, agents type.</text>
+          <text x="978" y="440" font-family="Fira Code" font-size="8" fill="#8d99a8">Kill bad runs — detach is the default.</text>
+
+          <!-- 4 · VERIFY — gate -->
+          <rect x="635" y="467" width="290" height="96" rx="14" fill="#14181e" stroke="#ffc24b" stroke-opacity=".6" stroke-width="1.5"/>
+          <rect x="635" y="467" width="290" height="96" rx="14" fill="none" stroke="#ffc24b" stroke-opacity=".3" stroke-width="5" filter="url(#lp-glow)"/>
+          <g transform="translate(648,478)" stroke="#ffc24b" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="10" cy="10" r="7"/>
+            <path d="M6.6 10.2l2.3 2.3 4.7-5.2"/>
+          </g>
+          <text x="674" y="493" font-family="Fira Code" font-size="7.5" font-weight="700" letter-spacing="1.5" fill="#ffc24b">PROVE</text>
+          <circle cx="905" cy="487" r="11" fill="#ffc24b"/>
+          <text x="905" y="491" text-anchor="middle" font-family="Fira Code" font-size="10" font-weight="700" fill="#0b0d10">4</text>
+          <text x="648" y="520" font-family="Instrument Serif" font-size="18" fill="#e9edf2">Verify in the loop</text>
+          <text x="648" y="536" font-family="Fira Code" font-size="8" fill="#8d99a8">Tests, a browser, or hardware-in-loop —</text>
+          <text x="648" y="550" font-family="Fira Code" font-size="8" fill="#8d99a8">not a story. This writes the hub.</text>
+
+          <!-- 5 · REVIEW -->
+          <rect x="305" y="357" width="290" height="96" rx="14" fill="#14181e" stroke="#21b35d" stroke-opacity=".6" stroke-width="1.5"/>
+          <rect x="305" y="357" width="290" height="96" rx="14" fill="none" stroke="#21b35d" stroke-opacity=".3" stroke-width="5" filter="url(#lp-glow)"/>
+          <g transform="translate(318,368)" stroke="#7ce0a6" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="8.8" cy="6.4" r="2.9"/>
+            <path d="M4 18c0-2.8 2.1-4.6 4.8-4.6s4.8 1.8 4.8 4.6"/>
+            <path d="M15.3 5l1.4 1.4L19.5 3.6"/>
+          </g>
+          <text x="344" y="383" font-family="Fira Code" font-size="7.5" font-weight="700" letter-spacing="1.5" fill="#7ce0a6">SIGN</text>
+          <circle cx="575" cy="377" r="11" fill="#14181e" stroke="#21b35d" stroke-opacity=".55" stroke-width="1.2"/>
+          <text x="575" y="381" text-anchor="middle" font-family="Fira Code" font-size="10" font-weight="700" fill="#7ce0a6">5</text>
+          <text x="318" y="410" font-family="Instrument Serif" font-size="18" fill="#e9edf2">Human review</text>
+          <text x="318" y="426" font-family="Fira Code" font-size="8" fill="#8d99a8">Taste and the merge bar stay human.</text>
+          <text x="318" y="440" font-family="Fira Code" font-size="8" fill="#8d99a8">Agent reviews first — you still sign it.</text>
+
+          <!-- 6 · TEACH -->
+          <rect x="305" y="197" width="290" height="96" rx="14" fill="#14181e" stroke="#ff3621" stroke-opacity=".6" stroke-width="1.5"/>
+          <rect x="305" y="197" width="290" height="96" rx="14" fill="none" stroke="#ff3621" stroke-opacity=".3" stroke-width="5" filter="url(#lp-glow)"/>
+          <g transform="translate(318,208)" stroke="#ff9d8a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M4 5.5c2.7-1.3 5.3-1.3 8 0 2.7-1.3 5.3-1.3 8 0v12c-2.7-1.3-5.3-1.3-8 0-2.7-1.3-5.3-1.3-8 0z"/>
+            <path d="M12 5.5v12"/>
+          </g>
+          <text x="344" y="223" font-family="Fira Code" font-size="7.5" font-weight="700" letter-spacing="1.5" fill="#ff9d8a">TEACH</text>
+          <circle cx="575" cy="217" r="11" fill="#14181e" stroke="#ff3621" stroke-opacity=".55" stroke-width="1.2"/>
+          <text x="575" y="221" text-anchor="middle" font-family="Fira Code" font-size="10" font-weight="700" fill="#ff9d8a">6</text>
+          <text x="318" y="250" font-family="Instrument Serif" font-size="18" fill="#e9edf2">Teach the house</text>
+          <text x="318" y="266" font-family="Fira Code" font-size="8" fill="#8d99a8">Write the mistake into CLAUDE.md or a lint.</text>
+          <text x="318" y="280" font-family="Fira Code" font-size="8" fill="#8d99a8">The next run inherits it. Back to 1.</text>
+
+          <!-- EVIDENCE — the hub -->
+          <rect x="665" y="271" width="230" height="88" rx="14" fill="#1b2029" stroke="#ffc24b" stroke-opacity=".65" stroke-width="1.5"/>
+          <rect x="665" y="271" width="230" height="88" rx="14" fill="none" stroke="#ffc24b" stroke-opacity=".28" stroke-width="5" filter="url(#lp-glow)"/>
+          <g transform="translate(679,283)" stroke="#ffc24b" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M3 11h4l2-5.5 4 9.5 2.5-4.5h5"/>
+          </g>
+          <text x="703" y="296" font-family="Fira Code" font-size="7.5" font-weight="700" letter-spacing="1.5" fill="#ffc24b">EVIDENCE</text>
+          <text x="679" y="322" font-family="Fira Code" font-size="8" font-weight="700" fill="#ffdb9e">tests &#183; PR &#183; telemetry</text>
+          <text x="679" y="336" font-family="Fira Code" font-size="8" fill="#8d99a8">Done is observed, not narrated.</text>
+          <text x="679" y="350" font-family="Fira Code" font-size="8" fill="#4e5764">not chat tokens</text>
+        </svg>
+      </div>
+
+      <div style="display:flex;align-items:center;flex-wrap:wrap;gap:clamp(10px,1.15vw,17px);margin-top:clamp(14px,2.4vh,26px);padding-top:clamp(12px,2vh,20px);border-top:1px solid var(--rule);">
+        <span style="font-family:var(--font-mono);font-size:clamp(8.5px,0.78vw,10px);letter-spacing:2.4px;text-transform:uppercase;color:var(--text-mute);">How to read</span>
+        <span class="tag" style="--tag-c:var(--gold);">start at 1 &middot; walk clockwise &middot; 6 feeds 1</span>
+        <span class="tag" style="--tag-c:var(--gold);">gold = the gate &middot; a named owner + proof</span>
+        <span style="font-family:var(--font-editorial);font-style:italic;font-size:clamp(12px,1.12vw,15.5px);color:var(--text-dim);">own &rarr; plan &rarr; run many &rarr; prove &rarr; sign &rarr; teach &rarr; <b style="color:var(--gold);font-style:normal;font-weight:600;">repeat</b></span>
+      </div>
+    </div>
+  </section>
+
+  <!-- S06 · THE USE CASE -->
+  <section class="slide" data-act="OPENING" data-act-name="The use case" data-accent="gold"
+           style="justify-content:center;align-items:flex-start;text-align:left;">
+    <div class="aurora aurora--gold" aria-hidden="true"><b></b></div>
+    <div class="reveal" style="position:relative;z-index:2;width:100%;max-width:1720px;margin:0 auto;">
+      <div class="cols" style="--cols:1.12fr 0.88fr;align-items:center;gap:clamp(24px,3.2vw,60px);">
+        <div>
+          <span class="tag" style="--tag-c:var(--gold);">The use case · one explainable incident</span>
+          <h2 class="h2" style="margin-top:clamp(12px,2vh,22px);">A payment platform gets a<br><span style="color:var(--gold);">suspicious merchant</span> report.</h2>
+          <p class="lede" style="max-width:56ch;margin-top:clamp(14px,2.4vh,24px);">
+            Merchant <b>m-007</b> receives 1,209 incident transactions &mdash; mostly Brazilian Real on a USD/EUR-only
+            policy. Your pipeline must <b>quarantine the bad rows</b>, score the merchant, and then prove how one
+            late-but-valid chargeback changes the number. You never call it fraud; you describe <b>observed facts</b>.
+          </p>
+          <div class="callout gold" style="margin-top:clamp(18px,3vh,30px);">
+            <div class="co-kicker">The deliverable</div>
+            <div class="co-body">One Gold view, <b>gold_merchant_risk</b>, where <b>m-007</b> moves from <b>risk 25</b> (normal) to <b>risk 45</b> (elevated) &mdash; with every point traced to a quarantined row or a chargeback.</div>
+          </div>
+        </div>
+        <div>
+          <span class="tag" style="--tag-c:var(--silver);margin-bottom:clamp(11px,1.8vh,19px);">The scale of it</span>
+          <div class="scale">
+            <div class="sc" style="--sc-c:var(--accent);"><div class="sc-n">100k</div><div class="sc-l">transactions, seed <b>22082026</b></div></div>
+            <div class="sc" style="--sc-c:var(--cyan);"><div class="sc-n">4</div><div class="sc-l">entities: merchants, orders, transactions, disputes</div></div>
+            <div class="sc" style="--sc-c:var(--gold);"><div class="sc-n">8</div><div class="sc-l">incident conditions &mdash; seven quarantine, one replay</div></div>
+            <div class="sc" style="--sc-c:var(--green);"><div class="sc-n">1</div><div class="sc-l">Gold view, one merchant-grain number</div></div>
+          </div>
+          <div style="margin-top:clamp(16px,2.6vh,28px);padding-top:clamp(12px,1.9vh,20px);border-top:1px solid var(--rule);">
+            <div class="arith">
+              <div class="ar"><span class="ar-k">baseline batch</span><span class="ar-v">98,791 valid transactions</span></div>
+              <div class="ar"><span class="ar-k">incident batch</span><span class="ar-v">1,209 transactions</span></div>
+              <div class="ar ar--sum"><span class="ar-k">total</span><span class="ar-v">100,000 rows</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- S07 · THE PLATFORM -->
+  <section class="slide" data-act="OPENING" data-act-name="The platform" data-accent="cyan"
+           style="justify-content:center;align-items:flex-start;text-align:left;">
+    <div class="aurora aurora--cyan" aria-hidden="true"><b></b></div>
+    <div class="reveal" style="width:100%;max-width:1680px;margin:0 auto;">
+      <span class="tag kick-tag" style="--tag-c:var(--cyan);">The platform &amp; tools · seven pieces, one workspace</span>
+      <div class="four-col">
+        <div class="req cyan">
+          <div class="req-inner">
+            <div class="req-idx">01</div>
+            <div class="req-name">Lakeflow</div>
+            <div class="req-note">Serverless Spark Declarative Pipelines &mdash; <b>from pyspark import pipelines as dp</b>.</div>
+          </div>
+        </div>
+        <div class="req purple">
+          <div class="req-inner">
+            <div class="req-idx">02</div>
+            <div class="req-name">DQX</div>
+            <div class="req-note">Data Quality Expectations &mdash; the <b>single source</b> of domain-quality behavior.</div>
+          </div>
+        </div>
+        <div class="req green">
+          <div class="req-inner">
+            <div class="req-idx">03</div>
+            <div class="req-name">DABs</div>
+            <div class="req-note">Databricks Asset Bundles &mdash; validate, deploy, run <b>dev</b> from the CLI.</div>
+          </div>
+        </div>
+        <div class="req gold">
+          <div class="req-inner">
+            <div class="req-idx">04</div>
+            <div class="req-name">Unity Catalog</div>
+            <div class="req-note">Catalog, schema, Volume, and <b>lineage</b> for every table and view.</div>
+          </div>
+        </div>
+        <div class="req accent">
+          <div class="req-inner">
+            <div class="req-idx">05</div>
+            <div class="req-name">Genie</div>
+            <div class="req-note">Natural-language answers over Gold and quarantine &mdash; <b>with the SQL shown</b>.</div>
+          </div>
+        </div>
+        <div class="req silver">
+          <div class="req-inner">
+            <div class="req-idx">06</div>
+            <div class="req-name">Agent Skills</div>
+            <div class="req-note">Project-scoped Databricks skills for <b>Claude Code and Codex</b>.</div>
+          </div>
+        </div>
+        <div class="req red">
+          <div class="req-inner">
+            <div class="req-idx">07</div>
+            <div class="req-name">dbldatagen</div>
+            <div class="req-note">Deterministic synthetic data &mdash; <b>seed 22082026</b>, no randomness.</div>
+          </div>
+        </div>
+        <div class="req cyan">
+          <div class="req-inner">
+            <div class="req-idx">08</div>
+            <div class="req-name">Databricks CLI</div>
+            <div class="req-note">One command surface for auth, bundles, pipelines, and Genie &mdash; <b>v1.13.0</b>.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ═══════════════ BUILD ═══════════════ -->
+
+  <!-- S08 · BUILD DIVIDER — the pipeline -->
+  <section class="slide" data-act="BUILD" data-act-name="The pipeline" data-accent="cyan"
+           style="justify-content:center;align-items:flex-start;text-align:left;">
+    <div class="aurora aurora--cyan" aria-hidden="true"><b></b></div>
+    <div class="reveal" style="position:relative;z-index:2;width:100%;max-width:1780px;margin:0 auto;">
+      <span class="tag" style="--tag-c:var(--cyan);">Move 2 of 4 · Build · one serverless pipeline</span>
+      <div class="act-num" style="--an-c:var(--cyan);margin-top:clamp(6px,1.2vh,14px);">02</div>
+      <h2 class="h2" style="margin-top:clamp(4px,0.8vh,10px);max-width:30ch;">
+        From a contract to a <span style="color:var(--cyan);">risk score</span>, in seven stages.
+      </h2>
+      <div class="rpipe" style="margin-top:clamp(24px,3.8vh,42px);">
+        <div class="rst" style="--r-c:var(--accent);"><div class="rst-n">1 · contract</div><div class="rst-t">Payment contract</div><div class="rst-s">four entities, seed, batches</div></div>
+        <div class="rst" style="--r-c:var(--gold);"><div class="rst-n">2 · generate</div><div class="rst-t">dbldatagen</div><div class="rst-s">100k deterministic rows</div></div>
+        <div class="rst" style="--r-c:var(--silver);"><div class="rst-n">3 · volume</div><div class="rst-t">UC managed Volume</div><div class="rst-s">batch-001 + incident</div></div>
+        <div class="rst" style="--r-c:var(--cyan);"><div class="rst-n">4 · bronze</div><div class="rst-t">4 streaming tables</div><div class="rst-s">raw + lineage metadata</div></div>
+        <div class="rst" style="--r-c:var(--purple);"><div class="rst-n">5 · dqx</div><div class="rst-t">Quality checks</div><div class="rst-s">single source of quality</div></div>
+        <div class="rst" style="--r-c:var(--green);"><div class="rst-n">6 · silver</div><div class="rst-t">valid + quarantine</div><div class="rst-s">_errors / _warnings</div></div>
+        <div class="rst" style="--r-c:var(--gold);"><div class="rst-n">7 · gold</div><div class="rst-t">merchant risk</div><div class="rst-s">gold_merchant_risk</div></div>
+      </div>
+      <div class="callout cyan" style="margin-top:clamp(24px,3.6vh,40px);">
+        <div class="co-kicker">Then · the delivery layer</div>
+        <div class="co-body"><b>DABs</b> deploy the pipeline to dev &rarr; <b>Unity Catalog</b> records lineage &rarr; <b>Genie</b> answers the four contract questions.</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- S09 · THE FOUR ENTITIES -->
+  <section class="slide" data-act="BUILD" data-act-name="Four entities" data-accent="cyan"
+           style="justify-content:center;align-items:flex-start;text-align:left;">
+    <div class="aurora aurora--cyan" aria-hidden="true"><b></b></div>
+    <div class="reveal" style="position:relative;z-index:2;width:100%;max-width:1720px;margin:0 auto;">
+      <span class="tag kick-tag" style="--tag-c:var(--cyan);">The domain model · only the fields the story needs</span>
+      <div class="four-col">
+        <div class="req cyan">
+          <div class="req-inner">
+            <div class="req-idx">merchants</div>
+            <div class="req-name">Merchants</div>
+            <div class="req-note"><b>PK</b> merchant_id · merchant_name · country · <b>risk_tier</b></div>
+          </div>
+        </div>
+        <div class="req accent">
+          <div class="req-inner">
+            <div class="req-idx">orders</div>
+            <div class="req-name">Orders</div>
+            <div class="req-note"><b>PK</b> order_id · <b>FK</b> merchant_id · order_ts · amount_cents · currency</div>
+          </div>
+        </div>
+        <div class="req gold">
+          <div class="req-inner">
+            <div class="req-idx">transactions</div>
+            <div class="req-name">Transactions</div>
+            <div class="req-note"><b>PK</b> txn_id · <b>FK</b> order_id, merchant_id · processor · status · amount_cents</div>
+          </div>
+        </div>
+        <div class="req red">
+          <div class="req-inner">
+            <div class="req-idx">disputes</div>
+            <div class="req-name">Disputes</div>
+            <div class="req-note"><b>PK</b> dispute_id · <b>FK</b> txn_id · opened_at · closed_at · reason · status</div>
+          </div>
+        </div>
+      </div>
+      <div class="section-rule">relationship</div>
+      <div class="jrn">
+        <div class="jst" style="--j-c:var(--cyan);"><div class="jst-n">1</div><div class="jst-t">Merchant</div><div class="jst-s">receives many orders</div></div>
+        <div class="jst" style="--j-c:var(--accent);"><div class="jst-n">2</div><div class="jst-t">Order</div><div class="jst-s">is paid by exactly one transaction</div></div>
+        <div class="jst" style="--j-c:var(--gold);"><div class="jst-n">3</div><div class="jst-t">Transaction</div><div class="jst-s">can be challenged by disputes</div></div>
+        <div class="jst" style="--j-c:var(--red);"><div class="jst-n">4</div><div class="jst-t">Dispute</div><div class="jst-s">closes after it opens &mdash; or it's quarantined</div></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- S10 · THE CONTRACT -->
+  <section class="slide" data-act="BUILD" data-act-name="The data contract" data-accent="accent"
+           style="justify-content:center;align-items:flex-start;text-align:left;">
+    <div class="aurora aurora--accent" aria-hidden="true"><b></b></div>
+    <div class="reveal" style="position:relative;z-index:2;width:100%;max-width:1680px;margin:0 auto;">
+      <span class="tag kick-tag" style="--tag-c:var(--accent);">The data promise · configs/contracts/psp-payment.contract.yaml</span>
+      <div class="cols" style="--cols:1.05fr 0.95fr;align-items:stretch;gap:clamp(20px,2.6vw,44px);">
+        <div class="cmac">
+          <div class="cmac-bar"><div class="cmac-dots"><i style="background:#ff5f56;"></i><i style="background:#ffbd2e;"></i><i style="background:#27c93f;"></i></div><span style="font-family:var(--font-mono);font-size:11px;color:var(--text-dim);">psp-payment.contract.yaml</span></div>
+          <div class="cmac-body">
+            <div class="code-block" data-lang="contract" style="border:0;background:transparent;padding:0;">
+<span class="c"># the deterministic data promise</span>
+<span class="k">contract</span>:          PSPPaymentContract/v1
+<span class="k">seed</span>:               <span class="n">22082026</span>
+<span class="k">transaction_count</span>:  <span class="n">100000</span>
+<span class="k">focus_merchant</span>:     m-007
+<span class="k">allowed_currencies</span>: [USD, EUR]
+<span class="k">allowed_processors</span>: [stripe, adyen]
+<span class="k">entities</span>: [merchants, orders, transactions, disputes]
+            </div>
+          </div>
+        </div>
+        <div>
+          <span class="tag" style="--tag-c:var(--silver);margin-bottom:clamp(11px,1.8vh,19px);">Two deterministic batches</span>
+          <div class="dif">
+            <div class="dcard" style="--dc:var(--green);">
+              <div class="dc-head"><span class="dc-dot" aria-hidden="true"></span><span class="dc-name">batch-001</span><span class="dc-batch">healthy baseline</span></div>
+              <div class="dc-body">
+                <div class="dc-well"><span class="dim">transactions</span>  <span class="ch">98,791</span>  <span class="dim">valid · establish the baseline</span></div>
+              </div>
+            </div>
+            <div class="dcard" style="--dc:var(--red);">
+              <div class="dc-head"><span class="dc-dot" aria-hidden="true"></span><span class="dc-name">batch-002-incident</span><span class="dc-batch">seven quarantines + one replay</span></div>
+              <div class="dc-body">
+                <div class="dc-well"><span class="dim">transactions</span>  <span class="ch">1,209</span>  <span class="dim">1,204 BRL + five sentinels + one held chargeback</span></div>
+              </div>
+            </div>
+          </div>
+          <p class="ts-note" style="margin-top:clamp(14px,2.2vh,24px);">Checkpoint: <b>why is the late chargeback valid data, while the temporal dispute is quarantined?</b></p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- S11 · THE AGENT CONTRACT -->
+  <section class="slide" data-act="BUILD" data-act-name="The agent contract" data-accent="red"
+           style="justify-content:center;align-items:flex-start;text-align:left;">
+    <div class="aurora aurora--red" aria-hidden="true"><b></b></div>
+    <div class="reveal" style="position:relative;z-index:2;width:100%;max-width:1680px;margin:0 auto;">
+      <span class="tag kick-tag" style="--tag-c:var(--red);">The fence · configs/contracts/agent-contract.yaml</span>
+      <div class="cols" style="--cols:1.02fr 0.98fr;gap:clamp(24px,3vw,56px);align-items:stretch;">
+        <div>
+          <h2 class="h2" style="font-size:clamp(24px,3.2vw,44px);">The agent may act. It may not <span style="color:var(--red);">cross the fence.</span></h2>
+          <div class="wh-row"><span class="wh-num">1</span><div><div class="wh-rule">Begin in <b>plan</b> mode &mdash; propose, don't deploy</div><div class="wh-why">approve the plan before any edit or remote mutation</div></div></div>
+          <div class="wh-row"><span class="wh-num">2</span><div><div class="wh-rule">Target <b>dev</b> only &mdash; no prd, no schedules, no service principals</div><div class="wh-why">the reset may touch only the exact workshop bundle and schema</div></div></div>
+          <div class="wh-row"><span class="wh-num">3</span><div><div class="wh-rule">Never <b>ON VIOLATION DROP ROW</b> &mdash; preserve every invalid row</div><div class="wh-why">quarantine carries _errors and _warnings; nothing is deleted</div></div></div>
+          <div class="wh-row"><span class="wh-num">4</span><div><div class="wh-rule">Keep <b>pipelines/src/psp-analytics/**</b> read-only</div><div class="wh-why">the advanced reference is context, not the build target</div></div></div>
+        </div>
+        <div class="cmac">
+          <div class="cmac-bar"><div class="cmac-dots"><i style="background:#ff5f56;"></i><i style="background:#ffbd2e;"></i><i style="background:#27c93f;"></i></div><span style="font-family:var(--font-mono);font-size:11px;color:var(--text-dim);">agent-contract.yaml · writable scope</span></div>
+          <div class="cmac-body">
+            <div class="etree" style="border:0;background:transparent;">
+<span class="et-hi">writable:</span>
+  configs/**
+  gen/synthetic/**
+  pipelines/src/<span class="et-hi">psp-agentic</span>/**
+  pipelines/resources/agentic/**
+  docs/** · tests/** · data/fallback/**
+<span class="et-dim"># ── protected ──────────────────────</span>
+  pipelines/src/<span class="et-dim">psp-analytics</span>/**   <span class="et-dim">· keep unchanged</span>
+  pipelines/resources/psp_*.yml
+  gen/psp.json
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- S12 · STEP 1 — GENERATE -->
+  <section class="slide" data-act="BUILD" data-act-name="Step 1 · Generate" data-accent="gold">
+    <span class="demo-live">Demo · Live</span>
+    <div class="aurora aurora--gold" aria-hidden="true"><b></b></div>
+    <div class="reveal" style="position:relative;z-index:2;width:100%;max-width:1680px;margin:0 auto;">
+      <span class="tag kick-tag" style="--tag-c:var(--gold);">Step 1 · Generate the deterministic story · dbldatagen</span>
+      <div class="cols" style="--cols:1.05fr 0.95fr;align-items:stretch;gap:clamp(18px,2.2vw,36px);">
+        <div class="code-block" data-lang="terminal">
+<span class="c"># seed is fixed in the contract — no randomness</span>
+$ ./scripts/generate_fallback.sh
+$ uv run python -m json.tool data/fallback/manifest.json | head -60
+
+<span class="g">✓ seed 22082026 · 12 merchants · 100,000 orders</span>
+<span class="g">✓ 100,000 transactions · 102 disputes</span>
+<span class="g">✓ 98,791 baseline + 1,209 incident</span>
+        </div>
+        <div>
+          <span class="tag" style="--tag-c:var(--silver);margin-bottom:clamp(9px,1.5vh,15px);">The eight incident conditions</span>
+          <div class="rules" style="grid-template-columns:1fr 1fr;">
+            <div class="rl"><span class="ct-k" style="--ck:var(--red);">1</span><span class="rl-v">txn_id is <b>null</b></span></div>
+            <div class="rl"><span class="ct-k" style="--ck:var(--red);">2</span><span class="rl-v">duplicate txn_id</span></div>
+            <div class="rl"><span class="ct-k" style="--ck:var(--red);">3</span><span class="rl-v">amount_cents &le; 0</span></div>
+            <div class="rl"><span class="ct-k" style="--ck:var(--red);">4</span><span class="rl-v"><b>BRL</b> unauthorized &middot; 1,204 rows</span></div>
+            <div class="rl"><span class="ct-k" style="--ck:var(--red);">5</span><span class="rl-v">unknown processor</span></div>
+            <div class="rl"><span class="ct-k" style="--ck:var(--red);">6</span><span class="rl-v">orphan order_id</span></div>
+            <div class="rl"><span class="ct-k" style="--ck:var(--red);">7</span><span class="rl-v">dispute closes before open</span></div>
+            <div class="rl rl--hot"><span class="ct-k" style="--ck:var(--gold);">8</span><span class="rl-v"><b>late valid chargeback</b> &middot; held for replay</span></div>
+          </div>
+          <div class="callout red" style="margin-top:clamp(14px,2.2vh,24px);">
+            <div class="co-kicker">The distinction</div>
+            <div class="co-body">Conditions <b>1&ndash;7</b> are invalid &rarr; quarantine. Condition <b>8</b> is valid but late &rarr; held, then replayed.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- S13 · STEP 2 — BRONZE -->
+  <section class="slide" data-act="BUILD" data-act-name="Step 2 · Bronze" data-accent="cyan">
+    <div class="aurora aurora--cyan" aria-hidden="true"><b></b></div>
+    <div class="reveal" style="position:relative;z-index:2;width:100%;max-width:1720px;margin:0 auto;">
+      <span class="tag kick-tag" style="--tag-c:var(--cyan);">Step 2 · Bronze · four streaming tables with lineage</span>
+      <div class="plant" style="margin-top:clamp(18px,3vh,30px);">
+        <div class="pst" style="--p-c:var(--cyan);"><div class="pst-in"><div class="pst-k">bronze_merchants</div><div class="pst-t">Merchants</div><div class="pst-s">raw rows, nothing dropped</div></div></div>
+        <div class="pst" style="--p-c:var(--accent);"><div class="pst-in"><div class="pst-k">bronze_orders</div><div class="pst-t">Orders</div><div class="pst-s">file stream from Volume</div></div></div>
+        <div class="pst" style="--p-c:var(--gold);"><div class="pst-in"><div class="pst-k">bronze_transactions</div><div class="pst-t">Transactions</div><div class="pst-s">the incident lives here</div></div></div>
+        <div class="pst" style="--p-c:var(--red);"><div class="pst-in"><div class="pst-k">bronze_disputes</div><div class="pst-t">Disputes</div><div class="pst-s">opened / closed timestamps</div></div></div>
+      </div>
+      <div class="callout cyan" style="margin-top:clamp(20px,3.2vh,34px);">
+        <div class="co-kicker">Every Bronze row keeps its receipt</div>
+        <div class="co-body"><b>_batch_id</b> · <b>_source_file</b> · <b>_ingested_at</b> · <b>_rescued_data</b> &mdash; lineage is a first-class column, not an afterthought.</div>
+      </div>
+      <div class="code-block" data-lang="verify" style="margin-top:clamp(14px,2.2vh,24px);">
+<span class="c"># prove the graph, not the rows — a dry-run proves construction</span>
+$ ./scripts/sdp.sh dry-run --spec pipelines/spark-pipeline.yaml
+<span class="g">✓ graph resolves · four Bronze nodes · exit 0</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- S14 · STEP 3 — DQX + SILVER -->
+  <section class="slide" data-act="BUILD" data-act-name="Step 3 · DQX + Silver" data-accent="purple">
+    <div class="aurora aurora--purple" aria-hidden="true"><b></b></div>
+    <div class="reveal" style="position:relative;z-index:2;width:100%;max-width:1720px;margin:0 auto;">
+      <span class="tag kick-tag" style="--tag-c:var(--purple);">Step 3 · DQX + Silver · route quality, preserve the bad</span>
+      <div class="cols" style="--cols:1.05fr 0.95fr;align-items:stretch;gap:clamp(20px,2.6vw,44px);">
+        <div>
+          <div class="three-col" style="grid-template-columns:1fr;">
+            <div class="card green" style="margin-bottom:clamp(14px,2vh,22px);">
+              <div class="card-inner">
+                <span class="tag" style="--tag-c:var(--green);">valid &rarr; Silver</span>
+                <div class="db-h grad">silver_* tables</div>
+                <p class="db-p">Rows that pass every DQX rule continue to the <b>silver_transactions</b> and <b>silver_disputes</b> tables.</p>
+              </div>
+            </div>
+            <div class="card red">
+              <div class="card-inner">
+                <span class="tag" style="--tag-c:var(--red);">invalid &rarr; Quarantine</span>
+                <div class="db-h grad">quarantine_* tables</div>
+                <p class="db-p">Rows that fail stay queryable with <b>_errors</b> and <b>_warnings</b> &mdash; never silently dropped.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="cmac">
+          <div class="cmac-bar"><div class="cmac-dots"><i style="background:#ff5f56;"></i><i style="background:#ffbd2e;"></i><i style="background:#27c93f;"></i></div><span style="font-family:var(--font-mono);font-size:11px;color:var(--text-dim);">configs/dqx-rules.yaml</span></div>
+          <div class="cmac-body">
+            <div class="etree" style="border:0;background:transparent;">
+<span class="et-dim">transactions:</span>
+  <span class="et-hi">txn_id_not_null</span>
+  <span class="et-hi">txn_id_unique</span>
+  <span class="et-hi">amount_positive</span>
+  <span class="et-hi">currency_allowed</span>      <span class="et-dim"># USD | EUR</span>
+  <span class="et-hi">processor_known</span>       <span class="et-dim"># stripe | adyen</span>
+  <span class="et-hi">order_exists</span>
+<span class="et-dim">disputes:</span>
+  <span class="et-hi">closed_after_opened</span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="callout red" style="margin-top:clamp(16px,2.6vh,28px);">
+        <div class="co-kicker">The contract test</div>
+        <div class="co-body"><b>rg "ON VIOLATION DROP ROW"</b> in the workshop pipeline must print <b>nothing</b>. Do not fix bad input by deleting it.</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- S15 · STEP 4 — GOLD -->
+  <section class="slide" data-act="BUILD" data-act-name="Step 4 · Gold" data-accent="gold">
+    <div class="aurora aurora--gold" aria-hidden="true"><b></b></div>
+    <div class="reveal" style="position:relative;z-index:2;width:100%;max-width:1680px;margin:0 auto;">
+      <span class="tag kick-tag" style="--tag-c:var(--gold);">Step 4 · Gold · one merchant-grain risk score</span>
+      <div class="cols" style="--cols:0.95fr 1.05fr;align-items:center;gap:clamp(22px,3vw,56px);">
+        <div class="code-block" data-lang="gold.py">
+<span class="c"># pipelines/src/psp-agentic/gold.py</span>
+<span class="k">quality_risk_score</span>     = ceil(quarantine_count / <span class="n">50</span>)
+<span class="k">chargeback_risk_points</span> = chargeback_count * <span class="n">20</span>
+<span class="k">risk_score</span>             = min(<span class="n">100</span>, quality + chargeback)
+        </div>
+        <div>
+          <span class="tag" style="--tag-c:var(--silver);margin-bottom:clamp(11px,1.8vh,19px);">gold_merchant_risk · m-007</span>
+          <div class="arith">
+            <div class="ar"><span class="ar-k">quarantined transactions</span><span class="ar-v">1,209</span></div>
+            <div class="ar"><span class="ar-k">quality points · ceil(1209 / 50)</span><span class="ar-v">25</span></div>
+            <div class="ar"><span class="ar-k">chargebacks · baseline</span><span class="ar-v">0 &rarr; 0 pts</span></div>
+            <div class="ar ar--sum"><span class="ar-k">risk score · before replay</span><span class="ar-v">25 · normal</span></div>
+            <div class="ar ar--delta"><span class="ar-k">+ 1 valid chargeback (replay)</span><span class="ar-v">45 · elevated</span></div>
+          </div>
+          <div class="callout gold" style="margin-top:clamp(16px,2.6vh,28px);">
+            <div class="co-kicker">Explainable by design</div>
+            <div class="co-body">Every point maps to a quarantined row or a chargeback. <b>No black box &mdash; the components are columns.</b></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- S16 · EVIDENCE LADDER -->
+  <section class="slide" data-act="BUILD" data-act-name="Evidence ladder" data-accent="green"
+           style="justify-content:center;align-items:flex-start;text-align:left;">
+    <div class="aurora aurora--green" aria-hidden="true"><b></b></div>
+    <div class="reveal" style="position:relative;z-index:2;width:100%;max-width:1680px;margin:0 auto;">
+      <span class="tag kick-tag" style="--tag-c:var(--green);">The evidence ladder · one command, five meanings</span>
+      <div class="gmx">
+        <div class="gmx-head">
+          <span class="gmx-k">Evidence rung</span>
+          <span class="gmx-state">proves</span>
+          <span class="gmx-state">graph</span>
+          <span class="gmx-state">rows</span>
+          <span class="gmx-state">workspace</span>
+        </div>
+        <div class="gmx-row"><div class="gmx-id">local dry-run<small>./scripts/sdp.sh dry-run</small></div><div class="gmx-cell"><span class="gmx-mark is-pass">&#10003;</span></div><div class="gmx-cell"><span class="gmx-mark is-pass">&#10003;</span></div><div class="gmx-cell"><span class="gmx-mark is-none">&ndash;</span></div><div class="gmx-cell"><span class="gmx-mark is-none">&ndash;</span></div></div>
+        <div class="gmx-row"><div class="gmx-id">remote dry-run<small>databricks pipelines dry-run</small></div><div class="gmx-cell"><span class="gmx-mark is-pass">&#10003;</span></div><div class="gmx-cell"><span class="gmx-mark is-pass">&#10003;</span></div><div class="gmx-cell"><span class="gmx-mark is-none">&ndash;</span></div><div class="gmx-cell"><span class="gmx-mark is-pass">&#10003;</span></div></div>
+        <div class="gmx-row"><div class="gmx-id">deployed<small>databricks bundle deploy</small></div><div class="gmx-cell"><span class="gmx-mark is-pass">&#10003;</span></div><div class="gmx-cell"><span class="gmx-mark is-none">&ndash;</span></div><div class="gmx-cell"><span class="gmx-mark is-none">&ndash;</span></div><div class="gmx-cell"><span class="gmx-mark is-pass">&#10003;</span></div></div>
+        <div class="gmx-row"><div class="gmx-id">live runtime<small>databricks bundle run</small></div><div class="gmx-cell"><span class="gmx-mark is-pass">&#10003;</span></div><div class="gmx-cell"><span class="gmx-mark is-none">&ndash;</span></div><div class="gmx-cell"><span class="gmx-mark is-pass">&#10003;</span></div><div class="gmx-cell"><span class="gmx-mark is-pass">&#10003;</span></div></div>
+        <div class="gmx-row"><div class="gmx-id">replay<small>release_incident --remote</small></div><div class="gmx-cell"><span class="gmx-mark is-pass">&#10003;</span></div><div class="gmx-cell"><span class="gmx-mark is-none">&ndash;</span></div><div class="gmx-cell"><span class="gmx-mark is-pass">&#10003;</span></div><div class="gmx-cell"><span class="gmx-mark is-pass">&#10003;</span></div></div>
+      </div>
+      <p class="gmeaning">A local pass does not prove your workspace can deploy. <b>Name the rung, keep the evidence separate.</b></p>
+    </div>
+  </section>
+
+
+  <!-- ═══════════════ DEPLOY ═══════════════ -->
+
+  <!-- S17 · DEPLOY DIVIDER -->
+  <section class="slide" data-act="DEPLOY" data-act-name="Deploy" data-accent="green"
+           style="justify-content:center;align-items:flex-start;text-align:left;">
+    <div class="aurora aurora--green" aria-hidden="true"><b></b></div>
+    <div class="reveal" style="position:relative;z-index:2;width:100%;max-width:1780px;margin:0 auto;">
+      <div class="cols" style="--cols:1.05fr 0.95fr;align-items:center;gap:clamp(24px,3.4vw,72px);">
+        <div>
+          <span class="tag" style="--tag-c:var(--green);">Move 3 of 4 · Deploy · DABs to dev</span>
+          <div class="act-num" style="--an-c:var(--green);margin-top:clamp(6px,1.2vh,14px);">03</div>
+          <h2 class="h2" style="margin-top:clamp(4px,0.8vh,10px);">
+            One bundle, one target,<br>every change <span style="color:var(--green);">tracked.</span>
+          </h2>
+          <p class="lede" style="max-width:54ch;margin-top:clamp(14px,2.4vh,24px);">
+            Databricks Asset Bundles version your workspace as code. <b>Strict-validate</b> before you deploy,
+            <b>dry-run</b> the hosted graph, then <b>run</b> the serverless pipeline. Read the active profile aloud &mdash; you are about to mutate a workspace.
+          </p>
+        </div>
+        <div>
+          <span class="tag" style="--tag-c:var(--silver);margin-bottom:clamp(9px,1.5vh,15px);">The deploy sequence</span>
+          <div class="code-block cb-green" data-lang="terminal">
+<span class="c"># pause — confirm your own workspace first</span>
+$ databricks auth profiles
+$ databricks current-user me -p "$DATABRICKS_CONFIG_PROFILE"
+
+$ databricks bundle <span class="g">validate</span> --strict -t dev
+$ databricks bundle <span class="g">deploy</span>   -t dev
+$ databricks pipelines <span class="g">dry-run</span> workshop_pipeline -t dev
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- S18 · RUN + UNITY CATALOG -->
+  <section class="slide" data-act="DEPLOY" data-act-name="Run + UC" data-accent="green">
+    <span class="demo-live">Demo · Live</span>
+    <div class="aurora aurora--green" aria-hidden="true"><b></b></div>
+    <div class="reveal" style="position:relative;z-index:2;width:100%;max-width:1680px;margin:0 auto;">
+      <span class="tag kick-tag" style="--tag-c:var(--green);">Deploy &amp; run · the live runtime evidence</span>
+      <div class="cols" style="--cols:1.02fr 0.98fr;align-items:stretch;gap:clamp(18px,2.4vw,40px);">
+        <div class="code-block cb-green" data-lang="terminal">
+<span class="c"># upload the generated baseline, then run</span>
+$ ./scripts/upload_fallback.sh baseline
+$ databricks bundle run workshop_pipeline -t dev --full-refresh-all
+
+<span class="c"># assert the hosted baseline</span>
+$ ./scripts/verify_remote_data.sh baseline
+<span class="g">✓ m-007 risk_score=25 risk_band=normal</span>
+        </div>
+        <div>
+          <span class="tag" style="--tag-c:var(--silver);margin-bottom:clamp(9px,1.5vh,15px);">Unity Catalog · one teachable namespace</span>
+          <div class="substrip" style="grid-template-columns:1fr;margin-bottom:0;">
+            <div class="subcell" style="--sb-c:var(--green);"><div class="sb-ic">&#9632;</div><div class="sb-k">catalog</div><div class="sb-v"><b>workspace</b> &middot; default Free Edition</div></div>
+            <div class="subcell" style="--sb-c:var(--cyan);"><div class="sb-ic">&#9632;</div><div class="sb-k">schema</div><div class="sb-v"><b>dbx_agentic_dev</b> &middot; isolated, stable</div></div>
+            <div class="subcell" style="--sb-c:var(--gold);"><div class="sb-ic">&#9632;</div><div class="sb-k">volume</div><div class="sb-v"><b>landing</b> &middot; managed JSON batches</div></div>
+          </div>
+          <div class="callout green" style="margin-top:clamp(12px,2vh,22px);">
+            <div class="co-kicker">Lineage &amp; table comments</div>
+            <div class="co-body">Bronze &rarr; Silver &rarr; Gold lineage is recorded in UC, with <b>comments on every table</b> &mdash; the evidence is inspectable, not just asserted.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ═══════════════ REPLAY ═══════════════ -->
+
+  <!-- S19 · REPLAY DIVIDER -->
+  <section class="slide" data-act="REPLAY" data-act-name="The replay" data-accent="gold"
+           style="justify-content:center;align-items:flex-start;text-align:left;">
+    <div class="aurora aurora--gold" aria-hidden="true"><b></b></div>
+    <div class="reveal" style="position:relative;z-index:2;width:100%;max-width:1780px;margin:0 auto;">
+      <span class="tag" style="--tag-c:var(--gold);">Move 4 of 4 · Replay · the incident is released</span>
+      <div class="act-num" style="--an-c:var(--gold);margin-top:clamp(6px,1.2vh,14px);">04</div>
+      <h2 class="h2" style="margin-top:clamp(4px,0.8vh,10px);max-width:32ch;">
+        A valid chargeback arrives <span style="color:var(--gold);">late.</span> Now the number moves.
+      </h2>
+      <p class="lede" style="max-width:58ch;margin-top:clamp(14px,2.4vh,24px);">
+        The held <b>late-valid-chargeback</b> is replayed into the pipeline. It passes Silver &mdash; it's valid data &mdash; and lands as a chargeback in Gold. <b>m-007 moves from 25 to 45, one explainable component at a time.</b>
+      </p>
+      <div class="code-block" data-lang="terminal" style="margin-top:clamp(18px,3vh,32px);max-width:920px;">
+$ ./scripts/release_incident.sh --remote
+$ ./scripts/verify_remote_data.sh replay
+<span class="g">✓ m-007 risk_score=45 risk_band=elevated · chargeback_count 0 &rarr; 1</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- S20 · BEFORE / AFTER -->
+  <section class="slide" data-act="REPLAY" data-act-name="Before & after" data-accent="gold">
+    <div class="aurora aurora--gold" aria-hidden="true"><b></b></div>
+    <div class="reveal" style="position:relative;z-index:2;width:100%;max-width:1680px;margin:0 auto;">
+      <span class="tag kick-tag" style="--tag-c:var(--gold);">The delta · m-007, before and after</span>
+      <div class="cols" style="--cols:1fr 1fr 0.7fr;align-items:stretch;gap:clamp(16px,2vw,32px);">
+        <div class="dcard" style="--dc:var(--green);">
+          <div class="dc-head"><span class="dc-dot" aria-hidden="true"></span><span class="dc-name">baseline</span><span class="dc-batch">before replay</span></div>
+          <div class="dc-body">
+            <div class="dc-foot"><span class="dc-val">25</span><span class="dc-say"><b>normal</b> &middot; 1,209 quarantined &middot; 0 chargebacks</span></div>
+            <div class="arith" style="margin-top:clamp(12px,1.9vh,18px);">
+              <div class="ar"><span class="ar-k">quality · ceil(1209/50)</span><span class="ar-v">25</span></div>
+              <div class="ar"><span class="ar-k">chargeback pts</span><span class="ar-v">0</span></div>
+              <div class="ar ar--sum"><span class="ar-k">risk</span><span class="ar-v">25</span></div>
+            </div>
+          </div>
+        </div>
+        <div class="dcard" style="--dc:var(--red);">
+          <div class="dc-head"><span class="dc-dot" aria-hidden="true"></span><span class="dc-name">replay</span><span class="dc-batch">after the late chargeback</span></div>
+          <div class="dc-body">
+            <div class="dc-foot"><span class="dc-val">45</span><span class="dc-say"><b>elevated</b> &middot; +1 valid chargeback &middot; quality unchanged</span></div>
+            <div class="arith" style="margin-top:clamp(12px,1.9vh,18px);">
+              <div class="ar"><span class="ar-k">quality · ceil(1209/50)</span><span class="ar-v">25</span></div>
+              <div class="ar"><span class="ar-k">chargeback pts · 1 &times; 20</span><span class="ar-v">20</span></div>
+              <div class="ar ar--sum"><span class="ar-k">risk</span><span class="ar-v">45</span></div>
+            </div>
+          </div>
+        </div>
+        <div>
+          <span class="tag" style="--tag-c:var(--silver);margin-bottom:clamp(9px,1.5vh,15px);">The meaning</span>
+          <div class="rulequote">The late chargeback is <b>valid data</b> &mdash; it belongs in Silver and Gold. The temporal dispute is <b>invalid</b> &mdash; it belongs in quarantine. Quality and risk are two different axes.</div>
+          <div class="callout gold" style="margin-top:clamp(14px,2.2vh,24px);">
+            <div class="co-kicker">Never say</div>
+            <div class="co-body">&ldquo;m-007 committed fraud.&rdquo; Say: <b>m-007 has 1,209 quarantined transactions and one chargeback.</b></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- S21 · GENIE -->
+  <section class="slide" data-act="REPLAY" data-act-name="Genie" data-accent="purple">
+    <div class="aurora aurora--purple" aria-hidden="true"><b></b></div>
+    <div class="reveal" style="position:relative;z-index:2;width:100%;max-width:1680px;margin:0 auto;">
+      <span class="tag kick-tag" style="--tag-c:var(--purple);">Genie · four bounded questions, SQL shown</span>
+      <div class="four-col" style="grid-template-columns:repeat(2,1fr);">
+        <div class="card purple"><div class="card-inner">
+          <span class="tag" style="--tag-c:var(--purple);">Q1</span>
+          <div class="db-h grad">Which merchant has the highest risk score?</div>
+          <p class="db-p">And which observed facts explain it &mdash; <b>m-007</b>, 1,209 quarantined rows.</p>
+        </div></div>
+        <div class="card cyan"><div class="card-inner">
+          <span class="tag" style="--tag-c:var(--cyan);">Q2</span>
+          <div class="db-h grad">How many BRL transactions were rejected?</div>
+          <p class="db-p"><b>1,204</b>, all received by the same merchant.</p>
+        </div></div>
+        <div class="card gold"><div class="card-inner">
+          <span class="tag" style="--tag-c:var(--gold);">Q3</span>
+          <div class="db-h grad">Summarize the quarantine reasons.</div>
+          <p class="db-p">Seven categories across transactions and disputes, with row counts.</p>
+        </div></div>
+        <div class="card red"><div class="card-inner">
+          <span class="tag" style="--tag-c:var(--red);">Q4</span>
+          <div class="db-h grad">What changed after the replay?</div>
+          <p class="db-p">risk 25 &rarr; <b>45</b> &middot; chargeback_count 0 &rarr; <b>1</b>.</p>
+        </div></div>
+      </div>
+      <div class="callout purple" style="margin-top:clamp(18px,3vh,30px);">
+        <div class="co-kicker">Genie is evidence, not inference</div>
+        <div class="co-body">Every answer is tied to <b>gold_merchant_risk</b> or a quarantine table &mdash; and the <b>SQL is inspectable</b>. Genie reports observed facts; it never invents a fraud verdict.</div>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ═══════════════ CLOSE ═══════════════ -->
+
+  <!-- S22 · EVIDENCE WALKTHROUGH -->
+  <section class="slide" data-act="CLOSE" data-act-name="Delivery" data-accent="green">
+    <div class="aurora aurora--green" aria-hidden="true"><b></b></div>
+    <div class="reveal" style="position:relative;z-index:2;width:100%;max-width:1380px;margin:0 auto;">
+      <span class="tag kick-tag" style="--tag-c:var(--green);">Delivery · the three-minute evidence walkthrough</span>
+      <ul class="xlist">
+        <li class="xli"><span class="xbox"><svg viewBox="0 0 24 24" fill="none"><path d="M5 13l4 4L19 7" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span class="xt">Show the <b>agent contract</b> and name one forbidden action.</span></li>
+        <li class="xli"><span class="xbox"><svg viewBox="0 0 24 24" fill="none"><path d="M5 13l4 4L19 7" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span class="xt">Show the <b>four-node Bronze</b> intake and one lineage column.</span></li>
+        <li class="xli"><span class="xbox"><svg viewBox="0 0 24 24" fill="none"><path d="M5 13l4 4L19 7" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span class="xt">Show one <b>DQX error preserved</b> in quarantine.</span></li>
+        <li class="xli"><span class="xbox"><svg viewBox="0 0 24 24" fill="none"><path d="M5 13l4 4L19 7" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span class="xt">Show <b>gold_merchant_risk</b> before/after for m-007.</span></li>
+        <li class="xli"><span class="xbox"><svg viewBox="0 0 24 24" fill="none"><path d="M5 13l4 4L19 7" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span class="xt">Show one <b>Genie answer and its SQL</b>.</span></li>
+        <li class="xli"><span class="xbox"><svg viewBox="0 0 24 24" fill="none"><path d="M5 13l4 4L19 7" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span class="xt">State which evidence is <b>local, deployed, live runtime, or fallback</b>.</span></li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- S23 · WHAT THIS WAS NOT -->
+  <section class="slide" data-act="CLOSE" data-act-name="The fence" data-accent="red">
+    <div class="aurora aurora--red" aria-hidden="true"><b></b></div>
+    <div class="reveal" style="position:relative;z-index:2;width:100%;max-width:1680px;margin:0 auto;">
+      <span class="tag kick-tag" style="--tag-c:var(--red);">The fence · what this session was not</span>
+      <div class="four-col">
+        <div class="card red"><div class="card-inner"><span class="not-x">&#10007;</span><div class="db-h grad">Not fraud detection</div><p class="db-p">We describe observed data-quality and dispute evidence. We never infer guilt.</p></div></div>
+        <div class="card red"><div class="card-inner"><span class="not-x">&#10007;</span><div class="db-h grad">Not production</div><p class="db-p">No prd resources, schedules, service principals, or classic compute. <b>dev only.</b></p></div></div>
+        <div class="card red"><div class="card-inner"><span class="not-x">&#10007;</span><div class="db-h grad">Not drop-and-forget</div><p class="db-p">Invalid rows are preserved. <b>ON VIOLATION DROP ROW</b> has no home here.</p></div></div>
+        <div class="card red"><div class="card-inner"><span class="not-x">&#10007;</span><div class="db-h grad">Not the reference</div><p class="db-p"><b>pipelines/src/psp-analytics/**</b> stays read-only &mdash; context, not the target.</p></div></div>
+      </div>
+      <div class="callout gold" style="margin-top:clamp(20px,3.2vh,34px);">
+        <div class="co-kicker">The final gate</div>
+        <div class="co-body">Finish with <b>./scripts/verify.sh --remote</b> &rarr; the last line reads <b>VERIFY=PASS mode=--remote</b>.</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- S24 · NEXT + EXIT -->
+  <section class="slide" data-act="CLOSE" data-act-name="Next" data-accent="purple">
+    <div class="aurora aurora--purple" aria-hidden="true"><b></b></div>
+    <div class="reveal" style="position:relative;z-index:2;width:100%;max-width:1680px;margin:0 auto;">
+      <span class="tag kick-tag" style="--tag-c:var(--purple);">Next steps · the door stays open</span>
+      <div class="cols" style="--cols:1fr 1fr;align-items:stretch;gap:clamp(18px,2.4vw,40px);">
+        <div>
+          <h2 class="h2" style="font-size:clamp(24px,3.2vw,44px);">Where this goes from here</h2>
+          <div class="hw-rail">
+            <li class="hw-i"><span class="hw-n">01</span><span class="hw-t">The advanced PSP reference &mdash; seven entities, 22 resources &mdash; is optional <span class="dim">after-workshop context</span>.</span></li>
+            <li class="hw-i"><span class="hw-n">02</span><span class="hw-t">Rehearse the same story in a <b>clean clone</b> to make it yours.</span></li>
+            <li class="hw-i"><span class="hw-n">03</span><span class="hw-t">Swap the incident &mdash; <span class="dim">new bad rows, new ledger entries, new risk delta</span>.</span></li>
+          </div>
+        </div>
+        <div>
+          <h2 class="h2" style="font-size:clamp(24px,3.2vw,44px);">Cleanup is after delivery</h2>
+          <div class="code-block" data-lang="terminal" style="margin-top:clamp(14px,2.2vh,24px);">
+<span class="c"># destructive &mdash; scoped to the exact dev bundle + schema</span>
+$ export DATABRICKS_WAREHOUSE_ID=YOUR_WAREHOUSE_ID
+$ ./scripts/reset.sh --confirm dbx_agentic_dev
+          </div>
+          <p class="db-p" style="margin-top:clamp(10px,1.6vh,16px);">Never run reset in the instructor workspace during the session. It touches only <b>dev</b> and <b>dbx_agentic_dev</b>.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- S25 · CLOSING — silent -->
+  <section class="slide slide--silent" data-act="CLOSE" data-act-name="Close" data-accent="gold">
+    <div class="aurora aurora--gold" style="z-index:1;" aria-hidden="true"><b></b></div>
+    <div class="reveal" style="position:relative;z-index:2;text-align:center;">
+      <div class="act-marker" style="justify-content:center;">DBX Agentic Development</div>
+      <div class="slide__display slide__display--act gradient-gold">25 &rarr; 45</div>
+      <p class="slide__body" style="max-width:52ch;margin:clamp(20px,3.2vh,36px) auto 0;">
+        The number moved because the data was <b style="color:var(--text);">preserved</b> &mdash; not because it was hidden.
+      </p>
+      <div class="close-tags">
+        <span class="tag" style="--tag-c:var(--accent);">contracts</span>
+        <span class="tag" style="--tag-c:var(--cyan);">Lakeflow</span>
+        <span class="tag" style="--tag-c:var(--purple);">DQX</span>
+        <span class="tag" style="--tag-c:var(--green);">DABs</span>
+        <span class="tag" style="--tag-c:var(--gold);">Genie</span>
+      </div>
+    </div>
+  </section>
+
+</div>
+
+<script>
+(function () {
+  const deck = document.querySelector('.deck');
+  const progress = document.querySelector('.deck-progress');
+  const counterN = document.getElementById('n');
+  const counterTotal = document.getElementById('total');
+  const hud = document.getElementById('hud');
+  const dcAct = document.getElementById('dcAct');
+  const dcBar = document.getElementById('dcBar');
+  const ACCENT = {
+    purple: ['var(--purple)', 'rgba(139,124,246,0.45)'],
+    accent: ['var(--accent)', 'rgba(255,54,33,0.45)'],
+    cyan:   ['var(--cyan)',   'rgba(56,198,217,0.45)'],
+    green:  ['var(--green)',  'rgba(33,179,93,0.45)'],
+    gold:   ['var(--gold)',   'rgba(255,194,75,0.45)'],
+    red:    ['var(--red)',    'rgba(255,77,61,0.45)'],
+    silver: ['var(--silver)', 'rgba(183,192,204,0.40)']
+  };
+  const tracker = document.getElementById('tracker');
+  const slides = Array.from(deck.querySelectorAll('section.slide'));
+  const total = slides.length;
+  const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+  const pad = (v) => String(v).padStart(2, '0');
+
+  counterTotal.textContent = pad(total);
+  counterN.textContent = pad(total ? 1 : 0);
+
+  /* HUD: one segment per slide + act label */
+  slides.forEach(() => {
+    const seg = document.createElement('span');
+    seg.className = 'dc-seg';
+    dcBar.appendChild(seg);
+  });
+  const segs = Array.from(dcBar.children);
+
+  function paintHud(idx) {
+    const sl = slides[idx];
+    if (!sl) return;
+    dcAct.textContent = sl.dataset.act || '';
+    const pair = ACCENT[sl.dataset.accent] || ACCENT.accent;
+    hud.style.setProperty('--dc-c', pair[0]);
+    hud.style.setProperty('--dc-glow', pair[1]);
+    segs.forEach((seg, i) => {
+      seg.classList.toggle('passed', i < idx);
+      seg.classList.toggle('current', i === idx);
+    });
+  }
+
+  /* tracker: one clickable dot per slide */
+  const dots = slides.map((slide, i) => {
+    const dot = document.createElement('button');
+    dot.type = 'button';
+    dot.className = 'dot';
+    dot.setAttribute('aria-label', 'Go to slide ' + (i + 1));
+    dot.addEventListener('click', () => {
+      slide.scrollIntoView({ behavior: reduceMotion.matches ? 'auto' : 'smooth' });
+    });
+    tracker.appendChild(dot);
+    return dot;
+  });
+
+  let currentIdx = -1;
+  function paint(idx) {
+    if (idx === currentIdx) return;
+    currentIdx = idx;
+    dots.forEach((dot, i) => {
+      dot.className = i === idx ? 'dot current' : (i < idx ? 'dot passed' : 'dot');
+    });
+    const cur = dots[idx];
+    if (cur && cur.scrollIntoView) cur.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
+  }
+
+  deck.addEventListener('scroll', () => {
+    const scrollTotal = deck.scrollHeight - deck.clientHeight;
+    const pct = scrollTotal > 0 ? (deck.scrollTop / scrollTotal) * 100 : 0;
+    progress.style.width = pct + '%';
+    if (!total) return;
+    const idx = Math.min(total - 1, Math.round(deck.scrollTop / deck.clientHeight));
+    counterN.textContent = pad(idx + 1);
+    paint(idx);
+    paintHud(idx);
+  }, { passive: true });
+
+  /* keyboard: ↓ → space / PageDown advance · ↑ ← / PageUp back */
+  document.addEventListener('keydown', (e) => {
+    if (e.metaKey || e.ctrlKey || e.altKey) return;
+    const h = deck.clientHeight;
+    const behavior = reduceMotion.matches ? 'auto' : 'smooth';
+    if (e.key === 'ArrowDown' || e.key === 'ArrowRight' || e.key === ' ' || e.key === 'PageDown') {
+      e.preventDefault(); deck.scrollBy({ top: h, behavior });
+    } else if (e.key === 'ArrowUp' || e.key === 'ArrowLeft' || e.key === 'PageUp') {
+      e.preventDefault(); deck.scrollBy({ top: -h, behavior });
+    } else if (e.key === 'Home') {
+      e.preventDefault(); deck.scrollTo({ top: 0, behavior });
+    } else if (e.key === 'End') {
+      e.preventDefault(); deck.scrollTo({ top: deck.scrollHeight, behavior });
+    }
+  });
+
+  if (total) { paint(0); paintHud(0); }
+
+  /* reveal: active slide ⇒ .is-active + .reveal children get .in */
+  function activate(slide) {
+    slide.classList.add('is-active');
+    if (slide.classList.contains('reveal')) slide.classList.add('in');
+    slide.querySelectorAll('.reveal').forEach((r) => r.classList.add('in'));
+  }
+  function deactivate(slide) {
+    slide.classList.remove('is-active');
+    if (slide.classList.contains('reveal')) slide.classList.remove('in');
+    slide.querySelectorAll('.reveal').forEach((r) => r.classList.remove('in'));
+  }
+
+  if (!('IntersectionObserver' in window)) {
+    slides.forEach(activate);
+  } else {
+    document.body.classList.add('anim-ready');
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((en) => {
+        const active = en.isIntersecting && en.intersectionRatio >= 0.5;
+        if (active && !en.target.classList.contains('is-active')) activate(en.target);
+        else if (!active && en.target.classList.contains('is-active')) deactivate(en.target);
+      });
+    }, { root: deck, threshold: [0, 0.5, 0.85] });
+    slides.forEach((s) => observer.observe(s));
+    if (slides[0]) activate(slides[0]);
+  }
+
+  /* spotlight: --mx/--my on the deck + --px/--py per card */
+  let raf = 0, cx = 0, cy = 0;
+  function applySpotlight() {
+    raf = 0;
+    deck.style.setProperty('--mx', (cx / window.innerWidth * 100).toFixed(2) + '%');
+    deck.style.setProperty('--my', (cy / window.innerHeight * 100).toFixed(2) + '%');
+    const active = deck.querySelector('.slide.is-active');
+    if (!active) return;
+    active.querySelectorAll('.card').forEach((el) => {
+      const r = el.getBoundingClientRect();
+      if (!r.width || !r.height) return;
+      el.style.setProperty('--px', ((cx - r.left) / r.width * 100).toFixed(2) + '%');
+      el.style.setProperty('--py', ((cy - r.top) / r.height * 100).toFixed(2) + '%');
+    });
+  }
+  deck.addEventListener('pointermove', (e) => {
+    cx = e.clientX; cy = e.clientY;
+    if (!raf) raf = requestAnimationFrame(applySpotlight);
+  }, { passive: true });
+
+})();
+</script>
+
+</body>
+</html>

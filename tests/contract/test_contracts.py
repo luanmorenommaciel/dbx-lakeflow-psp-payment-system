@@ -25,11 +25,11 @@ def test_incident_ledger_has_seven_quarantines_and_one_replay() -> None:
     assert sum(item["disposition"] == "held_then_replay" for item in incidents) == 1
 
 
-def test_agent_contract_is_dev_only_and_protects_reference() -> None:
+def test_agent_contract_is_dev_only() -> None:
     contract = load("agent-contract.yaml")
     assert contract["authority"]["allowed_target"] == "dev"
     assert contract["authority"]["deploy_requires_human_approval"] is True
-    assert "pipelines/src/psp-analytics/**" in contract["scope"]["protected"]
+    assert contract["scope"]["protected"] == []
 
 
 def test_agent_projections_point_to_canonical_contract() -> None:
