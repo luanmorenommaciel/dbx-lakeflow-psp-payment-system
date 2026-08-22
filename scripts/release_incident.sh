@@ -12,12 +12,12 @@ if [[ "$mode" == "--local" ]]; then
   unset SPARK_HOME
   JAVA_HOME="$java_home" PATH="$java_home/bin:$PATH" \
     uv run python -m gen.synthetic.release --output data/fallback/generated
-  backup_root="$(mktemp -d /tmp/dbx-agentic-replay.XXXXXX)"
+  backup_root="$(mktemp -d /tmp/dbx-psp-replay.XXXXXX)"
   if [[ -d spark-warehouse ]]; then
     mv spark-warehouse "$backup_root/spark-warehouse"
   fi
-  if [[ -d /tmp/dbx-agentic-psp-sdp ]]; then
-    mv /tmp/dbx-agentic-psp-sdp "$backup_root/pipeline-state"
+  if [[ -d /tmp/dbx-psp-sdp ]]; then
+    mv /tmp/dbx-psp-sdp "$backup_root/pipeline-state"
   fi
   ./scripts/sdp.sh run --spec pipelines/spark-pipeline.yaml --full-refresh-all
   echo "INCIDENT_REPLAY=COMPLETE mode=local proof=full_replay baseline_backup=$backup_root"

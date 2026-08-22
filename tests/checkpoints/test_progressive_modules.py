@@ -20,18 +20,18 @@ def test_module_02_synthetic_data() -> None:
 
 
 def test_module_03_bronze() -> None:
-    source = Path("pipelines/src/psp-agentic/bronze.py").read_text()
+    source = Path("pipelines/src/bronze.py").read_text()
     spec = yaml.safe_load(Path("pipelines/spark-pipeline.yaml").read_text())
     assert source.count("@dp.table") == 4
     assert 'option("cloudFiles.schemaEvolutionMode", "addNewColumns")' in source
     assert 'option("rescuedDataColumn", "_rescued_data")' in source
-    assert spec["libraries"][0] == {"glob": {"include": "src/psp-agentic/bronze.py"}}
+    assert spec["libraries"][0] == {"glob": {"include": "src/bronze.py"}}
 
 
 def test_module_04_dqx_silver() -> None:
     rules = yaml.safe_load(Path("configs/dqx-rules.yaml").read_text())
     source = "\n".join(
-        Path(f"pipelines/src/psp-agentic/{name}").read_text() for name in ("silver.py", "outputs.py")
+        Path(f"pipelines/src/{name}").read_text() for name in ("silver.py", "outputs.py")
     )
     assert len(rules["transactions"]) == 6
     assert {rule["name"] for rule in rules["disputes"]} == {
@@ -44,9 +44,9 @@ def test_module_04_dqx_silver() -> None:
 
 
 def test_module_05_gold_dabs() -> None:
-    gold = Path("pipelines/src/psp-agentic/gold.py").read_text()
+    gold = Path("pipelines/src/gold.py").read_text()
     bundle = yaml.safe_load(Path("databricks.yml").read_text())
-    resource = yaml.safe_load(Path("pipelines/resources/agentic/pipeline.yml").read_text())
+    resource = yaml.safe_load(Path("pipelines/resources/pipeline.yml").read_text())
     assert "gold_merchant_risk" in gold
     assert set(bundle["targets"]) == {"dev"}
     assert resource["resources"]["pipelines"]["workshop_pipeline"]["serverless"] is True

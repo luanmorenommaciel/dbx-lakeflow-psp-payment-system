@@ -13,8 +13,8 @@ scope:
     - toolchain.lock.yaml
     - configs/**
     - gen/synthetic/**
-    - pipelines/resources/agentic/**
-    - pipelines/src/psp-agentic/**
+    - pipelines/resources/**
+    - pipelines/src/**
     - pipelines/spark-pipeline.yaml
     - scripts/**
     - tests/**

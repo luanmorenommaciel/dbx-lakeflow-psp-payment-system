@@ -12,8 +12,8 @@
 Read `AGENTS.md`, the product specification, all contracts, and the DABs, Lakeflow, and Unity Catalog skills.
 First propose a plan and wait for my approval.
 
-After approval, create `pipelines/src/psp-agentic/gold.py`, `databricks.yml`, and
-`pipelines/resources/agentic/pipeline.yml`; complete the cumulative local SDP specification. Keep Gold at merchant
+After approval, create `pipelines/src/gold.py`, `databricks.yml`, and
+`pipelines/resources/pipeline.yml`; complete the cumulative local SDP specification. Keep Gold at merchant
 grain, target only `dev`, use one serverless pipeline, and keep the bundle host-neutral. Run
 `./scripts/checkpoint.sh 05` and stop before any remote mutation.
 

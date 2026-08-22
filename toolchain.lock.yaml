@@ -1,5 +1,5 @@
 contract: DBXWorkshopToolchain/v1
-observed_at: 2026-08-21T19:56:52Z
+observed_at: 2026-08-22
 python: ">=3.11,<3.14"
 java:
   required: "17 or 21"
@@ -15,8 +15,11 @@ lakeflow:
 dependencies:
   dbldatagen: "0.4.0.post1"
   databricks_labs_dqx: "0.16.0"
-  jmespath: ">=0.10.0,<1.1.0"
-  pyparsing: ">=3.0.0,<3.3.0"
+  databricks_sdk: ">=0.20.0"
+  pyarrow: ">=14.0.0"
+  numpy: ">=1.26,<2.4"
+  pandas: ">=2.0,<3.0"
+  pyyaml: ">=6.0,<7.0"
 agent_skills:
   catalog_observed: "0.2.10"
   selected:

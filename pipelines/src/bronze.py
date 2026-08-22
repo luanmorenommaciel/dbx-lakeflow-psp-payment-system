@@ -1,4 +1,4 @@
-"""Bronze ingestion for the four-entity agentic workshop."""
+"""Bronze ingestion for the four-entity workshop."""
 
 from pyspark import pipelines as dp
 from pyspark.sql import DataFrame

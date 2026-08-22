@@ -14,7 +14,7 @@ if [[ "$mode" == "--module05" ]]; then
   {
     uv run pytest -q tests/compatibility tests/contract tests/generator tests/pipeline \
       tests/checkpoints/test_progressive_modules.py -k "not module_06"
-    uv run ruff check gen tests pipelines/src/psp-agentic
+    uv run ruff check gen tests pipelines/src
     ./scripts/sdp.sh dry-run --spec pipelines/spark-pipeline.yaml
     echo "VERIFY=PASS mode=--module05"
   } | tee "$evidence_dir/01-verify.log"
@@ -23,12 +23,12 @@ else
 fi
 ./scripts/generate_fallback.sh | tee "$evidence_dir/02-generate.log"
 
-backup_root="$(mktemp -d /tmp/dbx-agentic-baseline.XXXXXX)"
+backup_root="$(mktemp -d /tmp/dbx-psp-baseline.XXXXXX)"
 if [[ -d spark-warehouse ]]; then
   mv spark-warehouse "$backup_root/spark-warehouse"
 fi
-if [[ -d /tmp/dbx-agentic-psp-sdp ]]; then
-  mv /tmp/dbx-agentic-psp-sdp "$backup_root/pipeline-state"
+if [[ -d /tmp/dbx-psp-sdp ]]; then
+  mv /tmp/dbx-psp-sdp "$backup_root/pipeline-state"
 fi
 
 ./scripts/sdp.sh run --spec pipelines/spark-pipeline.yaml --full-refresh-all \
@@ -42,12 +42,12 @@ uv run python scripts/assert_local_results.py --phase replay \
 
 # Leave the committed fallback shape in its baseline state for learners.
 ./scripts/generate_fallback.sh | tee "$evidence_dir/07-restore-baseline.log"
-restore_backup="$(mktemp -d /tmp/dbx-agentic-post-replay.XXXXXX)"
+restore_backup="$(mktemp -d /tmp/dbx-psp-post-replay.XXXXXX)"
 if [[ -d spark-warehouse ]]; then
   mv spark-warehouse "$restore_backup/spark-warehouse"
 fi
-if [[ -d /tmp/dbx-agentic-psp-sdp ]]; then
-  mv /tmp/dbx-agentic-psp-sdp "$restore_backup/pipeline-state"
+if [[ -d /tmp/dbx-psp-sdp ]]; then
+  mv /tmp/dbx-psp-sdp "$restore_backup/pipeline-state"
 fi
 ./scripts/sdp.sh run --spec pipelines/spark-pipeline.yaml --full-refresh-all \
   | tee "$evidence_dir/08-restore-baseline-pipeline.log"

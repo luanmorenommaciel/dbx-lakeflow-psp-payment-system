@@ -307,18 +307,15 @@ configs/
 gen/
   synthetic/
 pipelines/
-  databricks.yml               # existing advanced-reference bundle
   spark-pipeline.yaml
   resources/
-    agentic/
-      schema-volume.yml
-      pipeline.yml
+    schema-volume.yml
+    pipeline.yml
   src/
-    psp-analytics/              # existing advanced reference
-    psp-agentic/
-      bronze.py
-      silver.py
-      gold.py
+    bronze.py
+    silver.py
+    outputs.py
+    gold.py
 scripts/
   preflight.sh
   install_agent_skills.sh
@@ -354,7 +351,7 @@ docs/
   rehearsals/
 ```
 
-The workshop is the repository's root experience: commands run from the clone root and the new root `databricks.yml` includes only `pipelines/resources/agentic/*.yml`. The existing `pipelines/databricks.yml`, `pipelines/src/psp-analytics/`, ShadowTraffic configuration, generated reference data, and FlowCheck CLI remain advanced reference assets. The root README distinguishes the root workshop path from those reference assets.
+The workshop is the repository's root experience: commands run from the clone root and `databricks.yml` includes only `pipelines/resources/*.yml`. There is one pipeline graph under `pipelines/src/`.
 
 ## 11. Implementation waves
 

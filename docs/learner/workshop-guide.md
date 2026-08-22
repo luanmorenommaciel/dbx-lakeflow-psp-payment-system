@@ -93,7 +93,7 @@ schema tracking, `addNewColumns`, `_rescued_data`, and lineage before accepting 
 ```bash
 ./scripts/checkpoint.sh 03
 cp docs/learner/lesson-template.md .workshop-evidence/lessons/m03.md
-git add pipelines/src/psp-agentic/bronze.py pipelines/spark-pipeline.yaml
+git add pipelines/src/bronze.py pipelines/spark-pipeline.yaml
 git commit -m "workshop: complete module 03 bronze"
 ```
 
@@ -110,7 +110,7 @@ duplicates business rules outside DQX.
 ```bash
 ./scripts/checkpoint.sh 04
 cp docs/learner/lesson-template.md .workshop-evidence/lessons/m04.md
-git add configs/dqx-rules.yaml pipelines/src/psp-agentic pipelines/spark-pipeline.yaml
+git add configs/dqx-rules.yaml pipelines/src pipelines/spark-pipeline.yaml
 git commit -m "workshop: complete module 04 dqx silver"
 ```
 

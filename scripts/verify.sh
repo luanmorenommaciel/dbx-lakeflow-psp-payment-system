@@ -3,7 +3,7 @@ set -euo pipefail
 
 mode="${1:---local}"
 uv run pytest -q
-uv run ruff check gen tests pipelines/src/psp-agentic
+uv run ruff check gen tests pipelines/src
 ./scripts/sdp.sh dry-run --spec pipelines/spark-pipeline.yaml
 
 if [[ "$mode" == "--remote" ]]; then

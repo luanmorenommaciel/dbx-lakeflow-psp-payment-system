@@ -8,13 +8,13 @@ resources:
       continuous: false
       libraries:
         - file:
-            path: ../../src/psp-agentic/bronze.py
+            path: ../src/bronze.py
         - file:
-            path: ../../src/psp-agentic/silver.py
+            path: ../src/silver.py
         - file:
-            path: ../../src/psp-agentic/outputs.py
+            path: ../src/outputs.py
         - file:
-            path: ../../src/psp-agentic/gold.py
+            path: ../src/gold.py
       environment:
         environment_version: "4"
         dependencies:

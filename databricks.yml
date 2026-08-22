@@ -6,13 +6,13 @@ experimental:
   skip_name_prefix_for_schema: true
 
 include:
-  - pipelines/resources/agentic/*.yml
+  - pipelines/resources/*.yml
 
 sync:
   include:
     - configs/**
     - gen/synthetic/**
-    - pipelines/src/psp-agentic/**
+    - pipelines/src/**
 
 variables:
   catalog:

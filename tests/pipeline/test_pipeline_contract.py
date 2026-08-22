@@ -2,7 +2,7 @@ from pathlib import Path
 
 import yaml
 
-PIPELINE = Path("pipelines/src/psp-agentic")
+PIPELINE = Path("pipelines/src")
 
 
 def test_pipeline_uses_current_sdp_api_and_no_drop_rows() -> None:
@@ -31,10 +31,10 @@ def test_dqx_rules_cover_the_six_transaction_failures_and_temporal_dispute() -> 
 def test_local_sdp_spec_is_one_pipeline() -> None:
     spec = yaml.safe_load(Path("pipelines/spark-pipeline.yaml").read_text())
     assert spec["libraries"] == [
-        {"glob": {"include": "src/psp-agentic/bronze.py"}},
-        {"glob": {"include": "src/psp-agentic/silver.py"}},
-        {"glob": {"include": "src/psp-agentic/outputs.py"}},
-        {"glob": {"include": "src/psp-agentic/gold.py"}},
+        {"glob": {"include": "src/bronze.py"}},
+        {"glob": {"include": "src/silver.py"}},
+        {"glob": {"include": "src/outputs.py"}},
+        {"glob": {"include": "src/gold.py"}},
     ]
     assert spec["configuration"]["source_format"] == "json"
 

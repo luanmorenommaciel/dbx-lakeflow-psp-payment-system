@@ -8,12 +8,12 @@ def test_root_bundle_is_dev_only_and_host_neutral() -> None:
     bundle = yaml.safe_load(text)
     assert set(bundle["targets"]) == {"dev"}
     assert "host:" not in text
-    assert bundle["include"] == ["pipelines/resources/agentic/*.yml"]
+    assert bundle["include"] == ["pipelines/resources/*.yml"]
     assert bundle["experimental"]["skip_name_prefix_for_schema"] is True
 
 
 def test_pipeline_is_serverless_and_environment_is_pinned() -> None:
-    resource = yaml.safe_load(Path("pipelines/resources/agentic/pipeline.yml").read_text())
+    resource = yaml.safe_load(Path("pipelines/resources/pipeline.yml").read_text())
     pipeline = resource["resources"]["pipelines"]["workshop_pipeline"]
     assert pipeline["serverless"] is True
     assert pipeline["environment"]["environment_version"] == "4"
@@ -22,7 +22,7 @@ def test_pipeline_is_serverless_and_environment_is_pinned() -> None:
 
 
 def test_workshop_avoids_an_unnecessary_jobs_api_dependency() -> None:
-    assert not Path("pipelines/resources/agentic/workshop-job.yml").exists()
+    assert not Path("pipelines/resources/workshop-job.yml").exists()
     upload = Path("scripts/upload_fallback.sh").read_text()
     assert "databricks fs cp" in upload
     assert "dbfs:/Volumes/$catalog/$schema/$volume" in upload

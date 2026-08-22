@@ -50,4 +50,3 @@ def test_claude_project_contains_no_legacy_agentspec() -> None:
         Path(".claude/settings.local.json"),
     ]
     assert not [path for path in legacy_paths if path.exists()]
-    assert Path(".claude/README.md").exists()

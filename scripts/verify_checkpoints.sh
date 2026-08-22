@@ -50,7 +50,7 @@ for product in \
   "$starter/configs/contracts/incident-ledger.yaml" \
   "$starter/configs/dqx-rules.yaml" \
   "$starter/gen/synthetic/generator.py" \
-  "$starter/pipelines/src/psp-agentic/bronze.py" \
+  "$starter/pipelines/src/bronze.py" \
   "$starter/databricks.yml" \
   "$starter/docs/genie/questions.yaml"; do
   if [[ -e "$product" ]]; then

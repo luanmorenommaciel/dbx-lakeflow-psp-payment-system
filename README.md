@@ -21,4 +21,4 @@ creates/tests Genie, proves the hosted incident delta, tests guarded reset, and 
 the healthy baseline. Generated evidence stays under ignored `.workshop-evidence/`.
 
 The workshop implementation lives at the repository root: `configs/`, `gen/synthetic/`,
-`pipelines/src/psp-agentic/`, `scripts/`, `tests/`, and `docs/learner/`.
+`pipelines/src/`, `scripts/`, `tests/`, and `docs/learner/`.
