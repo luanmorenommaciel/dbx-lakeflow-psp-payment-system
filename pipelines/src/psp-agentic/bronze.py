@@ -7,12 +7,19 @@ from pyspark.sql.types import LongType, StringType, StructField, StructType
 
 LANDING_PATH = spark.conf.get("landing_path")
 SOURCE_FORMAT = spark.conf.get("source_format", "cloudFiles")
+SCHEMA_TRACKING_PATH = spark.conf.get("schema_tracking_path", f"{LANDING_PATH}/_schemas")
 
 
 def _read(entity: str, schema: StructType) -> DataFrame:
     path = f"{LANDING_PATH}/{entity}"
     if SOURCE_FORMAT == "cloudFiles":
-        reader = spark.readStream.format("cloudFiles").option("cloudFiles.format", "json")
+        reader = (
+            spark.readStream.format("cloudFiles")
+            .option("cloudFiles.format", "json")
+            .option("cloudFiles.schemaLocation", f"{SCHEMA_TRACKING_PATH}/{entity}")
+            .option("cloudFiles.schemaEvolutionMode", "addNewColumns")
+            .option("rescuedDataColumn", "_rescued_data")
+        )
     else:
         reader = spark.readStream.format(SOURCE_FORMAT)
     return (
@@ -20,7 +27,6 @@ def _read(entity: str, schema: StructType) -> DataFrame:
         .load(path)
         .withColumn("_source_file", F.col("_metadata.file_path"))
         .withColumn("_ingested_at", F.current_timestamp())
-        .withColumn("_rescued_data", F.lit(None).cast("string"))
     )
 
 
@@ -31,6 +37,7 @@ merchant_schema = StructType(
         StructField("country", StringType()),
         StructField("risk_tier", StringType()),
         StructField("_batch_id", StringType()),
+        StructField("_rescued_data", StringType()),
     ]
 )
 
@@ -42,6 +49,7 @@ order_schema = StructType(
         StructField("amount_cents", LongType()),
         StructField("currency", StringType()),
         StructField("_batch_id", StringType()),
+        StructField("_rescued_data", StringType()),
     ]
 )
 
@@ -57,6 +65,7 @@ transaction_schema = StructType(
         StructField("status", StringType()),
         StructField("_batch_id", StringType()),
         StructField("_incident_id", StringType()),
+        StructField("_rescued_data", StringType()),
     ]
 )
 
@@ -70,6 +79,7 @@ dispute_schema = StructType(
         StructField("status", StringType()),
         StructField("_batch_id", StringType()),
         StructField("_incident_id", StringType()),
+        StructField("_rescued_data", StringType()),
     ]
 )
 

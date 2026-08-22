@@ -1,8 +1,8 @@
 # DBX Agentic Development contract
 
 This repository has two products: the root four-hour workshop and the existing advanced PSP reference under
-`pipelines/src/psp-analytics/`. Read `configs/contracts/agent-contract.yaml` and
-`configs/contracts/psp-payment.contract.yaml` before editing.
+`pipelines/src/psp-analytics/`. Read `configs/contracts/agent-contract.yaml`, the business specification in
+`docs/specs/psp-payment.md`, and the current module prompt before editing.
 
 ## Authority
 
@@ -19,7 +19,8 @@ This repository has two products: the root four-hour workshop and the existing a
 - DQX is the single source of domain-quality behavior. Preserve invalid records in quarantine with `_errors`
   and `_warnings`; never use `ON VIOLATION DROP ROW` in the agentic pipeline.
 - Keep local SDP, Databricks pipeline dry-run, bundle validation, deployment, and runtime evidence distinct.
-- Run the relevant Task-Spec evals and repository tests before declaring a unit complete.
+- Implement only the paths owned by the current prompt under `docs/learner/prompts/`.
+- Run `./scripts/checkpoint.sh NN` for the current module before declaring it complete.
 
 ## Checkpoints
 

@@ -90,7 +90,7 @@ def _local_transaction_checked() -> DataFrame:
             (F.col("txn_id").isNull(), "txn_id_is_null"),
             (F.col("_incident_id") == "txn-id-duplicate", "txn_id_is_duplicate"),
             (F.col("amount_cents") < 1, "amount_is_not_positive"),
-            (~F.col("currency").isin("USD", "EUR"), "currency_is_not_authorized"),
+            (~F.col("currency").isin("USD", "GBP", "CAD", "AUD"), "currency_is_not_authorized"),
             (~F.col("processor").isin("stripe", "adyen"), "processor_is_unknown"),
             (~F.col("_order_exists"), "order_is_orphan"),
         ],

@@ -21,5 +21,6 @@ resources:
           - databricks-labs-dqx==0.16.0
       configuration:
         landing_path: /Volumes/${var.catalog}/${var.schema}/${var.landing_volume}
+        schema_tracking_path: /Volumes/${var.catalog}/${var.schema}/${var.landing_volume}/_schemas
         source_format: cloudFiles
         workshop.local: "false"

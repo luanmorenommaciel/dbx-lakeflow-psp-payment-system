@@ -40,3 +40,11 @@ def test_replay_upload_selects_only_held_dispute_parts(tmp_path: Path) -> None:
     assert len(calls) == 2
     assert all("data/fallback/generated/held/disputes/" in call for call in calls)
     assert all("/landing/disputes/" in call for call in calls)
+
+
+def test_drift_upload_selects_only_the_schema_rescue_probe(tmp_path: Path) -> None:
+    output, calls = run_upload(tmp_path, "drift")
+    assert "UPLOAD=PASS mode=drift files=1" in output
+    assert len(calls) == 1
+    assert "data/fallback/drift/transactions/schema-drift-rescue.json" in calls[0]
+    assert "/landing/transactions/schema-drift-rescue.json" in calls[0]

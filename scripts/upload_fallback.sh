@@ -2,8 +2,8 @@
 set -euo pipefail
 
 mode="${1:-baseline}"
-if [[ "$mode" != "baseline" && "$mode" != "replay" ]]; then
-  echo "UPLOAD=REFUSED usage='$0 [baseline|replay]'"
+if [[ "$mode" != "baseline" && "$mode" != "replay" && "$mode" != "drift" ]]; then
+  echo "UPLOAD=REFUSED usage='$0 [baseline|replay|drift]'"
   exit 2
 fi
 
@@ -34,8 +34,13 @@ if [[ "$mode" == "baseline" ]]; then
   for entity in merchants orders transactions disputes; do
     upload_parts "$root/$entity" "$entity"
   done
-else
+elif [[ "$mode" == "replay" ]]; then
   upload_parts "$root/held/disputes" disputes
+else
+  source_dir="data/fallback/drift/transactions"
+  target="dbfs:/Volumes/$catalog/$schema/$volume/transactions/schema-drift-rescue.json"
+  databricks fs cp "$source_dir/schema-drift-rescue.json" "$target" --overwrite -p "$profile"
+  uploaded=1
 fi
 
 echo "UPLOAD=PASS mode=$mode files=$uploaded target=/Volumes/$catalog/$schema/$volume"

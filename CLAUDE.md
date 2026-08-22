@@ -8,6 +8,7 @@ Start this workshop with:
 claude --permission-mode plan
 ```
 
-Follow `AGENTS.md` and the canonical contract in `configs/contracts/agent-contract.yaml`. Do not inherit the
-user's global permissions as authority to deploy. Use installed Databricks Agent Skills when relevant, but
-treat repository contracts and current Databricks documentation as authoritative.
+Follow `AGENTS.md`, the current prompt under `docs/learner/prompts/`, and the canonical authority contract in
+`configs/contracts/agent-contract.yaml`. Do not inherit the user's global permissions as authority to deploy.
+Use installed Databricks Agent Skills when relevant, but treat the repository specification, contracts, tests,
+and current Databricks documentation as authoritative. Stop after the module checkpoint and wait for the learner.

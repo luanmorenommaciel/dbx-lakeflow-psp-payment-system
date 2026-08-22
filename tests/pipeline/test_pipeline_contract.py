@@ -48,6 +48,15 @@ def test_baseline_pipeline_keeps_one_declarative_graph() -> None:
     assert ".count()" not in source
 
 
+def test_bronze_uses_real_auto_loader_schema_evolution_and_rescue() -> None:
+    bronze = (PIPELINE / "bronze.py").read_text()
+    assert 'option("cloudFiles.schemaLocation"' in bronze
+    assert 'option("cloudFiles.schemaEvolutionMode", "addNewColumns")' in bronze
+    assert 'option("rescuedDataColumn", "_rescued_data")' in bronze
+    assert 'withColumn("_rescued_data", F.lit(None)' not in bronze
+    assert Path("data/fallback/drift/transactions/schema-drift-rescue.json").exists()
+
+
 def test_incident_pipeline_preserves_quarantine_and_replay_evidence() -> None:
     silver = "\n".join((PIPELINE / name).read_text() for name in ("silver.py", "outputs.py"))
     gold = (PIPELINE / "gold.py").read_text()

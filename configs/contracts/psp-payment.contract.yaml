@@ -4,7 +4,7 @@ seed: 22082026
 transaction_count: 100000
 focus_merchant: m-007
 default_currency: USD
-allowed_currencies: [USD, EUR]
+allowed_currencies: [USD, GBP, CAD, AUD]
 allowed_processors: [stripe, adyen]
 entities:
   merchants:

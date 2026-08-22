@@ -1,0 +1,1 @@
+{"txn_id":"txn-drift-000001","order_id":"ord-000001","merchant_id":"m-002","event_ts":"2026-08-22 12:45:00","amount_cents":"not-an-integer","currency":"USD","processor":"stripe","status":"captured","_batch_id":"batch-drift-probe","_incident_id":"schema-drift-rescue","device_fingerprint":"device-demo-001"}

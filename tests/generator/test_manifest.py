@@ -25,3 +25,10 @@ def test_fallback_manifest_has_four_semantic_content_digests() -> None:
     result = json.loads(Path("data/fallback/manifest.json").read_text())
     assert set(result["entity_digests"]) == {"merchants", "orders", "transactions", "disputes"}
     assert all(value.startswith("sha256:") for value in result["entity_digests"].values())
+
+
+def test_generator_declares_only_the_four_valid_currencies_before_incident_override() -> None:
+    source = Path("gen/synthetic/generator.py").read_text()
+    for currency in ("USD", "GBP", "CAD", "AUD"):
+        assert f"'{currency}'" in source
+    assert "'EUR'" not in source

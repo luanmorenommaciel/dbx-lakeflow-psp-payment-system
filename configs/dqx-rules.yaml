@@ -25,7 +25,7 @@ transactions:
       function: is_in_list
       arguments:
         column: currency
-        allowed: ["'USD'", "'EUR'"]
+        allowed: ["'USD'", "'GBP'", "'CAD'", "'AUD'"]
   - name: processor_is_unknown
     criticality: error
     check:

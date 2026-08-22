@@ -1,10 +1,26 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
+mode="${1:---full}"
+if [[ "$mode" != "--full" && "$mode" != "--module05" ]]; then
+  echo "LOCAL_E2E=FAIL reason=usage usage='$0 [--full|--module05]'"
+  exit 2
+fi
+
 evidence_dir=".workshop-evidence/local"
 mkdir -p "$evidence_dir"
 
-./scripts/verify.sh --local | tee "$evidence_dir/01-verify.log"
+if [[ "$mode" == "--module05" ]]; then
+  {
+    uv run pytest -q tests/compatibility tests/contract tests/generator tests/pipeline \
+      tests/checkpoints/test_progressive_modules.py -k "not module_06"
+    uv run ruff check gen tests pipelines/src/psp-agentic
+    ./scripts/sdp.sh dry-run --spec pipelines/spark-pipeline.yaml
+    echo "VERIFY=PASS mode=--module05"
+  } | tee "$evidence_dir/01-verify.log"
+else
+  ./scripts/verify.sh --local | tee "$evidence_dir/01-verify.log"
+fi
 ./scripts/generate_fallback.sh | tee "$evidence_dir/02-generate.log"
 
 backup_root="$(mktemp -d /tmp/dbx-agentic-baseline.XXXXXX)"

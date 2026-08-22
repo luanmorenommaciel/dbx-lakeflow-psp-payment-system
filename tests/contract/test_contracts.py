@@ -11,6 +11,7 @@ def test_payment_contract_is_the_promised_slice() -> None:
     contract = load("psp-payment.contract.yaml")
     assert contract["seed"] == 22_082_026
     assert contract["transaction_count"] == 100_000
+    assert contract["allowed_currencies"] == ["USD", "GBP", "CAD", "AUD"]
     assert set(contract["entities"]) == {"merchants", "orders", "transactions", "disputes"}
     assert contract["quality"]["invalid_rows_are_preserved"] is True
     assert contract["gold"]["table"] == "gold_merchant_risk"

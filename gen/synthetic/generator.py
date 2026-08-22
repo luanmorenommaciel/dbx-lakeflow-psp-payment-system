@@ -62,7 +62,11 @@ def build_orders(spark: SparkSession, config: GeneratorConfig) -> DataFrame:
         )
         .withColumn("order_ts", StringType(), expr="CAST(timestamp_seconds(1787389200 + id) AS STRING)")
         .withColumn("amount_cents", LongType(), expr="1000 + (id % 25000)")
-        .withColumn("currency", StringType(), expr="CASE WHEN id % 10 = 0 THEN 'EUR' ELSE 'USD' END")
+        .withColumn(
+            "currency",
+            StringType(),
+            expr="CASE id % 4 WHEN 0 THEN 'USD' WHEN 1 THEN 'GBP' WHEN 2 THEN 'CAD' ELSE 'AUD' END",
+        )
         .build()
         .withColumn("_batch_id", F.when(F.col("id") < BASELINE_COUNT, "batch-001").otherwise("batch-002-incident"))
         .drop("id")
@@ -82,7 +86,11 @@ def build_transactions(spark: SparkSession, config: GeneratorConfig) -> DataFram
         )
         .withColumn("event_ts", StringType(), expr="CAST(timestamp_seconds(1787389260 + id) AS STRING)")
         .withColumn("amount_cents", LongType(), expr="1000 + (id % 25000)")
-        .withColumn("currency", StringType(), expr="CASE WHEN id % 10 = 0 THEN 'EUR' ELSE 'USD' END")
+        .withColumn(
+            "currency",
+            StringType(),
+            expr="CASE id % 4 WHEN 0 THEN 'USD' WHEN 1 THEN 'GBP' WHEN 2 THEN 'CAD' ELSE 'AUD' END",
+        )
         .withColumn("processor", StringType(), expr="CASE WHEN id % 2 = 0 THEN 'stripe' ELSE 'adyen' END")
         .withColumn("status", StringType(), expr="'captured'")
         .build()

@@ -38,8 +38,8 @@ instructor workspace supplies canonical rehearsal evidence and recovery demonstr
 
 ## T-12 hours — canonical Free Edition rehearsal
 
-This step deploys and runs dev resources, creates or updates a Genie Space, and releases the incident. Confirm the
-profile and intended workspace before running it:
+This step deploys and runs dev resources, optionally refreshes the instructor Genie Space, and releases the
+incident. Confirm the profile and intended workspace before running it:
 
 ```bash
 export DATABRICKS_CONFIG_PROFILE=workshop-instructor
@@ -59,14 +59,14 @@ reset and redeploys the healthy baseline so the instructor workspace is ready fo
 documented fallback folders, and record the run/update/space IDs in the rehearsal receipt. Never publish tokens,
 profile files, user email addresses, or raw CLI debug output.
 
-After Task-Spec archival, the final release assertion is:
+After the checkpoint, dual-agent, hosted, fallback, and website receipts are recorded, the final release
+assertion is:
 
 ```bash
 ./scripts/readiness.sh
 ```
 
-It must return `WORKSHOP_READINESS=READY`; missing hosted evidence or fewer than nine accepted archived tasks is
-an explicit failure.
+It must return `WORKSHOP_READINESS=READY`; any missing named receipt is an explicit failure.
 
 If you intentionally need a reset without the automatic baseline restore, use the guarded command only after
 explicit inspection:
@@ -78,7 +78,7 @@ export DATABRICKS_WAREHOUSE_ID=THE_CONFIRMED_WAREHOUSE
 
 ## Room opening — 30 minutes before
 
-- Open the learner guide, the incident ledger, pipeline graph, quarantine results, Gold view, and Genie Space.
+- Open the learner guide, starter tag, prompts, pipeline graph, quarantine results, Gold view, and Genie Code.
 - Confirm the SQL warehouse and serverless pipeline are usable.
 - Put the exact profile setup command on screen, but never your credential material.
 - Ask learners to use their own Free Edition workspace and keep the cheat sheet open.
@@ -89,15 +89,12 @@ export DATABRICKS_WAREHOUSE_ID=THE_CONFIRMED_WAREHOUSE
 
 | Time | Outcome | Instructor checkpoint |
 |---|---|---|
-| 00:00–00:15 | Contract + toolchain | Everyone can name the dev boundary and evidence labels |
-| 00:15–00:45 | dbldatagen story | Manifest shows 100,000 transactions and eight ledger entries |
-| 00:45–01:20 | Bronze | Four sources retain lineage/rescue metadata |
-| 01:20–02:00 | DQX + Silver | Bad records are queryable, never silently dropped |
-| 02:00–02:10 | Break | Choose live or fallback lane per learner |
-| 02:10–02:40 | Gold + local replay | Risk 25 becomes 45 with explainable components |
-| 02:40–03:15 | DAB deployment | Strict validation, deploy, run, and baseline SQL proof |
-| 03:15–03:45 | Genie + hosted replay | Four questions complete and replay delta is proven |
-| 03:45–04:00 | Delivery | Learners explain one end-to-end evidence chain |
+| 09:00–09:35 | Contract + plan | Human approves the agent plan before code |
+| 09:35–10:10 | dbldatagen story | 100,000 transactions and eight deterministic incidents |
+| 10:10–10:50 | Bronze | Four sources retain lineage, evolution, and rescue metadata |
+| 10:50–11:45 | DQX + Silver | Invalid records remain queryable and explained |
+| 11:45–12:30 | Gold + DABs | Local E2E, human deploy gate, hosted baseline |
+| 12:30–13:00 | Genie Code + replay | Four questions and risk change 25 to 45 |
 
 ## Recovery thresholds
 
@@ -107,7 +104,7 @@ export DATABRICKS_WAREHOUSE_ID=THE_CONFIRMED_WAREHOUSE
 - Runtime preflight: fail before deploy; retry after the documented quota reset or explicitly select a separately
   authenticated Free Edition workspace.
 - DQX dependency: use only the pinned official dependency or a checksum-reviewed official wheel.
-- Genie: five minutes, then replay the exact prompts, SQL, and bounded results from the current rehearsal.
+- Genie Code: five minutes, then replay the exact prompts, SQL, and bounded results from the current rehearsal.
 
 Fallbacks keep the class moving; they do not convert into live proof. Capture which learners ran live, paired, or
 replayed.
@@ -130,5 +127,7 @@ The workshop is delivery-ready only when the current repository revision has:
 - a successful dev deployment, baseline CLI upload, and pipeline update;
 - SQL assertions for risk 25 before and 45 after replay;
 - four completed Genie questions;
+- observed Auto Loader drift/rescue evidence;
+- successful module tags and both Claude Code and Codex fresh-start rehearsals;
 - a clean final `./scripts/verify.sh --remote` result;
 - no credential material in Git or evidence artifacts.
