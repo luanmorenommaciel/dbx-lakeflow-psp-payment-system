@@ -1,0 +1,26 @@
+resources:
+  pipelines:
+    workshop_pipeline:
+      name: dbx-agentic-psp-${bundle.target}
+      catalog: ${var.catalog}
+      schema: ${resources.schemas.workshop_schema.name}
+      serverless: true
+      continuous: false
+      libraries:
+        - file:
+            path: ../../src/psp-agentic/bronze.py
+        - file:
+            path: ../../src/psp-agentic/silver.py
+        - file:
+            path: ../../src/psp-agentic/outputs.py
+        - file:
+            path: ../../src/psp-agentic/gold.py
+      environment:
+        environment_version: "4"
+        dependencies:
+          - databricks-labs-dqx==0.16.0
+      configuration:
+        landing_path: /Volumes/${var.catalog}/${var.schema}/${var.landing_volume}
+        schema_tracking_path: /Volumes/${var.catalog}/${var.schema}/${var.landing_volume}/_schemas
+        source_format: cloudFiles
+        workshop.local: "false"

@@ -6,6 +6,8 @@ libraries:
       include: src/psp-agentic/silver.py
   - glob:
       include: src/psp-agentic/outputs.py
+  - glob:
+      include: src/psp-agentic/gold.py
 storage: file:///tmp/dbx-agentic-psp-sdp
 configuration:
   landing_path: data/fallback/generated
