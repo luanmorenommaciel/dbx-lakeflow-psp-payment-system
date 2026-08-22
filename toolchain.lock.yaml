@@ -14,6 +14,8 @@ lakeflow:
   pipeline_environment_version: "4"
 dependencies:
   dbldatagen: "0.4.0.post1"
+  jmespath: ">=0.10.0,<1.1.0"
+  pyparsing: ">=3.0.0,<3.3.0"
   databricks_labs_dqx: "0.16.0"
   databricks_sdk: ">=0.20.0"
   pyarrow: ">=14.0.0"
