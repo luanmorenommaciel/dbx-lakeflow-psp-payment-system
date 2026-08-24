@@ -38,7 +38,7 @@ transactions:
     check:
       function: sql_expression
       arguments:
-        expression: NOT _order_exists
+        expression: _order_exists
         msg: order_id does not exist in orders
         name: order_is_orphan
 disputes:
@@ -53,6 +53,6 @@ disputes:
     check:
       function: sql_expression
       arguments:
-        expression: to_timestamp(closed_at) < to_timestamp(opened_at)
+        expression: to_timestamp(closed_at) >= to_timestamp(opened_at)
         msg: closed_at is earlier than opened_at
         name: dispute_closes_before_open

@@ -26,6 +26,10 @@ def test_dqx_rules_cover_the_six_transaction_failures_and_temporal_dispute() -> 
         "order_is_orphan",
     }
     assert any(rule["name"] == "dispute_closes_before_open" for rule in rules["disputes"])
+    orphan = next(rule for rule in rules["transactions"] if rule["name"] == "order_is_orphan")
+    assert orphan["check"]["arguments"]["expression"] == "_order_exists"
+    temporal = next(rule for rule in rules["disputes"] if rule["name"] == "dispute_closes_before_open")
+    assert ">=" in temporal["check"]["arguments"]["expression"]
 
 
 def test_local_sdp_spec_is_one_pipeline() -> None:
@@ -55,6 +59,23 @@ def test_bronze_uses_real_auto_loader_schema_evolution_and_rescue() -> None:
     assert 'option("rescuedDataColumn", "_rescued_data")' in bronze
     assert 'withColumn("_rescued_data", F.lit(None)' not in bronze
     assert Path("data/fallback/drift/transactions/schema-drift-rescue.json").exists()
+
+
+def test_hosted_autoloader_uses_schema_hints_not_reader_schema() -> None:
+    bronze = (PIPELINE / "bronze.py").read_text()
+    cloud_block = bronze.split('if SOURCE_FORMAT == "cloudFiles":', 1)[1].split("else:", 1)[0]
+    assert 'option("cloudFiles.schemaHints"' in cloud_block
+    assert ".schema(" not in cloud_block
+    assert ".load(path)" in cloud_block
+
+
+def test_dqx_rules_load_from_configured_path_not_file() -> None:
+    silver = (PIPELINE / "silver.py").read_text()
+    outputs = (PIPELINE / "outputs.py").read_text()
+    assert "__file__" not in silver
+    assert "__file__" not in outputs
+    assert 'spark.conf.get("dqx_rules_path"' in silver
+    assert 'spark.conf.get("dqx_rules_path"' in outputs
 
 
 def test_incident_pipeline_preserves_quarantine_and_replay_evidence() -> None:

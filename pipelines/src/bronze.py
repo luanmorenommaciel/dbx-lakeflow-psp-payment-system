@@ -10,22 +10,32 @@ SOURCE_FORMAT = spark.conf.get("source_format", "cloudFiles")
 SCHEMA_TRACKING_PATH = spark.conf.get("schema_tracking_path", f"{LANDING_PATH}/_schemas")
 
 
+def _schema_hints(schema: StructType) -> str:
+    hints = []
+    for field in schema.fields:
+        if field.name == "_rescued_data":
+            continue
+        data_type = "BIGINT" if isinstance(field.dataType, LongType) else "STRING"
+        hints.append(f"{field.name} {data_type}")
+    return ", ".join(hints)
+
+
 def _read(entity: str, schema: StructType) -> DataFrame:
     path = f"{LANDING_PATH}/{entity}"
     if SOURCE_FORMAT == "cloudFiles":
-        reader = (
+        frame = (
             spark.readStream.format("cloudFiles")
             .option("cloudFiles.format", "json")
             .option("cloudFiles.schemaLocation", f"{SCHEMA_TRACKING_PATH}/{entity}")
             .option("cloudFiles.schemaEvolutionMode", "addNewColumns")
+            .option("cloudFiles.schemaHints", _schema_hints(schema))
             .option("rescuedDataColumn", "_rescued_data")
+            .load(path)
         )
     else:
-        reader = spark.readStream.format(SOURCE_FORMAT)
+        frame = spark.readStream.format(SOURCE_FORMAT).schema(schema).load(path)
     return (
-        reader.schema(schema)
-        .load(path)
-        .withColumn("_source_file", F.col("_metadata.file_path"))
+        frame.withColumn("_source_file", F.col("_metadata.file_path"))
         .withColumn("_ingested_at", F.current_timestamp())
     )
 

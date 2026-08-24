@@ -1690,6 +1690,27 @@ body.anim-ready .slide--silent .reveal.in > *, body.anim-ready .slide--title .re
   .deck { scroll-behavior: auto; }
   body.anim-ready .reveal > * { opacity: 1; transform: none; filter: none; }
 }
+
+/* ── SIX-RING MAP (rings slide) ─────────────────────────────────── */
+.rings-layout { display: grid; grid-template-columns: .68fr 1.32fr; gap: clamp(18px,2.4vw,44px); align-items: center; height: min(86vh,900px); }
+.rings-copy { align-self: center; }
+.rings-copy .h2 { font-size: clamp(34px,4.8vw,68px); margin-top: 12px; }
+.rings-copy .lede { margin-top: 18px; max-width: 38ch; }
+.ring-decision { margin-top: clamp(22px,3.4vh,34px); border-left: 3px solid var(--green); padding-left: clamp(15px,1.5vw,24px); }
+.ring-decision h3 { font-family: var(--font-display); font-size: clamp(23px,2.5vw,36px); font-weight: 400; line-height: 1; color: var(--green); margin: 0; }
+.ring-decision p { font-family: var(--font-editorial); font-size: clamp(13px,1.2vw,17px); line-height: 1.45; color: var(--text-dim); margin-top: 9px; }
+.ring-decision p b { color: var(--text); font-weight: 600; }
+.rings-viz { height: 100%; display: grid; place-items: center; min-width: 0; }
+.rings-viz svg { width: 100%; height: min(86vh,900px); display: block; overflow: visible; }
+.ring-breathe { transform-box: fill-box; transform-origin: center; animation: ring-breathe 9s ease-in-out infinite; }
+.ring-breathe.r2 { animation-delay: 1.2s; }
+.ring-breathe.r3 { animation-delay: 2.4s; }
+.ring-breathe.r4 { animation-delay: 3.6s; }
+.ring-breathe.r6 { animation-delay: 6s; }
+@keyframes ring-breathe { 0%,100% { transform: scale(1); } 50% { transform: scale(1.018); } }
+.core-pulse { transform-box: fill-box; transform-origin: center; animation: core-pulse 4s ease-in-out infinite; }
+.src { font-family: var(--font-mono); font-size: clamp(8px,.72vw,9.5px); line-height: 1.45; letter-spacing: .35px; color: var(--text-mute); border-top: 1px solid var(--rule); padding-top: clamp(7px,1.1vh,11px); margin-top: clamp(10px,1.6vh,16px); }
+@media (max-width: 1080px) { .rings-layout { grid-template-columns: 1fr; height: auto; } .rings-viz svg { height: 58vh; } }
 </style>
 </head>
 <body>
@@ -1710,9 +1731,10 @@ body.anim-ready .slide--silent .reveal.in > *, body.anim-ready .slide--title .re
 <nav class="deck-tracker" id="tracker" aria-label="Slide navigation"></nav>
 
 <div class="deck">
-<!-- ═══════════════ OPENING ═══════════════ -->
 
-  <!-- S01 · TITLE — asymmetric editorial -->
+  <!-- ═══════════════ OPENING · FRAME ═══════════════ -->
+
+<!-- S01 · TITLE — asymmetric editorial -->
   <section class="slide" data-act="OPENING" data-act-name="DBX Agentic Development" data-accent="accent"
            style="justify-content:center;padding-top:clamp(40px,5.4vh,64px);padding-bottom:clamp(50px,6.6vh,78px);">
     <div class="aurora aurora--accent" style="z-index:1;" aria-hidden="true"><b></b></div>
@@ -1806,7 +1828,7 @@ body.anim-ready .slide--silent .reveal.in > *, body.anim-ready .slide--title .re
     </div>
   </section>
 
-  <!-- S02 · SYSTEM MAP — the PSP and the chargeback -->
+<!-- S02 · SYSTEM MAP — the PSP and the chargeback -->
   <section class="slide" data-act="OPENING" data-act-name="System map" data-accent="gold"
            style="justify-content:flex-start;padding-top:clamp(18px,3vh,36px);">
     <div class="aurora aurora--gold" aria-hidden="true"><b></b></div>
@@ -1916,105 +1938,46 @@ body.anim-ready .slide--silent .reveal.in > *, body.anim-ready .slide--title .re
     </div>
   </section>
 
-  <!-- S03 · WHY — block divider -->
-  <section class="slide" data-act="OPENING" data-act-name="Why agentic" data-accent="accent"
+<!-- S03 · THE USE CASE -->
+  <section class="slide" data-act="OPENING" data-act-name="The use case" data-accent="gold"
            style="justify-content:center;align-items:flex-start;text-align:left;">
-    <div class="aurora aurora--accent" aria-hidden="true"><b></b></div>
-    <div class="reveal" style="position:relative;z-index:2;width:100%;max-width:1780px;margin:0 auto;">
-      <div class="cols" style="--cols:1.05fr 0.95fr;align-items:center;gap:clamp(24px,3.4vw,72px);">
+    <div class="aurora aurora--gold" aria-hidden="true"><b></b></div>
+    <div class="reveal" style="position:relative;z-index:2;width:100%;max-width:1720px;margin:0 auto;">
+      <div class="cols" style="--cols:1.12fr 0.88fr;align-items:center;gap:clamp(24px,3.2vw,60px);">
         <div>
-          <span class="tag" style="--tag-c:var(--accent);">Move 1 of 4 · Frame · the reason why</span>
-          <div class="act-num" style="--an-c:var(--accent);margin-top:clamp(6px,1.2vh,14px);">01</div>
-          <h2 class="h2" style="margin-top:clamp(4px,0.8vh,10px);">
-            Agents write code.<br>Contracts make it <span style="color:var(--accent);">verifiable.</span>
-          </h2>
-          <p class="lede" style="max-width:54ch;margin-top:clamp(14px,2.4vh,24px);">
-            Vibe coding moves fast and breaks silently. This workshop swaps vibes for a machine-readable
-            contract and a five-rung evidence ladder. <b>The same command proves something different at every rung &mdash; name the rung.</b>
+          <span class="tag" style="--tag-c:var(--gold);">The use case · one explainable incident</span>
+          <h2 class="h2" style="margin-top:clamp(12px,2vh,22px);">A payment platform gets a<br><span style="color:var(--gold);">suspicious merchant</span> report.</h2>
+          <p class="lede" style="max-width:56ch;margin-top:clamp(14px,2.4vh,24px);">
+            Merchant <b>m-007</b> receives 1,209 incident transactions &mdash; mostly Brazilian Real on a USD/EUR-only
+            policy. Your pipeline must <b>quarantine the bad rows</b>, score the merchant, and then prove how one
+            late-but-valid chargeback changes the number. You never call it fraud; you describe <b>observed facts</b>.
           </p>
-          <div style="display:flex;gap:clamp(9px,1vw,15px);flex-wrap:wrap;margin-top:clamp(16px,2.6vh,28px);">
-            <span class="tag" style="--tag-c:var(--red);">contracts, not vibes</span>
-            <span class="tag" style="--tag-c:var(--cyan);">evidence, not screenshots</span>
-            <span class="tag" style="--tag-c:var(--gold);">quarantine, not deletion</span>
+          <div class="callout gold" style="margin-top:clamp(18px,3vh,30px);">
+            <div class="co-kicker">The deliverable</div>
+            <div class="co-body">One Gold view, <b>gold_merchant_risk</b>, where <b>m-007</b> moves from <b>risk 25</b> (normal) to <b>risk 45</b> (elevated) &mdash; with every point traced to a quarantined row or a chargeback.</div>
           </div>
         </div>
         <div>
-          <span class="tag" style="--tag-c:var(--silver);margin-bottom:clamp(9px,1.5vh,15px);">Full Circle · Four Moves</span>
-          <ul class="wkrail">
-            <li class="wkr wkr--now">
-              <span class="wkr-d">01</span>
-              <div class="wkr-body"><div class="wkr-seat">Frame<span class="wkr-now-tag">now</span></div>
-              <div class="wkr-job">why, what, and the platform</div></div>
-            </li>
-            <li class="wkr" style="--wk-c:var(--cyan);opacity:0.88;">
-              <span class="wkr-d">02</span>
-              <div class="wkr-body"><div class="wkr-seat">Build</div>
-              <div class="wkr-job">contract &rarr; generator &rarr; Bronze &rarr; Silver &rarr; Gold</div></div>
-            </li>
-            <li class="wkr" style="--wk-c:var(--green);opacity:0.74;">
-              <span class="wkr-d">03</span>
-              <div class="wkr-body"><div class="wkr-seat">Deploy</div>
-              <div class="wkr-job">DABs &rarr; dev · Unity Catalog · runtime evidence</div></div>
-            </li>
-            <li class="wkr" style="--wk-c:var(--gold);opacity:0.62;">
-              <span class="wkr-d">04</span>
-              <div class="wkr-body"><div class="wkr-seat">Replay</div>
-              <div class="wkr-job">late chargeback &rarr; Genie &rarr; risk 45</div></div>
-            </li>
-          </ul>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- S04 · THE THREE TRUTHS -->
-  <section class="slide" data-act="OPENING" data-act-name="Three truths" data-accent="accent"
-           style="justify-content:center;align-items:flex-start;text-align:left;">
-    <div class="aurora aurora--accent" aria-hidden="true"><b></b></div>
-    <div class="reveal" style="position:relative;z-index:2;width:100%;max-width:1680px;margin:0 auto;">
-      <span class="tag kick-tag" style="--tag-c:var(--accent);">Why this matters · three truths</span>
-      <div class="three-col">
-        <div class="card card--flow accent">
-          <div class="card-inner">
-            <span class="tag" style="--tag-c:var(--accent);">Truth 1</span>
-            <div class="db-h grad">Agents are real production labor</div>
-            <p class="db-p">Claude Code and Codex edit repos every day. The risk is not that they <b>write</b> code &mdash; it's that nobody can prove what they changed and why.</p>
-            <ul class="db-list">
-              <li>plan-before-edit, not autopilot</li>
-              <li>a contract names the boundary</li>
-              <li>evidence is captured per change</li>
-            </ul>
+          <span class="tag" style="--tag-c:var(--silver);margin-bottom:clamp(11px,1.8vh,19px);">The scale of it</span>
+          <div class="scale">
+            <div class="sc" style="--sc-c:var(--accent);"><div class="sc-n">100k</div><div class="sc-l">transactions, seed <b>22082026</b></div></div>
+            <div class="sc" style="--sc-c:var(--cyan);"><div class="sc-n">4</div><div class="sc-l">entities: merchants, orders, transactions, disputes</div></div>
+            <div class="sc" style="--sc-c:var(--gold);"><div class="sc-n">8</div><div class="sc-l">incident conditions &mdash; seven quarantine, one replay</div></div>
+            <div class="sc" style="--sc-c:var(--green);"><div class="sc-n">1</div><div class="sc-l">Gold view, one merchant-grain number</div></div>
           </div>
-        </div>
-        <div class="card card--flow cyan">
-          <div class="card-inner">
-            <span class="tag" style="--tag-c:var(--cyan);">Truth 2</span>
-            <div class="db-h grad">Databricks collapses the stack</div>
-            <p class="db-p">Ingest, quality, deploy, govern, and investigate live in <b>one serverless platform</b>. No separate orchestrator, no DIY lineage, no hand-rolled data checks.</p>
-            <ul class="db-list">
-              <li>Lakeflow for the pipeline</li>
-              <li>DQX for quality, UC for lineage</li>
-              <li>DABs for deploy, Genie for answers</li>
-            </ul>
-          </div>
-        </div>
-        <div class="card card--flow gold">
-          <div class="card-inner">
-            <span class="tag" style="--tag-c:var(--gold);">Truth 3</span>
-            <div class="db-h grad">Quality is preserved, not dropped</div>
-            <p class="db-p">Real payment systems see null IDs, bad currencies, orphaned orders. Dropping them hides the story. <b>Quarantining them</b> makes it explainable.</p>
-            <ul class="db-list">
-              <li><code>_errors</code> / <code>_warnings</code> columns</li>
-              <li>seven quarantine causes, all queryable</li>
-              <li>one held valid chargeback to replay</li>
-            </ul>
+          <div style="margin-top:clamp(16px,2.6vh,28px);padding-top:clamp(12px,1.9vh,20px);border-top:1px solid var(--rule);">
+            <div class="arith">
+              <div class="ar"><span class="ar-k">baseline batch</span><span class="ar-v">98,791 valid transactions</span></div>
+              <div class="ar"><span class="ar-k">incident batch</span><span class="ar-v">1,209 transactions</span></div>
+              <div class="ar ar--sum"><span class="ar-k">total</span><span class="ar-v">100,000 rows</span></div>
+            </div>
           </div>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- S05 · THE LOOP — how effective AI teams work -->
+<!-- S04 · THE LOOP — how effective AI teams work -->
   <section class="slide" data-act="OPENING" data-act-name="The loop" data-accent="purple"
            style="justify-content:flex-start;padding-top:clamp(18px,3vh,36px);">
     <div class="aurora aurora--purple" aria-hidden="true"><b></b></div>
@@ -2204,8 +2167,7 @@ body.anim-ready .slide--silent .reveal.in > *, body.anim-ready .slide--title .re
     </div>
   </section>
 
-  <!-- S06 · THE WORKFLOW — eight stages to build any agentic system -->
-  <section class="slide" data-act="OPENING" data-act-name="The workflow" data-accent="purple"
+<section class="slide" data-act="OPENING" data-act-name="The workflow" data-accent="purple"
            style="justify-content:flex-start;padding-top:clamp(18px,3vh,36px);">
     <div class="aurora aurora--purple" aria-hidden="true"><b></b></div>
     <div class="reveal" style="position:relative;z-index:2;width:100%;max-width:1500px;margin:0 auto;">
@@ -2391,46 +2353,8 @@ body.anim-ready .slide--silent .reveal.in > *, body.anim-ready .slide--title .re
     </div>
   </section>
 
-  <!-- S07 · THE USE CASE -->
-  <section class="slide" data-act="OPENING" data-act-name="The use case" data-accent="gold"
-           style="justify-content:center;align-items:flex-start;text-align:left;">
-    <div class="aurora aurora--gold" aria-hidden="true"><b></b></div>
-    <div class="reveal" style="position:relative;z-index:2;width:100%;max-width:1720px;margin:0 auto;">
-      <div class="cols" style="--cols:1.12fr 0.88fr;align-items:center;gap:clamp(24px,3.2vw,60px);">
-        <div>
-          <span class="tag" style="--tag-c:var(--gold);">The use case · one explainable incident</span>
-          <h2 class="h2" style="margin-top:clamp(12px,2vh,22px);">A payment platform gets a<br><span style="color:var(--gold);">suspicious merchant</span> report.</h2>
-          <p class="lede" style="max-width:56ch;margin-top:clamp(14px,2.4vh,24px);">
-            Merchant <b>m-007</b> receives 1,209 incident transactions &mdash; mostly Brazilian Real on a USD/EUR-only
-            policy. Your pipeline must <b>quarantine the bad rows</b>, score the merchant, and then prove how one
-            late-but-valid chargeback changes the number. You never call it fraud; you describe <b>observed facts</b>.
-          </p>
-          <div class="callout gold" style="margin-top:clamp(18px,3vh,30px);">
-            <div class="co-kicker">The deliverable</div>
-            <div class="co-body">One Gold view, <b>gold_merchant_risk</b>, where <b>m-007</b> moves from <b>risk 25</b> (normal) to <b>risk 45</b> (elevated) &mdash; with every point traced to a quarantined row or a chargeback.</div>
-          </div>
-        </div>
-        <div>
-          <span class="tag" style="--tag-c:var(--silver);margin-bottom:clamp(11px,1.8vh,19px);">The scale of it</span>
-          <div class="scale">
-            <div class="sc" style="--sc-c:var(--accent);"><div class="sc-n">100k</div><div class="sc-l">transactions, seed <b>22082026</b></div></div>
-            <div class="sc" style="--sc-c:var(--cyan);"><div class="sc-n">4</div><div class="sc-l">entities: merchants, orders, transactions, disputes</div></div>
-            <div class="sc" style="--sc-c:var(--gold);"><div class="sc-n">8</div><div class="sc-l">incident conditions &mdash; seven quarantine, one replay</div></div>
-            <div class="sc" style="--sc-c:var(--green);"><div class="sc-n">1</div><div class="sc-l">Gold view, one merchant-grain number</div></div>
-          </div>
-          <div style="margin-top:clamp(16px,2.6vh,28px);padding-top:clamp(12px,1.9vh,20px);border-top:1px solid var(--rule);">
-            <div class="arith">
-              <div class="ar"><span class="ar-k">baseline batch</span><span class="ar-v">98,791 valid transactions</span></div>
-              <div class="ar"><span class="ar-k">incident batch</span><span class="ar-v">1,209 transactions</span></div>
-              <div class="ar ar--sum"><span class="ar-k">total</span><span class="ar-v">100,000 rows</span></div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
 
-  <!-- S08 · THE PLATFORM -->
+<!-- S05 · THE PLATFORM -->
   <section class="slide" data-act="OPENING" data-act-name="The platform" data-accent="cyan"
            style="justify-content:center;align-items:flex-start;text-align:left;">
     <div class="aurora aurora--cyan" aria-hidden="true"><b></b></div>
@@ -2496,577 +2420,165 @@ body.anim-ready .slide--silent .reveal.in > *, body.anim-ready .slide--title .re
       </div>
     </div>
   </section>
-
-
-  <!-- ═══════════════ BUILD ═══════════════ -->
-
-  <!-- S09 · BUILD DIVIDER — the pipeline -->
-  <section class="slide" data-act="BUILD" data-act-name="The pipeline" data-accent="cyan"
+  <!-- S06 · FIVE ARCHETYPES -->
+  <section class="slide" data-act="OPENING" data-act-name="Five archetypes" data-accent="purple"
            style="justify-content:center;align-items:flex-start;text-align:left;">
-    <div class="aurora aurora--cyan" aria-hidden="true"><b></b></div>
-    <div class="reveal" style="position:relative;z-index:2;width:100%;max-width:1780px;margin:0 auto;">
-      <span class="tag" style="--tag-c:var(--cyan);">Move 2 of 4 · Build · six modules, six checkpoints</span>
-      <div class="act-num" style="--an-c:var(--cyan);margin-top:clamp(6px,1.2vh,14px);">02</div>
-      <h2 class="h2" style="margin-top:clamp(4px,0.8vh,10px);max-width:30ch;">
-        Six modules, six checkpoints &mdash; <span style="color:var(--cyan);">contract to risk score.</span>
-      </h2>
-      <div class="rpipe" style="margin-top:clamp(24px,3.8vh,42px);grid-template-columns:repeat(6,minmax(0,1fr));">
-        <div class="rst" style="--r-c:var(--accent);"><div class="rst-n">M01</div><div class="rst-t">Contract + plan</div><div class="rst-s">contracts · ledger</div></div>
-        <div class="rst" style="--r-c:var(--gold);"><div class="rst-n">M02</div><div class="rst-t">Synthetic data</div><div class="rst-s">dbldatagen · 100k</div></div>
-        <div class="rst" style="--r-c:var(--cyan);"><div class="rst-n">M03</div><div class="rst-t">Bronze</div><div class="rst-s">4 streaming tables</div></div>
-        <div class="rst" style="--r-c:var(--purple);"><div class="rst-n">M04</div><div class="rst-t">DQX + Silver</div><div class="rst-s">quality + quarantine</div></div>
-        <div class="rst" style="--r-c:var(--green);"><div class="rst-n">M05</div><div class="rst-t">Gold + DABs</div><div class="rst-s">risk + dev deploy</div></div>
-        <div class="rst" style="--r-c:var(--gold);"><div class="rst-n">M06</div><div class="rst-t">Genie + replay</div><div class="rst-s">investigate · 25 → 45</div></div>
-      </div>
-      <div class="callout cyan" style="margin-top:clamp(24px,3.6vh,40px);">
-        <div class="co-kicker">Each module · the same loop</div>
-        <div class="co-body">own &rarr; plan &rarr; execute &rarr; verify &rarr; review &rarr; lesson &mdash; then <b>checkpoint.sh NN</b> proves the slice.</div>
-      </div>
-    </div>
-  </section>
-
-  <!-- S10 · THE FOUR ENTITIES -->
-  <section class="slide" data-act="BUILD" data-act-name="Four entities" data-accent="cyan"
-           style="justify-content:center;align-items:flex-start;text-align:left;">
-    <div class="aurora aurora--cyan" aria-hidden="true"><b></b></div>
-    <div class="reveal" style="position:relative;z-index:2;width:100%;max-width:1720px;margin:0 auto;">
-      <span class="tag kick-tag" style="--tag-c:var(--cyan);">The domain model · NovaPay (m-007) under review · 12 merchants · 100k orders · 100k transactions · 102 disputes</span>
-      <div class="four-col">
-        <div class="req cyan">
-          <div class="req-inner">
-            <div class="req-idx">merchants</div>
-            <div class="req-name">Merchants</div>
-            <div class="req-note"><b>PK</b> merchant_id · merchant_name · country · <b>risk_tier</b></div>
-          </div>
-        </div>
-        <div class="req accent">
-          <div class="req-inner">
-            <div class="req-idx">orders</div>
-            <div class="req-name">Orders</div>
-            <div class="req-note"><b>PK</b> order_id · <b>FK</b> merchant_id · order_ts · amount_cents · currency</div>
-          </div>
-        </div>
-        <div class="req gold">
-          <div class="req-inner">
-            <div class="req-idx">transactions</div>
-            <div class="req-name">Transactions</div>
-            <div class="req-note"><b>PK</b> txn_id · <b>FK</b> order_id, merchant_id · processor · status · amount_cents</div>
-          </div>
-        </div>
-        <div class="req red">
-          <div class="req-inner">
-            <div class="req-idx">disputes</div>
-            <div class="req-name">Disputes</div>
-            <div class="req-note"><b>PK</b> dispute_id · <b>FK</b> txn_id · opened_at · closed_at · reason · status</div>
-          </div>
-        </div>
-      </div>
-      <div class="section-rule">relationship</div>
-      <div class="jrn">
-        <div class="jst" style="--j-c:var(--cyan);"><div class="jst-n">1</div><div class="jst-t">Merchant</div><div class="jst-s">receives many orders</div></div>
-        <div class="jst" style="--j-c:var(--accent);"><div class="jst-n">2</div><div class="jst-t">Order</div><div class="jst-s">is paid by exactly one transaction</div></div>
-        <div class="jst" style="--j-c:var(--gold);"><div class="jst-n">3</div><div class="jst-t">Transaction</div><div class="jst-s">can be challenged by disputes</div></div>
-        <div class="jst" style="--j-c:var(--red);"><div class="jst-n">4</div><div class="jst-t">Dispute</div><div class="jst-s">closes after it opens &mdash; or it's quarantined</div></div>
-      </div>
-    </div>
-  </section>
-
-  <!-- S11 · THE CONTRACT -->
-  <section class="slide" data-act="BUILD" data-act-name="The data contract" data-accent="accent"
-           style="justify-content:center;align-items:flex-start;text-align:left;">
-    <div class="aurora aurora--accent" aria-hidden="true"><b></b></div>
-    <div class="reveal" style="position:relative;z-index:2;width:100%;max-width:1680px;margin:0 auto;">
-      <span class="tag kick-tag" style="--tag-c:var(--accent);">The data promise · configs/contracts/psp-payment.contract.yaml</span>
-      <div class="cols" style="--cols:1.05fr 0.95fr;align-items:stretch;gap:clamp(20px,2.6vw,44px);">
-        <div class="cmac">
-          <div class="cmac-bar"><div class="cmac-dots"><i style="background:#ff5f56;"></i><i style="background:#ffbd2e;"></i><i style="background:#27c93f;"></i></div><span style="font-family:var(--font-mono);font-size:11px;color:var(--text-dim);">psp-payment.contract.yaml</span></div>
-          <div class="cmac-body">
-            <div class="code-block" data-lang="contract" style="border:0;background:transparent;padding:0;">
-<span class="c"># the deterministic data promise</span>
-<span class="k">contract</span>:          PSPPaymentContract/v1
-<span class="k">seed</span>:               <span class="n">22082026</span>
-<span class="k">transaction_count</span>:  <span class="n">100000</span>
-<span class="k">focus_merchant</span>:     m-007
-<span class="k">allowed_currencies</span>: [USD, GBP, CAD, AUD]
-<span class="k">allowed_processors</span>: [stripe, adyen]
-<span class="k">entities</span>: [merchants, orders, transactions, disputes]
-            </div>
-          </div>
-        </div>
-        <div>
-          <span class="tag" style="--tag-c:var(--silver);margin-bottom:clamp(11px,1.8vh,19px);">Two deterministic batches</span>
-          <div class="dif">
-            <div class="dcard" style="--dc:var(--green);">
-              <div class="dc-head"><span class="dc-dot" aria-hidden="true"></span><span class="dc-name">batch-001</span><span class="dc-batch">healthy baseline</span></div>
-              <div class="dc-body">
-                <div class="dc-well"><span class="dim">transactions</span>  <span class="ch">98,791</span>  <span class="dim">valid · establish the baseline</span></div>
-              </div>
-            </div>
-            <div class="dcard" style="--dc:var(--red);">
-              <div class="dc-head"><span class="dc-dot" aria-hidden="true"></span><span class="dc-name">batch-002-incident</span><span class="dc-batch">seven quarantines + one replay</span></div>
-              <div class="dc-body">
-                <div class="dc-well"><span class="dim">transactions</span>  <span class="ch">1,209</span>  <span class="dim">1,204 BRL + five sentinels + one held chargeback</span></div>
-              </div>
-            </div>
-          </div>
-          <p class="ts-note" style="margin-top:clamp(14px,2.2vh,24px);">Checkpoint: <b>why is the late chargeback valid data, while the temporal dispute is quarantined?</b></p>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- S12 · THE AGENT CONTRACT -->
-  <section class="slide" data-act="BUILD" data-act-name="The agent contract" data-accent="red"
-           style="justify-content:center;align-items:flex-start;text-align:left;">
-    <div class="aurora aurora--red" aria-hidden="true"><b></b></div>
-    <div class="reveal" style="position:relative;z-index:2;width:100%;max-width:1680px;margin:0 auto;">
-      <span class="tag kick-tag" style="--tag-c:var(--red);">The fence · configs/contracts/agent-contract.yaml</span>
-      <div class="cols" style="--cols:1.02fr 0.98fr;gap:clamp(24px,3vw,56px);align-items:stretch;">
-        <div>
-          <h2 class="h2" style="font-size:clamp(24px,3.2vw,44px);">The agent may act. It may not <span style="color:var(--red);">cross the fence.</span></h2>
-          <div class="wh-row"><span class="wh-num">1</span><div><div class="wh-rule">Begin in <b>plan</b> mode &mdash; propose, don't deploy</div><div class="wh-why">approve the plan before any edit or remote mutation</div></div></div>
-          <div class="wh-row"><span class="wh-num">2</span><div><div class="wh-rule">Target <b>dev</b> only &mdash; no prd, no schedules, no service principals</div><div class="wh-why">the reset may touch only the exact workshop bundle and schema</div></div></div>
-          <div class="wh-row"><span class="wh-num">3</span><div><div class="wh-rule">Never <b>ON VIOLATION DROP ROW</b> &mdash; preserve every invalid row</div><div class="wh-why">quarantine carries _errors and _warnings; nothing is deleted</div></div></div>
-          <div class="wh-row"><span class="wh-num">4</span><div><div class="wh-rule">Implement only the <b>module's paths</b> &mdash; one slice at a time</div><div class="wh-why">own &rarr; plan &rarr; execute &rarr; verify &rarr; review &rarr; lesson</div></div></div>
-        </div>
-        <div class="cmac">
-          <div class="cmac-bar"><div class="cmac-dots"><i style="background:#ff5f56;"></i><i style="background:#ffbd2e;"></i><i style="background:#27c93f;"></i></div><span style="font-family:var(--font-mono);font-size:11px;color:var(--text-dim);">agent-contract.yaml · writable scope</span></div>
-          <div class="cmac-body">
-            <div class="etree" style="border:0;background:transparent;">
-<span class="et-hi">writable:</span>
-  configs/**
-  gen/synthetic/**
-  pipelines/src/**
-  pipelines/resources/**
-  pipelines/spark-pipeline.yaml
-  scripts/** · tests/** · docs/** · data/fallback/**
-<span class="et-dim"># ── protected ──────────────────────</span>
-  <span class="et-dim">none &mdash; main holds the instructor solution</span>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- S13 · MODULE 02 — GENERATE -->
-  <section class="slide" data-act="BUILD" data-act-name="Module 02 · Generate" data-accent="gold">
-    <span class="demo-live">Demo · Live</span>
-    <div class="aurora aurora--gold" aria-hidden="true"><b></b></div>
-    <div class="reveal" style="position:relative;z-index:2;width:100%;max-width:1680px;margin:0 auto;">
-      <span class="tag kick-tag" style="--tag-c:var(--gold);">Module 02 · Generate the deterministic story · dbldatagen</span>
-      <div class="cols" style="--cols:1.05fr 0.95fr;align-items:stretch;gap:clamp(18px,2.2vw,36px);">
-        <div class="code-block" data-lang="terminal">
-<span class="c"># seed is fixed in the contract — no randomness</span>
-$ ./scripts/generate_fallback.sh
-$ uv run python -m json.tool data/fallback/manifest.json | head -60
-
-<span class="g">✓ seed 22082026 · 12 merchants · 100,000 orders</span>
-<span class="g">✓ 100,000 transactions · 102 disputes</span>
-<span class="g">✓ 98,791 baseline + 1,209 incident</span>
-<span class="c"># prove it</span>
-$ ./scripts/checkpoint.sh 02
-        </div>
-        <div>
-          <span class="tag" style="--tag-c:var(--silver);margin-bottom:clamp(9px,1.5vh,15px);">The eight incident conditions</span>
-          <div class="rules" style="grid-template-columns:1fr 1fr;">
-            <div class="rl"><span class="ct-k" style="--ck:var(--red);">1</span><span class="rl-v">txn_id is <b>null</b></span></div>
-            <div class="rl"><span class="ct-k" style="--ck:var(--red);">2</span><span class="rl-v">duplicate txn_id</span></div>
-            <div class="rl"><span class="ct-k" style="--ck:var(--red);">3</span><span class="rl-v">amount_cents &le; 0</span></div>
-            <div class="rl"><span class="ct-k" style="--ck:var(--red);">4</span><span class="rl-v"><b>BRL</b> unauthorized &middot; 1,204 rows</span></div>
-            <div class="rl"><span class="ct-k" style="--ck:var(--red);">5</span><span class="rl-v">unknown processor</span></div>
-            <div class="rl"><span class="ct-k" style="--ck:var(--red);">6</span><span class="rl-v">orphan order_id</span></div>
-            <div class="rl"><span class="ct-k" style="--ck:var(--red);">7</span><span class="rl-v">dispute closes before open</span></div>
-            <div class="rl rl--hot"><span class="ct-k" style="--ck:var(--gold);">8</span><span class="rl-v"><b>late valid chargeback</b> &middot; held for replay</span></div>
-          </div>
-          <div class="callout red" style="margin-top:clamp(14px,2.2vh,24px);">
-            <div class="co-kicker">The distinction</div>
-            <div class="co-body">Conditions <b>1&ndash;7</b> are invalid &rarr; quarantine. Condition <b>8</b> is valid but late &rarr; held, then replayed.</div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- S14 · MODULE 03 — BRONZE -->
-  <section class="slide" data-act="BUILD" data-act-name="Module 03 · Bronze" data-accent="cyan">
-    <div class="aurora aurora--cyan" aria-hidden="true"><b></b></div>
-    <div class="reveal" style="position:relative;z-index:2;width:100%;max-width:1720px;margin:0 auto;">
-      <span class="tag kick-tag" style="--tag-c:var(--cyan);">Module 03 · Bronze · four streaming tables with lineage</span>
-      <div class="plant" style="margin-top:clamp(18px,3vh,30px);">
-        <div class="pst" style="--p-c:var(--cyan);"><div class="pst-in"><div class="pst-k">bronze_merchants</div><div class="pst-t">Merchants</div><div class="pst-s">raw rows, nothing dropped</div></div></div>
-        <div class="pst" style="--p-c:var(--accent);"><div class="pst-in"><div class="pst-k">bronze_orders</div><div class="pst-t">Orders</div><div class="pst-s">file stream from Volume</div></div></div>
-        <div class="pst" style="--p-c:var(--gold);"><div class="pst-in"><div class="pst-k">bronze_transactions</div><div class="pst-t">Transactions</div><div class="pst-s">the incident lives here</div></div></div>
-        <div class="pst" style="--p-c:var(--red);"><div class="pst-in"><div class="pst-k">bronze_disputes</div><div class="pst-t">Disputes</div><div class="pst-s">opened / closed timestamps</div></div></div>
-      </div>
-      <div class="callout cyan" style="margin-top:clamp(20px,3.2vh,34px);">
-        <div class="co-kicker">Auto Loader keeps schema evolution + rescued data</div>
-        <div class="co-body"><b>_batch_id</b> · <b>_source_file</b> · <b>_ingested_at</b> · <b>_rescued_data</b> &mdash; lineage is a first-class column, not an afterthought.</div>
-      </div>
-      <div class="code-block" data-lang="verify" style="margin-top:clamp(14px,2.2vh,24px);">
-<span class="c"># prove the graph, not the rows — a dry-run proves construction</span>
-$ ./scripts/sdp.sh dry-run --spec pipelines/spark-pipeline.yaml
-<span class="g">✓ graph resolves · four Bronze nodes · exit 0</span>
-<span class="c"># checkpoint</span>
-$ ./scripts/checkpoint.sh 03
-      </div>
-    </div>
-  </section>
-
-  <!-- S15 · MODULE 04 — DQX + SILVER -->
-  <section class="slide" data-act="BUILD" data-act-name="Module 04 · DQX + Silver" data-accent="purple">
     <div class="aurora aurora--purple" aria-hidden="true"><b></b></div>
-    <div class="reveal" style="position:relative;z-index:2;width:100%;max-width:1720px;margin:0 auto;">
-      <span class="tag kick-tag" style="--tag-c:var(--purple);">Module 04 · DQX + Silver · route quality, preserve the bad</span>
-      <div class="cols" style="--cols:1.05fr 0.95fr;align-items:stretch;gap:clamp(20px,2.6vw,44px);">
-        <div>
-          <div class="three-col" style="grid-template-columns:1fr;">
-            <div class="card green" style="margin-bottom:clamp(14px,2vh,22px);">
-              <div class="card-inner">
-                <span class="tag" style="--tag-c:var(--green);">valid &rarr; Silver</span>
-                <div class="db-h grad">silver_* tables</div>
-                <p class="db-p">Rows that pass every DQX rule continue to the <b>silver_transactions</b> and <b>silver_disputes</b> tables.</p>
-              </div>
-            </div>
-            <div class="card red">
-              <div class="card-inner">
-                <span class="tag" style="--tag-c:var(--red);">invalid &rarr; Quarantine</span>
-                <div class="db-h grad">quarantine_* tables</div>
-                <p class="db-p">Rows that fail stay queryable with <b>_errors</b> and <b>_warnings</b> &mdash; never silently dropped.</p>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div class="cmac">
-          <div class="cmac-bar"><div class="cmac-dots"><i style="background:#ff5f56;"></i><i style="background:#ffbd2e;"></i><i style="background:#27c93f;"></i></div><span style="font-family:var(--font-mono);font-size:11px;color:var(--text-dim);">configs/dqx-rules.yaml</span></div>
-          <div class="cmac-body">
-            <div class="etree" style="border:0;background:transparent;">
-<span class="et-dim">transactions:</span>
-  <span class="et-hi">txn_id_is_null</span>
-  <span class="et-hi">txn_id_is_duplicate</span>
-  <span class="et-hi">amount_is_not_positive</span>
-  <span class="et-hi">currency_is_not_authorized</span>  <span class="et-dim"># USD · GBP · CAD · AUD</span>
-  <span class="et-hi">processor_is_unknown</span>         <span class="et-dim"># stripe · adyen</span>
-  <span class="et-hi">order_is_orphan</span>
-<span class="et-dim">disputes:</span>
-  <span class="et-hi">dispute_id_is_null</span>
-  <span class="et-hi">dispute_closes_before_open</span>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="callout red" style="margin-top:clamp(16px,2.6vh,28px);">
-        <div class="co-kicker">The contract test</div>
-        <div class="co-body"><b>rg "ON VIOLATION DROP ROW"</b> in the workshop pipeline must print <b>nothing</b>. Do not fix bad input by deleting it.</div>
-      </div>
-    </div>
-  </section>
-
-  <!-- S16 · MODULE 05 — GOLD -->
-  <section class="slide" data-act="BUILD" data-act-name="Module 05 · Gold" data-accent="gold">
-    <div class="aurora aurora--gold" aria-hidden="true"><b></b></div>
     <div class="reveal" style="position:relative;z-index:2;width:100%;max-width:1680px;margin:0 auto;">
-      <span class="tag kick-tag" style="--tag-c:var(--gold);">Module 05 · Gold · one merchant-grain risk score</span>
-      <div class="cols" style="--cols:0.95fr 1.05fr;align-items:center;gap:clamp(22px,3vw,56px);">
-        <div class="code-block" data-lang="gold.py">
-<span class="c"># pipelines/src/gold.py</span>
-<span class="k">quality_risk_score</span>     = ceil(quarantine_count / <span class="n">50</span>)
-<span class="k">chargeback_risk_points</span> = chargeback_count * <span class="n">20</span>
-<span class="k">risk_score</span>             = min(<span class="n">100</span>, quality + chargeback)
-<span class="c"># risk_band: &ge; 70 critical &middot; &ge; 30 elevated &middot; else normal</span>
-        </div>
-        <div>
-          <span class="tag" style="--tag-c:var(--silver);margin-bottom:clamp(11px,1.8vh,19px);">gold_merchant_risk · m-007</span>
-          <div class="arith">
-            <div class="ar"><span class="ar-k">quarantined transactions</span><span class="ar-v">1,209</span></div>
-            <div class="ar"><span class="ar-k">quality points · ceil(1209 / 50)</span><span class="ar-v">25</span></div>
-            <div class="ar"><span class="ar-k">chargebacks · baseline</span><span class="ar-v">0 &rarr; 0 pts</span></div>
-            <div class="ar ar--sum"><span class="ar-k">risk score · before replay</span><span class="ar-v">25 · normal</span></div>
-            <div class="ar ar--delta"><span class="ar-k">+ 1 valid chargeback (replay)</span><span class="ar-v">45 · elevated</span></div>
-          </div>
-          <div class="callout gold" style="margin-top:clamp(16px,2.6vh,28px);">
-            <div class="co-kicker">Explainable by design</div>
-            <div class="co-body">Every point maps to a quarantined row or a chargeback. <b>No black box &mdash; the components are columns.</b></div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- S17 · EVIDENCE LADDER -->
-  <section class="slide" data-act="BUILD" data-act-name="Evidence ladder" data-accent="green"
-           style="justify-content:center;align-items:flex-start;text-align:left;">
-    <div class="aurora aurora--green" aria-hidden="true"><b></b></div>
-    <div class="reveal" style="position:relative;z-index:2;width:100%;max-width:1680px;margin:0 auto;">
-      <span class="tag kick-tag" style="--tag-c:var(--green);">The evidence ladder · one command, five meanings</span>
-      <div class="gmx">
-        <div class="gmx-head">
-          <span class="gmx-k">Evidence rung</span>
-          <span class="gmx-state">proves</span>
-          <span class="gmx-state">graph</span>
-          <span class="gmx-state">rows</span>
-          <span class="gmx-state">workspace</span>
-        </div>
-        <div class="gmx-row"><div class="gmx-id">local dry-run<small>./scripts/sdp.sh dry-run</small></div><div class="gmx-cell"><span class="gmx-mark is-pass">&#10003;</span></div><div class="gmx-cell"><span class="gmx-mark is-pass">&#10003;</span></div><div class="gmx-cell"><span class="gmx-mark is-none">&ndash;</span></div><div class="gmx-cell"><span class="gmx-mark is-none">&ndash;</span></div></div>
-        <div class="gmx-row"><div class="gmx-id">remote dry-run<small>databricks pipelines dry-run</small></div><div class="gmx-cell"><span class="gmx-mark is-pass">&#10003;</span></div><div class="gmx-cell"><span class="gmx-mark is-pass">&#10003;</span></div><div class="gmx-cell"><span class="gmx-mark is-none">&ndash;</span></div><div class="gmx-cell"><span class="gmx-mark is-pass">&#10003;</span></div></div>
-        <div class="gmx-row"><div class="gmx-id">deployed<small>databricks bundle deploy</small></div><div class="gmx-cell"><span class="gmx-mark is-pass">&#10003;</span></div><div class="gmx-cell"><span class="gmx-mark is-none">&ndash;</span></div><div class="gmx-cell"><span class="gmx-mark is-none">&ndash;</span></div><div class="gmx-cell"><span class="gmx-mark is-pass">&#10003;</span></div></div>
-        <div class="gmx-row"><div class="gmx-id">live runtime<small>databricks bundle run</small></div><div class="gmx-cell"><span class="gmx-mark is-pass">&#10003;</span></div><div class="gmx-cell"><span class="gmx-mark is-none">&ndash;</span></div><div class="gmx-cell"><span class="gmx-mark is-pass">&#10003;</span></div><div class="gmx-cell"><span class="gmx-mark is-pass">&#10003;</span></div></div>
-        <div class="gmx-row"><div class="gmx-id">replay<small>release_incident --remote</small></div><div class="gmx-cell"><span class="gmx-mark is-pass">&#10003;</span></div><div class="gmx-cell"><span class="gmx-mark is-none">&ndash;</span></div><div class="gmx-cell"><span class="gmx-mark is-pass">&#10003;</span></div><div class="gmx-cell"><span class="gmx-mark is-pass">&#10003;</span></div></div>
-      </div>
-      <p class="gmeaning">A local pass does not prove your workspace can deploy. <b>Name the rung, keep the evidence separate.</b></p>
-    </div>
-  </section>
-
-
-  <!-- ═══════════════ DEPLOY ═══════════════ -->
-
-  <!-- S18 · DEPLOY DIVIDER -->
-  <section class="slide" data-act="DEPLOY" data-act-name="Deploy" data-accent="green"
-           style="justify-content:center;align-items:flex-start;text-align:left;">
-    <div class="aurora aurora--green" aria-hidden="true"><b></b></div>
-    <div class="reveal" style="position:relative;z-index:2;width:100%;max-width:1780px;margin:0 auto;">
-      <div class="cols" style="--cols:1.05fr 0.95fr;align-items:center;gap:clamp(24px,3.4vw,72px);">
-        <div>
-          <span class="tag" style="--tag-c:var(--green);">Module 05 · Deploy · DABs to dev</span>
-          <div class="act-num" style="--an-c:var(--green);margin-top:clamp(6px,1.2vh,14px);">03</div>
-          <h2 class="h2" style="margin-top:clamp(4px,0.8vh,10px);">
-            One bundle, one target,<br>every change <span style="color:var(--green);">tracked.</span>
-          </h2>
-          <p class="lede" style="max-width:54ch;margin-top:clamp(14px,2.4vh,24px);">
-            Databricks Asset Bundles version your workspace as code. <b>Strict-validate</b> before you deploy,
-            <b>dry-run</b> the hosted graph, then <b>run</b> the serverless pipeline. Read the active profile aloud &mdash; you are about to mutate a workspace.
-          </p>
-        </div>
-        <div>
-          <span class="tag" style="--tag-c:var(--silver);margin-bottom:clamp(9px,1.5vh,15px);">The deploy sequence</span>
-          <div class="code-block cb-green" data-lang="terminal">
-<span class="c"># pause — confirm your own workspace first</span>
-$ databricks auth profiles
-$ databricks current-user me -p "$DATABRICKS_CONFIG_PROFILE"
-
-$ databricks bundle <span class="g">validate</span> --strict -t dev
-$ databricks bundle <span class="g">deploy</span>   -t dev
-$ databricks pipelines <span class="g">dry-run</span> workshop_pipeline -t dev
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- S19 · RUN + UNITY CATALOG -->
-  <section class="slide" data-act="DEPLOY" data-act-name="Run + UC" data-accent="green">
-    <span class="demo-live">Demo · Live</span>
-    <div class="aurora aurora--green" aria-hidden="true"><b></b></div>
-    <div class="reveal" style="position:relative;z-index:2;width:100%;max-width:1680px;margin:0 auto;">
-      <span class="tag kick-tag" style="--tag-c:var(--green);">Deploy &amp; run · the live runtime evidence</span>
-      <div class="cols" style="--cols:1.02fr 0.98fr;align-items:stretch;gap:clamp(18px,2.4vw,40px);">
-        <div class="code-block cb-green" data-lang="terminal">
-<span class="c"># upload the generated baseline, then run</span>
-$ ./scripts/upload_fallback.sh baseline
-$ databricks bundle run workshop_pipeline -t dev --full-refresh-all
-
-<span class="c"># assert the hosted baseline</span>
-$ ./scripts/verify_remote_data.sh baseline
-<span class="g">✓ m-007 risk_score=25 risk_band=normal</span>
-        </div>
-        <div>
-          <span class="tag" style="--tag-c:var(--silver);margin-bottom:clamp(9px,1.5vh,15px);">Unity Catalog · one teachable namespace</span>
-          <div class="substrip" style="grid-template-columns:1fr;margin-bottom:0;">
-            <div class="subcell" style="--sb-c:var(--green);"><div class="sb-ic">&#9632;</div><div class="sb-k">catalog</div><div class="sb-v"><b>workspace</b> &middot; default Free Edition</div></div>
-            <div class="subcell" style="--sb-c:var(--cyan);"><div class="sb-ic">&#9632;</div><div class="sb-k">schema</div><div class="sb-v"><b>dbx_agentic_dev</b> &middot; isolated, stable</div></div>
-            <div class="subcell" style="--sb-c:var(--gold);"><div class="sb-ic">&#9632;</div><div class="sb-k">volume</div><div class="sb-v"><b>landing</b> &middot; managed JSON batches</div></div>
-          </div>
-          <div class="callout green" style="margin-top:clamp(12px,2vh,22px);">
-            <div class="co-kicker">Lineage &amp; table comments</div>
-            <div class="co-body">Bronze &rarr; Silver &rarr; Gold lineage is recorded in UC, with <b>comments on every table</b> &mdash; the evidence is inspectable, not just asserted.</div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-
-  <!-- ═══════════════ REPLAY ═══════════════ -->
-
-  <!-- S20 · REPLAY DIVIDER -->
-  <section class="slide" data-act="REPLAY" data-act-name="The replay" data-accent="gold"
-           style="justify-content:center;align-items:flex-start;text-align:left;">
-    <div class="aurora aurora--gold" aria-hidden="true"><b></b></div>
-    <div class="reveal" style="position:relative;z-index:2;width:100%;max-width:1780px;margin:0 auto;">
-      <span class="tag" style="--tag-c:var(--gold);">Module 06 · Replay · the incident is released</span>
-      <div class="act-num" style="--an-c:var(--gold);margin-top:clamp(6px,1.2vh,14px);">04</div>
-      <h2 class="h2" style="margin-top:clamp(4px,0.8vh,10px);max-width:32ch;">
-        A valid chargeback arrives <span style="color:var(--gold);">late.</span> Now the number moves.
+      <span class="tag kick-tag" style="--tag-c:var(--purple);">Five archetypes &nbsp;·&nbsp; behavior beats title</span>
+      <h2 class="h2" style="font-size:clamp(30px,4.4vw,60px);">
+        Titles blur.<br><span style="color:var(--purple);">Archetypes endure.</span>
       </h2>
-      <p class="lede" style="max-width:58ch;margin-top:clamp(14px,2.4vh,24px);">
-        The held <b>late-valid-chargeback</b> is replayed into the pipeline. It passes Silver &mdash; it's valid data &mdash; and lands as a chargeback in Gold. <b>m-007 moves from 25 to 45, one explainable component at a time.</b>
+      <p class="lede" style="max-width:92ch;margin-top:clamp(12px,2vh,20px);">
+        <b>Boris Cherny</b> &mdash; creator of Claude Code at Anthropic &mdash; on how a team adds value in the AI era:
+        five behavior-based roles that hold regardless of formal title.
       </p>
-      <div class="code-block" data-lang="terminal" style="margin-top:clamp(18px,3vh,32px);max-width:920px;">
-<span class="c"># release the held chargeback</span>
-$ ./scripts/release_incident.sh --remote
-$ ./scripts/verify_remote_data.sh replay
-<span class="g">✓ m-007 risk_score=45 risk_band=elevated · chargeback_count 0 &rarr; 1</span>
+
+      <div style="display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:clamp(12px,1.4vw,20px);margin-top:clamp(20px,3.2vh,34px);">
+        <div class="card accent"><div class="card-inner">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 3l1.8 5.2L19 10l-5.2 1.8L12 17l-1.8-5.2L5 10l5.2-1.8z" stroke="#ff9d8a" stroke-width="1.6" stroke-linejoin="round"/></svg>
+          <div style="font-family:var(--font-display);font-size:clamp(19px,1.9vw,26px);line-height:1.05;color:var(--text);margin-top:clamp(12px,1.8vh,18px);">Prototyper</div>
+          <p style="font-family:var(--font-editorial);font-size:clamp(12.5px,1.15vw,15px);line-height:1.45;color:var(--text-dim);margin-top:clamp(8px,1.3vh,13px);">Generates brand-new ideas and runs many rapid experiments &mdash; <b style="color:var(--text);font-weight:600;">knowing most won't ship</b>.</p>
+        </div></div>
+
+        <div class="card cyan"><div class="card-inner">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" aria-hidden="true"><rect x="4" y="4" width="16" height="5" rx="1" stroke="#7fe0ec" stroke-width="1.6"/><rect x="4" y="10" width="16" height="5" rx="1" stroke="#7fe0ec" stroke-width="1.6"/><rect x="4" y="16" width="16" height="4" rx="1" stroke="#7fe0ec" stroke-width="1.6"/></svg>
+          <div style="font-family:var(--font-display);font-size:clamp(19px,1.9vw,26px);line-height:1.05;color:var(--text);margin-top:clamp(12px,1.8vh,18px);">Builder</div>
+          <p style="font-family:var(--font-editorial);font-size:clamp(12.5px,1.15vw,15px);line-height:1.45;color:var(--text-dim);margin-top:clamp(8px,1.3vh,13px);">Turns a promising prototype into <b style="color:var(--text);font-weight:600;">production-grade</b> product and infrastructure.</p>
+        </div></div>
+
+        <div class="card gold"><div class="card-inner">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M6 5l1 2.5 2.5 1-2.5 1L6 12l-1-2.5L2.5 8.5 5 7.5z" fill="#ffdb9e"/><path d="M17.5 14l0.8 2 2 0.8-2 0.8-0.8 2-0.8-2-2-0.8 2-0.8z" fill="#ffdb9e"/></svg>
+          <div style="font-family:var(--font-display);font-size:clamp(19px,1.9vw,26px);line-height:1.05;color:var(--text);margin-top:clamp(12px,1.8vh,18px);">Sweeper</div>
+          <p style="font-family:var(--font-editorial);font-size:clamp(12.5px,1.15vw,15px);line-height:1.45;color:var(--text-dim);margin-top:clamp(8px,1.3vh,13px);">Simplifies UI, code, and systems &mdash; <b style="color:var(--text);font-weight:600;">unships dead features</b>, optimizes performance.</p>
+        </div></div>
+
+        <div class="card green"><div class="card-inner">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 20v-7" stroke="#7ce0a6" stroke-width="1.6" stroke-linecap="round"/><path d="M12 13c0-3.5 2.5-6 6-6 0 3.5-2.5 6-6 6z" stroke="#7ce0a6" stroke-width="1.6" stroke-linejoin="round"/><path d="M12 10c0-3.5-2.5-6-6-6 0 3.5 2.5 6 6 6z" stroke="#7ce0a6" stroke-width="1.6" stroke-linejoin="round"/></svg>
+          <div style="font-family:var(--font-display);font-size:clamp(19px,1.9vw,26px);line-height:1.05;color:var(--text);margin-top:clamp(12px,1.8vh,18px);">Grower</div>
+          <p style="font-family:var(--font-editorial);font-size:clamp(12.5px,1.15vw,15px);line-height:1.45;color:var(--text-dim);margin-top:clamp(8px,1.3vh,13px);">Iterates closely on an established product to expand <b style="color:var(--text);font-weight:600;">product-market fit</b>.</p>
+        </div></div>
+
+        <div class="card silver"><div class="card-inner">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 3l7 3v6c0 4.5-3 7.5-7 9-4-1.5-7-4.5-7-9V6z" stroke="#d3dae2" stroke-width="1.6" stroke-linejoin="round"/><path d="M9 12l2 2 4-4" stroke="#d3dae2" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          <div style="font-family:var(--font-display);font-size:clamp(19px,1.9vw,26px);line-height:1.05;color:var(--text);margin-top:clamp(12px,1.8vh,18px);">Maintainer</div>
+          <p style="font-family:var(--font-editorial);font-size:clamp(12.5px,1.15vw,15px);line-height:1.45;color:var(--text-dim);margin-top:clamp(8px,1.3vh,13px);">Owns mature systems &mdash; keeps them <b style="color:var(--text);font-weight:600;">secure, reliable, fast, and efficient</b> at scale.</p>
+        </div></div>
       </div>
     </div>
   </section>
 
-  <!-- S21 · BEFORE / AFTER -->
-  <section class="slide" data-act="REPLAY" data-act-name="Before & after" data-accent="gold">
-    <div class="aurora aurora--gold" aria-hidden="true"><b></b></div>
-    <div class="reveal" style="position:relative;z-index:2;width:100%;max-width:1680px;margin:0 auto;">
-      <span class="tag kick-tag" style="--tag-c:var(--gold);">The delta · NovaPay (m-007), before and after</span>
-      <div class="cols" style="--cols:1fr 1fr 0.7fr;align-items:stretch;gap:clamp(16px,2vw,32px);">
-        <div class="dcard" style="--dc:var(--green);">
-          <div class="dc-head"><span class="dc-dot" aria-hidden="true"></span><span class="dc-name">baseline</span><span class="dc-batch">before replay</span></div>
-          <div class="dc-body">
-            <div class="dc-foot"><span class="dc-val">25</span><span class="dc-say"><b>normal</b> &middot; 1,209 quarantined &middot; 0 chargebacks</span></div>
-            <div class="arith" style="margin-top:clamp(12px,1.9vh,18px);">
-              <div class="ar"><span class="ar-k">quality · ceil(1209/50)</span><span class="ar-v">25</span></div>
-              <div class="ar"><span class="ar-k">chargeback pts</span><span class="ar-v">0</span></div>
-              <div class="ar ar--sum"><span class="ar-k">risk</span><span class="ar-v">25</span></div>
-            </div>
-          </div>
+  <!-- S07 · SIX RINGS -->
+  <section class="slide" data-act="OPENING" data-act-name="Six rings" data-accent="green"
+           style="padding-top:clamp(20px,3vh,40px);padding-bottom:clamp(20px,3vh,40px);">
+    <div class="aurora aurora--green" aria-hidden="true"><b></b></div>
+    <div class="wrap rings-layout">
+      <div class="rings-copy reveal">
+        <span class="tag" style="--tag-c:var(--green);">The map · six rings around a model</span>
+        <h2 class="h2">Two rings light. <span style="color:var(--green);">The map completes.</span></h2>
+        <p class="lede">An agentic system is six rings around a model. Four are earned by building.
+        Two stay hot until the run proves them &mdash; <b>Loop</b> and <b>Eval + human gate</b>.</p>
+
+        <div class="ring-decision">
+          <h3>The model is a commodity.</h3>
+          <p>Spec, Context, Harness and Graph are <b>earned</b> &mdash; solid, on disk. Loop and Eval stay
+          <b>hot</b> until the run proves them. Completing the map is the spine, not the end.</p>
+          <p><b>What turns is the loop.</b> Nothing moves until it runs &mdash; and the model underneath can be swapped.</p>
         </div>
-        <div class="dcard" style="--dc:var(--red);">
-          <div class="dc-head"><span class="dc-dot" aria-hidden="true"></span><span class="dc-name">replay</span><span class="dc-batch">after the late chargeback</span></div>
-          <div class="dc-body">
-            <div class="dc-foot"><span class="dc-val">45</span><span class="dc-say"><b>elevated</b> &middot; +1 valid chargeback &middot; quality unchanged</span></div>
-            <div class="arith" style="margin-top:clamp(12px,1.9vh,18px);">
-              <div class="ar"><span class="ar-k">quality · ceil(1209/50)</span><span class="ar-v">25</span></div>
-              <div class="ar"><span class="ar-k">chargeback pts · 1 &times; 20</span><span class="ar-v">20</span></div>
-              <div class="ar ar--sum"><span class="ar-k">risk</span><span class="ar-v">45</span></div>
-            </div>
-          </div>
-        </div>
-        <div>
-          <span class="tag" style="--tag-c:var(--silver);margin-bottom:clamp(9px,1.5vh,15px);">The meaning</span>
-          <div class="rulequote">The late chargeback is <b>valid data</b> &mdash; it belongs in Silver and Gold. The temporal dispute is <b>invalid</b> &mdash; it belongs in quarantine. Quality and risk are two different axes.</div>
-          <div class="callout gold" style="margin-top:clamp(14px,2.2vh,24px);">
-            <div class="co-kicker">Never say</div>
-            <div class="co-body">&ldquo;m-007 committed fraud.&rdquo; Say: <b>m-007 has 1,209 quarantined transactions and one chargeback.</b></div>
-          </div>
-        </div>
+        <div class="src">Ring model of an agentic system. Earned = built + on disk. Loop + Eval light live &mdash; the two rings this workshop turns. The figure is a map, not a metric.</div>
+      </div>
+
+      <div class="rings-viz reveal">
+        <svg viewBox="0 0 1000 900" role="img" aria-label="The six rings of an agentic system: Spec, Context, Harness and Graph earned; Loop and Eval + human gate light tonight, completing the map around the Model.">
+          <defs>
+            <radialGradient id="srGraph" cx="50%" cy="50%" r="50%"><stop offset="83%" stop-color="#8b7cf6" stop-opacity="0"/><stop offset="100%" stop-color="#8b7cf6" stop-opacity=".08"/></radialGradient>
+            <radialGradient id="srEval" cx="50%" cy="50%" r="50%"><stop offset="78%" stop-color="#21b35d" stop-opacity="0"/><stop offset="100%" stop-color="#21b35d" stop-opacity=".16"/></radialGradient>
+            <radialGradient id="srLoop" cx="50%" cy="50%" r="50%"><stop offset="73%" stop-color="#7ce0a6" stop-opacity="0"/><stop offset="100%" stop-color="#7ce0a6" stop-opacity=".2"/></radialGradient>
+            <radialGradient id="srHarness" cx="50%" cy="50%" r="50%"><stop offset="68%" stop-color="#ffc24b" stop-opacity="0"/><stop offset="100%" stop-color="#ffc24b" stop-opacity=".09"/></radialGradient>
+            <radialGradient id="srContext" cx="50%" cy="50%" r="50%"><stop offset="62%" stop-color="#38c6d9" stop-opacity="0"/><stop offset="100%" stop-color="#38c6d9" stop-opacity=".09"/></radialGradient>
+            <radialGradient id="srSpec" cx="50%" cy="50%" r="50%"><stop offset="55%" stop-color="#8b7cf6" stop-opacity="0"/><stop offset="100%" stop-color="#8b7cf6" stop-opacity=".11"/></radialGradient>
+            <radialGradient id="srCore" cx="50%" cy="50%" r="50%"><stop offset="0%" stop-color="#8b7cf6" stop-opacity=".56"/><stop offset="100%" stop-color="#8b7cf6" stop-opacity=".12"/></radialGradient>
+            <filter id="srHotGlow" x="-30%" y="-30%" width="160%" height="160%"><feGaussianBlur stdDeviation="4" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+            <filter id="srCoreGlow" x="-60%" y="-60%" width="220%" height="220%"><feGaussianBlur stdDeviation="5" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+          </defs>
+
+          <circle class="ring-breathe r6" cx="500" cy="452" r="408" fill="url(#srGraph)" stroke="#8b7cf6" stroke-width="1.8" stroke-opacity=".5"/>
+          <circle class="ring-breathe" cx="500" cy="452" r="351" fill="url(#srEval)" stroke="#21b35d" stroke-width="3" stroke-opacity=".95" filter="url(#srHotGlow)"/>
+          <circle class="ring-breathe" cx="500" cy="452" r="297" fill="url(#srLoop)" stroke="#7ce0a6" stroke-width="3" stroke-opacity=".95" filter="url(#srHotGlow)"/>
+          <circle class="ring-breathe r3" cx="500" cy="452" r="244" fill="url(#srHarness)" stroke="#ffc24b" stroke-width="1.6" stroke-opacity=".5"/>
+          <circle class="ring-breathe r2" cx="500" cy="452" r="191" fill="url(#srContext)" stroke="#38c6d9" stroke-width="1.6" stroke-opacity=".48"/>
+          <circle class="ring-breathe r4" cx="500" cy="452" r="139" fill="url(#srSpec)" stroke="#8b7cf6" stroke-width="1.8" stroke-opacity=".5"/>
+          <circle class="core-pulse" cx="500" cy="452" r="86" fill="url(#srCore)" stroke="#8b7cf6" stroke-width="2" filter="url(#srCoreGlow)"/>
+
+          <text x="500" y="66" fill="#c4b7fb" font-family="Instrument Serif" font-size="29" text-anchor="middle">Graph</text>
+          <text x="500" y="86" fill="#8d7ec4" font-family="Fira Code" font-size="11.5" text-anchor="middle">earned · lineage · Bronze → Silver → Gold</text>
+
+          <text x="500" y="123" fill="#7ce0a6" font-family="Instrument Serif" font-size="27" text-anchor="middle" filter="url(#srHotGlow)">Eval + human gate</text>
+          <text x="500" y="143" fill="#21b35d" font-family="Fira Code" font-size="11.5" font-weight="bold" text-anchor="middle">tonight · checkpoint + the human sign-off</text>
+
+          <text x="500" y="179" fill="#96e0b2" font-family="Instrument Serif" font-size="29" text-anchor="middle" filter="url(#srHotGlow)">Loop</text>
+          <text x="500" y="198" fill="#7ce0a6" font-family="Fira Code" font-size="11.5" font-weight="bold" text-anchor="middle">tonight · own → plan → execute → verify → review → lesson</text>
+
+          <text x="500" y="232" fill="#ffdb9e" font-family="Instrument Serif" font-size="27" text-anchor="middle">Harness</text>
+          <text x="500" y="252" fill="#c2ae72" font-family="Fira Code" font-size="11.5" text-anchor="middle">earned · Lakeflow + DQX + DABs</text>
+
+          <text x="500" y="286" fill="#7fe0ec" font-family="Instrument Serif" font-size="27" text-anchor="middle">Context</text>
+          <text x="500" y="305" fill="#5fb6c4" font-family="Fira Code" font-size="11.5" text-anchor="middle">earned · BRD · spec · contracts · AGENTS.md</text>
+
+          <text x="500" y="339" fill="#d8ccff" font-family="Instrument Serif" font-size="30" text-anchor="middle">Prompt / Spec</text>
+          <text x="500" y="358" fill="#c4b7fb" font-family="Fira Code" font-size="12" text-anchor="middle">earned · the data contract</text>
+
+          <text x="500" y="445" fill="#fff" font-family="Instrument Serif" font-size="47" text-anchor="middle">Model</text>
+          <text x="500" y="471" fill="#e6ddff" font-family="Fira Code" font-size="11.5" text-anchor="middle">capability engine · swappable</text>
+
+          <text x="500" y="569" fill="#c4b7fb" font-family="Fira Code" font-size="11.5" font-style="italic" text-anchor="middle" opacity=".8">✓ the what — the data contract</text>
+          <text x="500" y="621" fill="#5fb6c4" font-family="Fira Code" font-size="11.5" font-style="italic" text-anchor="middle" opacity=".8">✓ the world it can see — the repo</text>
+          <text x="500" y="674" fill="#c2ae72" font-family="Fira Code" font-size="11.5" font-style="italic" text-anchor="middle" opacity=".8">✓ the hands and the brakes — the pipeline</text>
+          <text x="500" y="727" fill="#7ce0a6" font-family="Fira Code" font-size="12.5" font-weight="bold" text-anchor="middle">● the engine of persistence — tonight</text>
+          <text x="500" y="780" fill="#21b35d" font-family="Fira Code" font-size="12.5" font-weight="bold" text-anchor="middle">● the proof and the accountable decision — tonight</text>
+          <text x="500" y="836" fill="#8d7ec4" font-family="Fira Code" font-size="11.5" font-style="italic" text-anchor="middle" opacity=".8">✓ the lineage — Bronze → Silver → Gold</text>
+        </svg>
       </div>
     </div>
   </section>
 
-  <!-- S22 · GENIE -->
-  <section class="slide" data-act="REPLAY" data-act-name="Genie" data-accent="purple">
-    <div class="aurora aurora--purple" aria-hidden="true"><b></b></div>
+  <!-- S08 · START — open the repo -->
+  <section class="slide" data-act="START" data-act-name="Start" data-accent="green"
+           style="justify-content:center;align-items:flex-start;text-align:left;">
+    <div class="aurora aurora--green" aria-hidden="true"><b></b></div>
     <div class="reveal" style="position:relative;z-index:2;width:100%;max-width:1680px;margin:0 auto;">
-      <span class="tag kick-tag" style="--tag-c:var(--purple);">Genie Code · four bounded questions, SQL shown</span>
-      <div class="four-col" style="grid-template-columns:repeat(2,1fr);">
-        <div class="card purple"><div class="card-inner">
-          <span class="tag" style="--tag-c:var(--purple);">Q1</span>
-          <div class="db-h grad">Which merchant has the highest risk score?</div>
-          <p class="db-p">And which observed facts explain it &mdash; <b>m-007</b>, 1,209 quarantined rows.</p>
+      <span class="tag kick-tag" style="--tag-c:var(--green);">Start &nbsp;·&nbsp; the repo is ready</span>
+      <h2 class="h2" style="font-size:clamp(30px,4.6vw,64px);">
+        The story is framed.<br>Now <span style="color:var(--green);">build it.</span>
+      </h2>
+      <p class="lede" style="max-width:72ch;margin-top:clamp(14px,2.4vh,24px);">
+        Six modules, six checkpoints, one explainable number &mdash; NovaPay (<b>m-007</b>) from risk <b>25</b> to <b>45</b>.
+        Open the repository and start at module 01.
+      </p>
+      <div class="three-col" style="margin-top:clamp(20px,3.2vh,34px);">
+        <div class="card green"><div class="card-inner">
+          <span class="tag" style="--tag-c:var(--green);">1 · Read the ticket</span>
+          <div class="db-h grad">The BRD</div>
+          <p class="db-p"><b>docs/learner/brd-psp.md</b> &mdash; the NovaPay incident and the eight conditions.</p>
         </div></div>
         <div class="card cyan"><div class="card-inner">
-          <span class="tag" style="--tag-c:var(--cyan);">Q2</span>
-          <div class="db-h grad">How many BRL transactions were rejected?</div>
-          <p class="db-p"><b>1,204</b>, all received by the same merchant.</p>
+          <span class="tag" style="--tag-c:var(--cyan);">2 · Boot the machine</span>
+          <div class="db-h grad">Setup</div>
+          <p class="db-p"><b>docs/learner/setup.md</b> &rarr; <b>./scripts/bootstrap.sh</b> &mdash; one profile, one workspace.</p>
         </div></div>
         <div class="card gold"><div class="card-inner">
-          <span class="tag" style="--tag-c:var(--gold);">Q3</span>
-          <div class="db-h grad">Summarize the quarantine reasons.</div>
-          <p class="db-p">Seven categories across transactions and disputes, with row counts.</p>
-        </div></div>
-        <div class="card red"><div class="card-inner">
-          <span class="tag" style="--tag-c:var(--red);">Q4</span>
-          <div class="db-h grad">What changed after the replay?</div>
-          <p class="db-p">risk 25 &rarr; <b>45</b> &middot; chargeback_count 0 &rarr; <b>1</b>.</p>
+          <span class="tag" style="--tag-c:var(--gold);">3 · Start module 01</span>
+          <div class="db-h grad">Contract + plan</div>
+          <p class="db-p"><b>docs/learner/prompts/01-contract-plan.md</b> &rarr; <b>./scripts/checkpoint.sh 01</b></p>
         </div></div>
       </div>
-      <div class="callout purple" style="margin-top:clamp(18px,3vh,30px);">
-        <div class="co-kicker">Genie is evidence, not inference</div>
-        <div class="co-body">Every answer is tied to <b>gold_merchant_risk</b> or a quarantine table &mdash; and the <b>SQL is inspectable</b>. Genie reports observed facts; it never invents a fraud verdict.</div>
+      <div class="code-block cb-green" data-lang="terminal" style="margin-top:clamp(20px,3.2vh,34px);max-width:920px;">
+<span class="c"># open the repo · read the ticket · boot · start module 01</span>
+$ ./scripts/bootstrap.sh
+$ ./scripts/checkpoint.sh 01
       </div>
     </div>
   </section>
-
-
-  <!-- ═══════════════ CLOSE ═══════════════ -->
-
-  <!-- S23 · EVIDENCE WALKTHROUGH -->
-  <section class="slide" data-act="CLOSE" data-act-name="Delivery" data-accent="green">
-    <div class="aurora aurora--green" aria-hidden="true"><b></b></div>
-    <div class="reveal" style="position:relative;z-index:2;width:100%;max-width:1380px;margin:0 auto;">
-      <span class="tag kick-tag" style="--tag-c:var(--green);">Delivery · the three-minute evidence walkthrough</span>
-      <ul class="xlist">
-        <li class="xli"><span class="xbox"><svg viewBox="0 0 24 24" fill="none"><path d="M5 13l4 4L19 7" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span class="xt">Show the <b>agent contract</b> and name one forbidden action.</span></li>
-        <li class="xli"><span class="xbox"><svg viewBox="0 0 24 24" fill="none"><path d="M5 13l4 4L19 7" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span class="xt">Show the <b>four-node Bronze</b> intake and one lineage column.</span></li>
-        <li class="xli"><span class="xbox"><svg viewBox="0 0 24 24" fill="none"><path d="M5 13l4 4L19 7" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span class="xt">Show one <b>DQX error preserved</b> in quarantine.</span></li>
-        <li class="xli"><span class="xbox"><svg viewBox="0 0 24 24" fill="none"><path d="M5 13l4 4L19 7" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span class="xt">Show <b>gold_merchant_risk</b> before/after for m-007.</span></li>
-        <li class="xli"><span class="xbox"><svg viewBox="0 0 24 24" fill="none"><path d="M5 13l4 4L19 7" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span class="xt">Show one <b>Genie answer and its SQL</b>.</span></li>
-        <li class="xli"><span class="xbox"><svg viewBox="0 0 24 24" fill="none"><path d="M5 13l4 4L19 7" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span class="xt">State which evidence is <b>local, deployed, live runtime, or fallback</b>.</span></li>
-      </ul>
-    </div>
-  </section>
-
-  <!-- S24 · WHAT THIS WAS NOT -->
-  <section class="slide" data-act="CLOSE" data-act-name="The fence" data-accent="red">
-    <div class="aurora aurora--red" aria-hidden="true"><b></b></div>
-    <div class="reveal" style="position:relative;z-index:2;width:100%;max-width:1680px;margin:0 auto;">
-      <span class="tag kick-tag" style="--tag-c:var(--red);">The fence · what this session was not</span>
-      <div class="four-col">
-        <div class="card red"><div class="card-inner"><span class="not-x">&#10007;</span><div class="db-h grad">Not fraud detection</div><p class="db-p">We describe observed data-quality and dispute evidence. We never infer guilt.</p></div></div>
-        <div class="card red"><div class="card-inner"><span class="not-x">&#10007;</span><div class="db-h grad">Not production</div><p class="db-p">No prd resources, schedules, service principals, or classic compute. <b>dev only.</b></p></div></div>
-        <div class="card red"><div class="card-inner"><span class="not-x">&#10007;</span><div class="db-h grad">Not drop-and-forget</div><p class="db-p">Invalid rows are preserved. <b>ON VIOLATION DROP ROW</b> has no home here.</p></div></div>
-        <div class="card red"><div class="card-inner"><span class="not-x">&#10007;</span><div class="db-h grad">Not the full platform</div><p class="db-p">No customers, cards, payouts, or KYB &mdash; four entities only; those are out of scope.</p></div></div>
-      </div>
-      <div class="callout gold" style="margin-top:clamp(20px,3.2vh,34px);">
-        <div class="co-kicker">The final gate</div>
-        <div class="co-body">Finish with <b>./scripts/verify.sh --remote</b> &rarr; the last line reads <b>VERIFY=PASS mode=--remote</b>.</div>
-      </div>
-    </div>
-  </section>
-
-  <!-- S25 · NEXT + EXIT -->
-  <section class="slide" data-act="CLOSE" data-act-name="Next" data-accent="purple">
-    <div class="aurora aurora--purple" aria-hidden="true"><b></b></div>
-    <div class="reveal" style="position:relative;z-index:2;width:100%;max-width:1680px;margin:0 auto;">
-      <span class="tag kick-tag" style="--tag-c:var(--purple);">Next steps · the door stays open</span>
-      <div class="cols" style="--cols:1fr 1fr;align-items:stretch;gap:clamp(18px,2.4vw,40px);">
-        <div>
-          <h2 class="h2" style="font-size:clamp(24px,3.2vw,44px);">Where this goes from here</h2>
-          <div class="hw-rail">
-            <li class="hw-i"><span class="hw-n">01</span><span class="hw-t">The instructor solution lives on <b>main</b>; the curriculum is a linear <b>workshop-v1</b> branch with six tagged checkpoints.</span></li>
-            <li class="hw-i"><span class="hw-n">02</span><span class="hw-t">Rehearse the same story in a <b>clean clone</b> to make it yours.</span></li>
-            <li class="hw-i"><span class="hw-n">03</span><span class="hw-t">Swap the incident &mdash; <span class="dim">new bad rows, new ledger entries, new risk delta</span>.</span></li>
-          </div>
-        </div>
-        <div>
-          <h2 class="h2" style="font-size:clamp(24px,3.2vw,44px);">Cleanup is after delivery</h2>
-          <div class="code-block" data-lang="terminal" style="margin-top:clamp(14px,2.2vh,24px);">
-<span class="c"># destructive &mdash; scoped to the exact dev bundle + schema</span>
-$ export DATABRICKS_WAREHOUSE_ID=YOUR_WAREHOUSE_ID
-$ ./scripts/reset.sh --confirm dbx_agentic_dev
-          </div>
-          <p class="db-p" style="margin-top:clamp(10px,1.6vh,16px);">Never run reset in the instructor workspace during the session. It touches only <b>dev</b> and <b>dbx_agentic_dev</b>.</p>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- S26 · CLOSING — silent -->
-  <section class="slide slide--silent" data-act="CLOSE" data-act-name="Close" data-accent="gold">
-    <div class="aurora aurora--gold" style="z-index:1;" aria-hidden="true"><b></b></div>
-    <div class="reveal" style="position:relative;z-index:2;text-align:center;">
-      <div class="act-marker" style="justify-content:center;">DBX Agentic Development</div>
-      <div class="slide__display slide__display--act gradient-gold">25 &rarr; 45</div>
-      <p class="slide__body" style="max-width:52ch;margin:clamp(20px,3.2vh,36px) auto 0;">
-        The number moved because the data was <b style="color:var(--text);">preserved</b> &mdash; not because it was hidden.
-      </p>
-      <div class="close-tags">
-        <span class="tag" style="--tag-c:var(--accent);">contracts</span>
-        <span class="tag" style="--tag-c:var(--cyan);">Lakeflow</span>
-        <span class="tag" style="--tag-c:var(--purple);">DQX</span>
-        <span class="tag" style="--tag-c:var(--green);">DABs</span>
-        <span class="tag" style="--tag-c:var(--gold);">Genie</span>
-      </div>
-    </div>
-  </section>
-
 </div>
 
 <script>

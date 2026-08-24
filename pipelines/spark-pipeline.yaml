@@ -12,5 +12,6 @@ storage: file:///tmp/dbx-psp-sdp
 configuration:
   landing_path: data/fallback/generated
   schema_tracking_path: data/fallback/generated/_schemas
+  dqx_rules_path: configs/dqx-rules.yaml
   source_format: json
   workshop.local: "true"

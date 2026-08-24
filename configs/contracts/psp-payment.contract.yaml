@@ -5,24 +5,29 @@ transaction_count: 100000
 focus_merchant: m-007
 default_currency: USD
 allowed_currencies: [USD, GBP, CAD, AUD]
+unauthorized_currencies: [BRL]
 allowed_processors: [stripe, adyen]
 entities:
   merchants:
     primary_key: merchant_id
+    row_count: 12
     required: [merchant_id, merchant_name, country, risk_tier]
   orders:
     primary_key: order_id
+    row_count: 100000
     foreign_keys:
       merchant_id: merchants.merchant_id
     required: [order_id, merchant_id, order_ts, amount_cents, currency]
   transactions:
     primary_key: txn_id
+    row_count: 100000
     foreign_keys:
       order_id: orders.order_id
       merchant_id: merchants.merchant_id
     required: [txn_id, order_id, merchant_id, event_ts, amount_cents, currency, processor, status]
   disputes:
     primary_key: dispute_id
+    row_count_after_replay: 102
     foreign_keys:
       txn_id: transactions.txn_id
     required: [dispute_id, txn_id, opened_at, closed_at, reason, status]
@@ -43,4 +48,6 @@ gold:
     quarantine_rows_per_point: 50
     chargeback_points: 20
     before_replay: 25
+    before_replay_band: normal
     after_replay: 45
+    after_replay_band: elevated

@@ -19,6 +19,7 @@ def test_pipeline_is_serverless_and_environment_is_pinned() -> None:
     assert pipeline["environment"]["environment_version"] == "4"
     assert pipeline["environment"]["dependencies"] == ["databricks-labs-dqx==0.16.0"]
     assert pipeline["configuration"]["landing_path"] == "/Volumes/${var.catalog}/${var.schema}/${var.landing_volume}"
+    assert pipeline["configuration"]["dqx_rules_path"] == "${workspace.file_path}/configs/dqx-rules.yaml"
 
 
 def test_workshop_avoids_an_unnecessary_jobs_api_dependency() -> None:

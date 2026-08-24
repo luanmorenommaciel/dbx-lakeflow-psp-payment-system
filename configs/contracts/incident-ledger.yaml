@@ -5,33 +5,45 @@ incidents:
   - id: txn-id-null
     entity: transactions
     generator_id: 98791
+    condition: null transaction ID
     disposition: quarantine
   - id: txn-id-duplicate
     entity: transactions
     generator_id: 98792
+    condition: duplicate transaction ID
     disposition: quarantine
   - id: amount-non-positive
     entity: transactions
     generator_id: 98793
+    condition: non-positive amount
     disposition: quarantine
   - id: currency-brl-unauthorized
     entity: transactions
     generator_id_range: [98794, 99997]
     expected_rows: 1204
+    condition: unauthorized BRL currency
     disposition: quarantine
   - id: processor-unknown
     entity: transactions
     generator_id: 99998
+    condition: unknown processor
     disposition: quarantine
   - id: order-orphan
     entity: transactions
     generator_id: 99999
+    condition: orphan order
     disposition: quarantine
   - id: dispute-closes-before-open
     entity: disputes
     generator_id: 100
+    condition: dispute close timestamp before its open timestamp
     disposition: quarantine
   - id: late-valid-chargeback
     entity: disputes
     generator_id: 101
+    condition: valid late chargeback held for incremental replay
     disposition: held_then_replay
+    gold_effect:
+      merchant_id: m-007
+      risk_before: 25
+      risk_after: 45

@@ -22,5 +22,6 @@ resources:
       configuration:
         landing_path: /Volumes/${var.catalog}/${var.schema}/${var.landing_volume}
         schema_tracking_path: /Volumes/${var.catalog}/${var.schema}/${var.landing_volume}/_schemas
+        dqx_rules_path: ${workspace.file_path}/configs/dqx-rules.yaml
         source_format: cloudFiles
         workshop.local: "false"

@@ -13,7 +13,7 @@ from pyspark import pipelines as dp
 from pyspark.sql import DataFrame
 from pyspark.sql import functions as F
 
-RULES_PATH = Path(__file__).resolve().parents[2] / "configs" / "dqx-rules.yaml"
+RULES_PATH = Path(spark.conf.get("dqx_rules_path", "configs/dqx-rules.yaml"))
 RULE_DOCUMENT = yaml.safe_load(RULES_PATH.read_text(encoding="utf-8"))
 LOCAL_MODE = spark.conf.get("workshop.local", "false").lower() == "true"
 DQ_RESULT_DDL = (
